@@ -5,13 +5,13 @@ class Square
 	value: null
 	row_id: null
 	column_id: null
-	cage_if: null
+	cage_id: null
 
 
 	constructor: (row_id, column_id) ->
-		this.row_id = row_id
-		this.column_id = column_id
-		id = (String.fromCharCode(row_id+96)) + column_id 
+		@row_id = row_id
+		@column_id = column_id
+		@id = (String.fromCharCode(row_id+97)) + (column_id+1) 
 	
 	set_cage_id: (cage_id) ->
 

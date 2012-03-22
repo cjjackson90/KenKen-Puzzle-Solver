@@ -9,14 +9,15 @@ class Grid
 
 
 	constructor: (grid_size) ->
-		size = grid_size
-		for i in [0...size]
-			rows[i] = []
-			columns[i] = []
-			for j in [1..size]
-				rows[i][j] = j+1
-				columns[j] = j+1
-				display[i][j] = new Square(i,j)
+		@size = grid_size
+		for i in [0...@size]
+			@rows[i] = []
+			@columns[i] = []
+			@display[i] = []
+			for j in [0...@size]
+				@rows[i][j] = j+1
+				@columns[i][j] = j+1
+				@display[i][j] = new Square(i,j)
 	
 	draw: () ->
 
