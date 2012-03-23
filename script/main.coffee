@@ -56,9 +56,6 @@ class Main
 				cancel: "Okay, thanks!"
 				callback: ( r ) ->
 					setCookie "welcome", "false"
-			@modal.div.css
-				width: 600
-				"margin-left": 300#-300
 			@modal.show( )
 
 this.Main = Main

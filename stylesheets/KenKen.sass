@@ -1,0 +1,412 @@
+
+$metro1 = #4E5B6F
+$metro2 = #D6ECFF
+$metro3 = #7FD13B
+$colour1 = #bd0
+$colour2 = #fa0
+$copytext = #666
+$imgloc = ../img/
+
+@mixin button_img($name)
+  background-image: url( "#{$imgloc}#{$name}.png" )
+
+@mixin linear-gradient($from, $to)
+    background-color: $from
+    background-image: -webkit-gradient(linear, left top, left bottom, from($from), to($to))
+    background-image: -webkit-linear-gradient(top, $from, $to)
+    background-image: -moz-linear-gradient(top, $from, $to)
+    background-image: -ms-linear-gradient(top, $from, $to)
+    background-image: -o-linear-gradient(top, $from, $to)
+    background-image: linear-gradient(top, $from, $to)
+
+@mixin box-shadow($options)
+    -webkit-box-shadow: $options
+    -moz-box-shadow: $options
+    box-shadow: $options
+
+@mixin border-radius($radius)
+    -webkit-border-radius: $radius !important
+    -moz-border-radius: $radius !important
+    border-radius: $radius !important
+    -moz-background-clip: padding !important
+    -webkit-background-clip: padding-box !important
+    background-clip: padding-box !important
+
+@mixin transition($options)
+    -webkit-transition: $options
+    -moz-transition: $options
+    -ms-transition: $options
+    -o-transition: $options
+    transition: $options
+
+@mixin rotate($options)
+    -webkit-transform: rotate($options)
+    -moz-transform: rotate($options)
+    -ms-transform: rotate($options)
+    -o-transform: rotate($options)
+    transform: rotate($options)
+
+@mixin flipH( )
+    -webkit-transform: scaleX(-1)
+    -moz-transform: scaleX(-1)
+    -ms-transform: scaleX(-1)
+    -o-transform: scaleX(-1)
+    transform: scaleX(-1)
+
+@mixin reset1
+    padding: 0
+    margin: 0
+
+html
+    height: 100%
+
+body
+    height: 100%
+    width: 100%
+    font-family: sans-serif
+    -moz-user-select: none
+    -webkit-user-select: none
+    user-select: none
+    @include reset1
+    @include linear-gradient($metro1, $metro2)
+
+.clear
+    clear: both
+
+#copyright
+    position: absolute
+    right: 18px
+    bottom: 5px
+    color: $copytext
+    font-size: 8pt
+
+    a
+        color: $copytext
+        text-decoration: none
+
+        &:hover
+            text-decoration: underline
+
+#toolbar
+    position: absolute
+    left: 0
+    top: 0
+    padding: 2px 10px
+    height: 40px
+    @include linear-gradient(#333, #999)
+    @include box-shadow(0 0 10px rgba(0,0,0,0.4))
+    @include border-radius(0 0 16px 0)
+
+    h1
+        float: left
+        color: $colour1
+        height: 36px
+        text-shadow: 0 0 10px rgba(187, 221, 0, 0.4)
+        @include reset1
+        padding-right: 20px
+
+        span
+            color: $colour2
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.4)
+
+    ul
+        list-style: none
+        float:left
+        @include reset1
+
+    li
+        float: left
+        width: 32px
+        height: 32px
+        background-repeat: no-repeat
+        background-position: 50% 50%
+        padding: 2px
+        margin: 2px
+        @include transition(all 0.2s ease-out)
+
+        &:hover
+            opacity: 0.5
+            cursor: pointer
+
+#slidewrap, #legendwrap
+    position: absolute
+    bottom: 0
+    z-index: 100
+    overflow: hidden
+    @include linear-gradient(#666, #999)
+
+    #slidetoggle, #legendtoggle
+        display: block
+        position: absolute
+        top: 0
+        height: 100%
+        text-shadow: 0 0 10px #000
+
+        span
+            position: relative
+            left: 0
+            top: 50%
+            display: block
+
+        &:hover
+            color: #09f
+            text-shadow: 0 0 10px rgba(0, 153, 255, 0.8)
+            cursor: pointer
+
+#slidewrap
+    right: 0
+    padding: 4px 0 0 12px
+    @include border-radius(40px 0 0 0)
+
+    #slidetoggle
+        left: 1px
+
+#legendwrap
+    left: 0
+    padding: 4px 12px 0 0
+    @include border-radius(0 40px 0 0)
+
+    #legendtoggle
+        right: 1px
+
+div#algohelptext
+    display: none
+    position: absolute
+    right: -70px
+    bottom: 150px
+    opacity: 0
+    margin-left: -20px
+    text-align: center
+    @include rotate(-90deg)
+    @include transition(all 0.5s ease-out)
+
+#slideout, #legendout
+    padding: 10px
+    @include linear-gradient(#000, #333)
+    @include border-radius(40px 0 0 0)
+
+    h2, h3
+        color: #09f
+        text-shadow: 0 0 10px rgba(0, 153, 255, 0.8)
+
+    h2
+        text-align: right
+        font-size: 1.6em
+        margin: 0
+
+
+    ul#list
+        list-style: none
+        padding: 0
+
+        li
+            margin: 0
+
+            h3
+                font-weight: normal
+                font-size: 0.85em
+                margin: 10px 0 0 0
+
+            p
+                color: #fff
+                font-size: 1.2em
+                margin: 0
+
+            select, input[type="text"]
+                width: 200px
+                padding: 2px
+                outline: 0px
+                font-size: 1.2em
+                /*border: #fff solid 2px*/ // TODO: Bug in chrome with the select. -webkit-appearance
+                @include linear-gradient(#ccc, #fff)
+                @include border-radius(5px)
+
+#legendout
+    @include border-radius(0 40px 0 0)
+
+    h2
+        text-align: left
+
+#helptext
+    line-height: 40px
+    font-size: 14pt
+    color: $colour1
+
+    ul
+      float: right
+
+#welcome
+    margin-left: -320px
+    width: 600px
+    padding: 20px
+
+.context
+    position: absolute
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+
+    ul
+        position: absolute
+        padding: 5px
+        color: #fff
+        list-style: none
+        display: block
+
+        @include border-radius(0 10px 10px 10px)
+        @include linear-gradient(#000, #333)
+        @include box-shadow(0 0 10px, #000)
+
+        li
+            margin: 0
+            padding: 0
+            cursor: pointer
+
+            &:hover
+                background-color: rgba(255,255,255,0.3)
+
+.modal, .opaquebg
+    position: absolute
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+    background: rgba(0,0,0,0.4)
+    color: #fff
+
+    >div
+        position: absolute
+        top: 0
+        width: 600px
+        left: 50%
+        margin-left: -300px
+        border: 2px $metro3 solid
+        border-top: 0px transparent none
+
+        @include border-radius(0 0 25px 25px)
+        @include linear-gradient(#000, #333)
+        @include box-shadow(0 0 20px #000)
+
+        >*
+            margin: 10px
+
+        h2
+            border-bottom: 1px #999 solid
+
+        div.fields
+            clear: both
+
+            >label
+                clear: both
+
+                >input, label
+                    width: 60%
+                    float: right
+                    margin-right: 10px
+                    border: none
+                    outline: none
+                    padding: 2px
+
+                    @include border-radius(5px)
+
+        div.buttons
+            clear: left
+            border-top: 1px #999 solid
+            text-align: right
+
+            >button
+              padding: 5px
+
+#kkprogbar
+    background: #09f
+    height: 10px
+    @include border-radius(0 0 5px 5px)
+
+#loadfile
+    text-align: center
+    display: block
+    padding: 5px
+    border: 1px #999 solid
+    color: #333
+    width: 200px
+    cursor: pointer
+
+    @include border-radius(5px)
+    @include linear-gradient(#ccc, #999)
+
+    &:hover
+        @include linear-gradient(#999, #666)
+
+.submarker
+    float: right
+
+// Legend colours
+#legendwrap
+    ul
+        color: #fff
+        margin: 0
+        padding: 0
+        list-style: none
+    li
+        margin: 3px 0
+
+        >span
+            width: 16px
+            height: 16px
+            display: block
+            margin: 0 10px
+            float: left
+            border: #fff 1px solid
+            @include border-radius( 5px )
+
+#leg_normal
+    background: #666
+#leg_potential
+    background: #0247fe
+#leg_visited
+    background: #000
+#leg_looking
+    background: #0c3
+#leg_path
+    background: #f60
+
+// Button Images
+// TODO: Convert to a sprite
+#new
+    @include button_img( New%20Document )
+#save
+    @include button_img( Get%20Document )
+#load
+    @include button_img( Send%20Document )
+#add
+    @include button_img( Add%20Green%20Button )
+#remove
+    @include button_img( Minus%20Green%20Button )
+#kamada
+    @include button_img( Menu%20Item )
+#connect
+    @include button_img( Plugin%20Green%20Button )
+#search
+    @include button_img( Spotlight%20Blue%20Button )
+#run
+    @include button_img( Play%20All )
+#stepback
+    @include button_img( Play )
+    @include flipH( )
+#stepforward
+    @include button_img( Play )
+#process
+    @include button_img( Run )
+#design
+    @include button_img( Write%20Document )
+#cancel
+    @include button_img( Cancel%20Red%20Button )
+#stop
+    @include button_img( Stop )
+.settings
+    @include button_img( Gear )
+#reset
+    @include button_img( Backup%20Green%20Button )
+#setnodes
+    @include button_img( Star )

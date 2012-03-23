@@ -53,10 +53,6 @@
             return setCookie("welcome", "false");
           }
         });
-        this.modal.div.css({
-          width: 600,
-          "margin-left": 300
-        });
         return this.modal.show();
       }
     };
