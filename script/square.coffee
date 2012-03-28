@@ -11,12 +11,17 @@ class Square
 	constructor: (row_id, column_id) ->
 		@row_id = row_id
 		@column_id = column_id
-		@id = (String.fromCharCode(row_id+97)) + (column_id+1) 
+		@id = (String.fromCharCode(row_id+65)) + (column_id+1) 
+		#console.log(@id)
 	
 	set_cage_id: (cage_id) ->
+		@cage_id = cage_id
 
 	set_value: (new_val) ->
+		@value = new_val
 
 	set_target_op: (target_val, op) ->
+		@target_op = target_val + op
+
 
 this.Square = Square

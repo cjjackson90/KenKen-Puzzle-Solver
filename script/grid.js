@@ -20,18 +20,56 @@
           this.display[i][j] = new Square(i, j);
         }
       }
-      console.log("rows");
-      console.log(this.rows);
-      console.log("columns");
-      console.log(this.columns);
-      console.log(this.display);
     }
     Grid.prototype.draw = function() {};
     Grid.prototype.clear = function() {};
     Grid.prototype.update_row = function(row_id, col_id, val) {};
     Grid.prototype.update_column = function(row_id, col_id, val) {};
-    Grid.prototype.add_cage = function() {};
+    Grid.prototype.add_cage = function(cage) {
+      return this.cages.push(cage);
+    };
     Grid.prototype.remove_cage = function() {};
+    Grid.prototype.add_solution = function(solution) {
+      return this.solution = solution;
+    };
+    Grid.prototype.verify_correct = function() {
+      var i, valid, _ref;
+      valid = true;
+      if (solution !== null) {
+        for (i = 0, _ref = this.size; 0 <= _ref ? i <= _ref : i >= _ref; 0 <= _ref ? i++ : i--) {
+          if (display[i].value !== solution[i]) {
+            return false;
+          }
+        }
+      } else {
+        if (check_rows_are_valid() === false) {
+          return false;
+        }
+        if (check_cols_are_valid() === false) {
+          return false;
+        }
+        if (check_cages_are_valid() === false) {
+          return false;
+        }
+        return valid;
+      }
+    };
+    Grid.prototype.cages_have_candidates = function() {
+      var cage, _i, _len;
+      for (_i = 0, _len = cages.length; _i < _len; _i++) {
+        cage = cages[_i];
+        if (cage.candidates === null) {
+          return false;
+        }
+      }
+      return true;
+    };
+    Grid.prototype.get_square = function(square_id) {
+      var column, row;
+      row = square_id.substring(0, 1).charCodeAt(0) - 65;
+      column = square_id.substring(1) - 1;
+      return this.display[row][column];
+    };
     return Grid;
   })();
   this.Grid = Grid;

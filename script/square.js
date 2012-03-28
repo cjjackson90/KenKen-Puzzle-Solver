@@ -10,11 +10,17 @@
     function Square(row_id, column_id) {
       this.row_id = row_id;
       this.column_id = column_id;
-      this.id = (String.fromCharCode(row_id + 97)) + (column_id + 1);
+      this.id = (String.fromCharCode(row_id + 65)) + (column_id + 1);
     }
-    Square.prototype.set_cage_id = function(cage_id) {};
-    Square.prototype.set_value = function(new_val) {};
-    Square.prototype.set_target_op = function(target_val, op) {};
+    Square.prototype.set_cage_id = function(cage_id) {
+      return this.cage_id = cage_id;
+    };
+    Square.prototype.set_value = function(new_val) {
+      return this.value = new_val;
+    };
+    Square.prototype.set_target_op = function(target_val, op) {
+      return this.target_op = target_val + op;
+    };
     return Square;
   })();
   this.Square = Square;

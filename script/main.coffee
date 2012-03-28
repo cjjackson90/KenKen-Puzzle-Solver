@@ -8,6 +8,16 @@ class Main
 		# Instantiates the main class and starts the program
 		window.APP = new Main
 
+	# ### window.uniqueId( )
+	# Generates a Unique ID. Taken from [here]
+	# (http://coffeescriptcookbook.com/chapters/strings/generating-a-unique-id)
+	# #### Parameters
+	# * `length` - Length of generated id string
+	window.uniqueId = ( length = 5 ) ->
+		id = ""
+		id += Math.random( ).toString( 36 ).substr( 2 ) while id.length < length
+		id.substr 0, length
+
 	# Adapted from PPK's cookie methods
 	window.setCookie = ( name, value, days ) ->
 		if days
@@ -33,8 +43,55 @@ class Main
 
 	constructor: ->
 		@welcome_dialog( )
-		n = 5
+		n = 3
 		@main_grid = new Grid(n)
+
+		cage = new Cage([@main_grid.get_square("A1"), @main_grid.get_square("A2")])
+		cage.update_target(5)
+		cage.update_operation("+")
+		@main_grid.add_cage(cage)
+		#console.log(@main_grid.cages)
+
+		cage = new Cage([@main_grid.get_square("B1"), @main_grid.get_square("B2")])
+		cage.update_target(2)
+		cage.update_operation("/")
+		@main_grid.add_cage(cage)
+		#console.log(@main_grid.cages)
+
+		cage = new Cage([@main_grid.get_square("A3"), @main_grid.get_square("B3")])
+		cage.update_target(2)
+		cage.update_operation("-")
+		@main_grid.add_cage(cage)
+		#console.log(@main_grid.cages)
+
+		cage = new Cage([@main_grid.get_square("C1")])
+		cage.update_target(1)
+		cage.update_operation("+")
+		@main_grid.add_cage(cage)
+		#console.log(@main_grid.cages)
+
+		cage = new Cage([@main_grid.get_square("C2"), @main_grid.get_square("C3")])
+		cage.update_target(6)
+		cage.update_operation("*")
+		@main_grid.add_cage(cage)
+
+		console.log("grid - cages")
+		console.log(@main_grid.cages)
+
+		for cage in @main_grid.cages
+			cage.find_all_candidates(@main_grid.size)
+
+		###temp = ["B1","B2"]
+		@main_grid.add_cage(temp)
+		temp = ["A3", "B3"]
+		@main_grid.add_cage(temp)
+		temp = ["C1"]
+		@main_grid.add_cage(temp)
+		temp = ["C2","C3"]
+		@main_grid.add_cage(temp)
+		console.log(@main_grid.cages)
+		###
+
 
 	welcome_dialog: ->
 		if "false" isnt getCookie "welcome"
