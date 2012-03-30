@@ -43,6 +43,11 @@ class Main
 
 	constructor: ->
 		@welcome_dialog( )
+		#n = 3
+		#@main_grid = new Grid(n)
+
+		# TEST CAGE 1 - EASY pg1
+		###
 		n = 3
 		@main_grid = new Grid(n)
 
@@ -77,6 +82,51 @@ class Main
 
 		console.log("grid - cages")
 		console.log(@main_grid.cages)
+		###
+
+		# TEST CAGE 2 - DIFFICULT pg42
+		# ###
+		n = 5
+		@main_grid = new Grid(n)
+
+		cage = new Cage([@main_grid.get_square("A1"), @main_grid.get_square("A2"), @main_grid.get_square("B1"), @main_grid.get_square("C1"), @main_grid.get_square("C2")])
+		cage.update_target(12)
+		cage.update_operation("*")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("A3"), @main_grid.get_square("A4"), @main_grid.get_square("B2"), @main_grid.get_square("B3"), @main_grid.get_square("B4")])
+		cage.update_target(21)
+		cage.update_operation("+")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("A5"), @main_grid.get_square("B5"), @main_grid.get_square("C5")])
+		cage.update_target(24)
+		cage.update_operation("*")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("C3"), @main_grid.get_square("C4")])
+		cage.update_target(4)
+		cage.update_operation("-")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("D1"), @main_grid.get_square("D2"), @main_grid.get_square("E1"), @main_grid.get_square("E2")])
+		cage.update_target(16)
+		cage.update_operation("+")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("D3"), @main_grid.get_square("E3"), @main_grid.get_square("E4"), @main_grid.get_square("E5")])
+		cage.update_target(6)
+		cage.update_operation("*")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("D4"), @main_grid.get_square("D5")])
+		cage.update_target(3)
+		cage.update_operation("-")
+		@main_grid.add_cage(cage)
+
+		console.log("grid - cages")
+		console.log(@main_grid.cages)
+		# ###
 
 		for cage in @main_grid.cages
 			cage.find_all_candidates(@main_grid.size)
