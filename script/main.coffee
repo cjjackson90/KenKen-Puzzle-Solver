@@ -80,6 +80,7 @@ class Main
 
 		for cage in @main_grid.cages
 			cage.find_all_candidates(@main_grid.size)
+		console.log @main_grid.cages
 
 		###temp = ["B1","B2"]
 		@main_grid.add_cage(temp)

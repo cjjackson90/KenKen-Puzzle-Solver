@@ -19,6 +19,8 @@ class Grid
 				@columns[i][j] = j+1
 				@display[i][j] = new Square(i,j)
 	
+	add_candidate: () ->
+
 	draw: () ->
 
 	clear: () ->

@@ -79,6 +79,7 @@
         cage = _ref[_i];
         cage.find_all_candidates(this.main_grid.size);
       }
+      console.log(this.main_grid.cages);
       /*temp = ["B1","B2"]
       		@main_grid.add_cage(temp)
       		temp = ["A3", "B3"]

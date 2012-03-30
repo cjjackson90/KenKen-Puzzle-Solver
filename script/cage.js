@@ -19,51 +19,197 @@
       return this.operation = op;
     };
     Cage.prototype.find_all_candidates = function(grid_size) {
-      var output, single_candidate;
+      var i, output, single_candidate, _ref, _ref2, _ref3, _results;
       this.grid_size = grid_size;
       output = "";
+      this.candidates = [];
       switch (this.operation) {
         case "+":
+          console.log("******NEW + ********");
           single_candidate = [];
-          single_candidate.push(7);
-          return this.bt_plus(single_candidate, 0);
+          single_candidate.push(this.target);
+          this.bt_plus(single_candidate, 0);
+          console.log("location.length = " + this.location.length + ", candidates=");
+          console.log(this.candidates);
+          break;
         case "-":
-          return this.candidates_minus(grid_size);
+          console.log("********* minus");
+          for (i = _ref = this.grid_size; _ref <= 1 ? i <= 1 : i >= 1; _ref <= 1 ? i++ : i--) {
+            single_candidate = [];
+            single_candidate.push(i);
+            this.bt_minus(single_candidate, 1);
+          }
+          break;
         case "*":
-          return this.candidates_multi(grid_size);
+          console.log("********* multiply");
+          for (i = _ref2 = this.grid_size; _ref2 <= 1 ? i <= 1 : i >= 1; _ref2 <= 1 ? i++ : i--) {
+            single_candidate = [];
+            single_candidate.push(i);
+            this.bt_multi(single_candidate, 1);
+          }
+          break;
         case "/":
-          return this.candidates_divide(grid_size);
+          console.log("/////////// divide");
+          _results = [];
+          for (i = _ref3 = this.grid_size; _ref3 <= 1 ? i <= 1 : i >= 1; _ref3 <= 1 ? i++ : i--) {
+            single_candidate = [];
+            single_candidate.push(i);
+            _results.push(this.bt_divide(single_candidate, 1));
+          }
+          return _results;
       }
     };
     Cage.prototype.bt_plus = function(candidate, counter) {
-      var new_branch, potentials, prev_vals, running_target, val, _i, _len, _ref, _results;
+      var new_branch, new_count, potentials, prev_vals, running_target, val, _i, _j, _len, _ref, _ref2, _results, _results2;
+      running_target = candidate[0];
+      for (prev_vals = 1, _ref = candidate.length; 1 <= _ref ? prev_vals < _ref : prev_vals > _ref; 1 <= _ref ? prev_vals++ : prev_vals--) {
+        running_target -= candidate[prev_vals];
+      }
+      if (running_target < 0 || (running_target === 0 && counter !== this.location.length)) {
+        return;
+      }
+      if (running_target === 0) {
+        this.candidates.push(candidate.slice(1, (candidate.length + 1) || 9e9));
+        return;
+      }
+      if (counter >= this.location.length) {
+        return;
+      }
+      potentials = (function() {
+        _results = [];
+        for (var _i = _ref2 = this.grid_size; _ref2 <= 1 ? _i <= 1 : _i >= 1; _ref2 <= 1 ? _i++ : _i--){ _results.push(_i); }
+        return _results;
+      }).apply(this, arguments);
+      _results2 = [];
+      for (_j = 0, _len = potentials.length; _j < _len; _j++) {
+        val = potentials[_j];
+        new_branch = candidate;
+        new_branch.push(val);
+        new_count = counter + 1;
+        this.bt_plus(new_branch, new_count);
+        _results2.push(candidate.pop());
+      }
+      return _results2;
+    };
+    Cage.prototype.bt_minus = function(candidate, counter) {
+      var new_branch, new_count, potentials, prev_vals, running_target, val, _i, _j, _len, _ref, _ref2, _results, _results2;
       running_target = candidate[0];
       console.log("candidate =  " + candidate + ", counter = " + counter);
       for (prev_vals = 1, _ref = candidate.length; 1 <= _ref ? prev_vals < _ref : prev_vals > _ref; 1 <= _ref ? prev_vals++ : prev_vals--) {
         running_target -= candidate[prev_vals];
       }
-      console.log(running_target);
-      if (running_target < 0 || (running_target === 0 && counter !== this.location.length)) {
+      if (running_target < this.target || (running_target === this.target && counter !== this.location.length)) {
+        return;
+      }
+      if (running_target === this.target) {
+        this.candidates.push(candidate.slice(0, candidate.length));
+        return;
+      }
+      if (counter >= this.location.length) {
+        return;
+      }
+      potentials = (function() {
+        _results = [];
+        for (var _i = _ref2 = this.grid_size; _ref2 <= 1 ? _i <= 1 : _i >= 1; _ref2 <= 1 ? _i++ : _i--){ _results.push(_i); }
+        return _results;
+      }).apply(this, arguments);
+      _results2 = [];
+      for (_j = 0, _len = potentials.length; _j < _len; _j++) {
+        val = potentials[_j];
+        new_branch = candidate;
+        new_branch.push(val);
+        new_count = counter + 1;
+        console.log("the candidate entering bt() is " + candidate);
+        this.bt_minus(new_branch, new_count);
+        _results2.push(candidate.pop());
+      }
+      return _results2;
+    };
+    Cage.prototype.bt_multi = function(candidate, counter) {
+      var new_branch, new_count, potentials, prev_vals, running_target, val, _i, _j, _len, _ref, _ref2, _results, _results2;
+      running_target = candidate[0];
+      console.log("candidate =  " + candidate + ", counter = " + counter);
+      for (prev_vals = 1, _ref = candidate.length; 1 <= _ref ? prev_vals < _ref : prev_vals > _ref; 1 <= _ref ? prev_vals++ : prev_vals--) {
+        running_target *= candidate[prev_vals];
+      }
+      if (running_target > this.target || (running_target === this.target && counter !== this.location.length)) {
         console.log("invalid");
         return;
       }
-      if (running_target === 0) {
+      if (running_target === this.target) {
         console.log("######valid");
-        console.log(candidate.slice(1, (candidate.length + 1) || 9e9));
-        this.candidates.push(candidate.slice(1, (candidate.length + 1) || 9e9));
+        this.candidates.push(candidate.slice(0, candidate.length));
         return;
       }
-      potentials = [2, 1];
-      _results = [];
-      for (_i = 0, _len = potentials.length; _i < _len; _i++) {
-        val = potentials[_i];
+      console.log("location.length = " + this.location.length + ", counter=" + counter);
+      if (counter >= this.location.length) {
+        console.log("invalid 2");
+        return;
+      }
+      potentials = (function() {
+        _results = [];
+        for (var _i = _ref2 = this.grid_size; _ref2 <= 1 ? _i <= 1 : _i >= 1; _ref2 <= 1 ? _i++ : _i--){ _results.push(_i); }
+        return _results;
+      }).apply(this, arguments);
+      _results2 = [];
+      for (_j = 0, _len = potentials.length; _j < _len; _j++) {
+        val = potentials[_j];
         new_branch = candidate;
         new_branch.push(val);
+        new_count = counter + 1;
         console.log("the candidate entering bt() is " + candidate);
-        this.bt_plus(new_branch, ++counter);
-        _results.push(candidate.pop());
+        this.bt_multi(new_branch, new_count);
+        _results2.push(candidate.pop());
       }
-      return _results;
+      return _results2;
+    };
+    Cage.prototype.bt_divide = function(candidate, counter) {
+      var i, new_branch, new_count, potentials, prev_vals, running_target, val, _i, _j, _len, _ref, _ref2, _results, _results2;
+      running_target = candidate[0];
+      console.log("candidate =  " + candidate + ", counter = " + counter);
+      for (prev_vals = 1, _ref = candidate.length; 1 <= _ref ? prev_vals < _ref : prev_vals > _ref; 1 <= _ref ? prev_vals++ : prev_vals--) {
+        running_target /= candidate[prev_vals];
+      }
+      console.log(running_target);
+      if (running_target < this.target) {
+        console.log("invalid");
+        return;
+      }
+      if (running_target === this.target) {
+        console.log("######valid");
+        if (counter !== this.location.length) {
+          i = this.location.length;
+          console.log("location.length = " + this.location.length + ", " + i + ", " + counter);
+          while (i !== counter) {
+            candidate.push(1);
+            i--;
+          }
+          console.log("candidate = " + candidate);
+        }
+        this.candidates.push(candidate.slice(0, candidate.length));
+        return;
+      }
+      console.log("location.length = " + this.location.length + ", counter=" + counter);
+      if (counter >= this.location.length) {
+        console.log("invalid 2");
+        return;
+      }
+      potentials = (function() {
+        _results = [];
+        for (var _i = _ref2 = this.grid_size; _ref2 <= 1 ? _i <= 1 : _i >= 1; _ref2 <= 1 ? _i++ : _i--){ _results.push(_i); }
+        return _results;
+      }).apply(this, arguments);
+      _results2 = [];
+      for (_j = 0, _len = potentials.length; _j < _len; _j++) {
+        val = potentials[_j];
+        new_branch = candidate;
+        new_branch.push(val);
+        new_count = counter + 1;
+        console.log("the candidate entering bt() is " + candidate);
+        this.bt_divide(new_branch, new_count);
+        _results2.push(candidate.pop());
+      }
+      return _results2;
     };
     Cage.prototype.candidates_plus = function(n, output) {
       var current, temp, _results;

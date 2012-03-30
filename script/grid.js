@@ -21,6 +21,7 @@
         }
       }
     }
+    Grid.prototype.add_candidate = function() {};
     Grid.prototype.draw = function() {};
     Grid.prototype.clear = function() {};
     Grid.prototype.update_row = function(row_id, col_id, val) {};
