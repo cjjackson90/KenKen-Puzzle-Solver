@@ -7,7 +7,6 @@ class Cage
 	candidates: []
 	grid_size: null
 
-
 	constructor: (location) ->
 		@location = location
 		@id = uniqueId( )
@@ -19,7 +18,7 @@ class Cage
 		@operation = op
 
 	find_all_candidates: (grid_size) ->
-		
+	
 		#TODO: optimise by reducing from brute force.
 		@grid_size = grid_size
 		output = ""
@@ -75,7 +74,7 @@ class Cage
 			#console.log "targetop = #{@target}#{@operation}"
 			#console.log "check_consistent() = #{candidate}"
 			if @check_consistent(candidate) is true
-				#console.log "Candidate added!"
+				console.log "Candidate added!"
 				@candidates.push candidate[0..candidate.length]
 			return
 			
@@ -118,6 +117,7 @@ class Cage
 			# #console.log "valid candidate = #{candidate}"
 			# #console.log candidate[0...candidate.length]
 			if (@check_consistent(candidate) is true)
+				console.log "Candidate added!"
 				@candidates.push candidate[0..candidate.length]
 			return
 		##console.log "location.length = #{@location.length}, counter=#{counter}"
@@ -152,6 +152,7 @@ class Cage
 			#console.log "######valid"
 			##console.log candidate[1..candidate.length]
 			if (@check_consistent(candidate) is true)
+				console.log "Candidate added!"
 				@candidates.push candidate[0..candidate.length]
 			return
 		#console.log "location.length = #{@location.length}, counter=#{counter}"
@@ -199,8 +200,9 @@ class Cage
 					i--
 				#console.log "candidate = #{candidate}"
 			##console.log candidate[1..candidate.length]
-			#if (@check_consistent(candidate) is true)
-			#	@candidates.push candidate[0..candidate.length]
+			if (@check_consistent(candidate) is true)
+				console.log "Candidate added!"
+				@candidates.push candidate[0..candidate.length]
 			return
 		#console.log "location.length = #{@location.length}, counter=#{counter}"
 		if counter >= (@location.length)
@@ -248,7 +250,8 @@ class Cage
 						else
 							console.log "      Consistent"
 							#@candidates.push candidate[0..candidate.length]
-							return true
+							#return true
+			return true
 			
 
 	add_candidate_to_grid: (candidate) ->

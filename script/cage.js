@@ -66,6 +66,7 @@
       }
       if (running_target === 0) {
         if (this.check_consistent(candidate) === true) {
+          console.log("Candidate added!");
           this.candidates.push(candidate.slice(0, (candidate.length + 1) || 9e9));
         }
         return;
@@ -100,6 +101,7 @@
       }
       if (running_target === this.target) {
         if (this.check_consistent(candidate) === true) {
+          console.log("Candidate added!");
           this.candidates.push(candidate.slice(0, (candidate.length + 1) || 9e9));
         }
         return;
@@ -134,6 +136,7 @@
       }
       if (running_target === this.target) {
         if (this.check_consistent(candidate) === true) {
+          console.log("Candidate added!");
           this.candidates.push(candidate.slice(0, (candidate.length + 1) || 9e9));
         }
         return;
@@ -174,6 +177,10 @@
             i--;
           }
         }
+        if (this.check_consistent(candidate) === true) {
+          console.log("Candidate added!");
+          this.candidates.push(candidate.slice(0, (candidate.length + 1) || 9e9));
+        }
         return;
       }
       if (counter >= this.location.length) {
@@ -196,11 +203,10 @@
       return _results2;
     };
     Cage.prototype.check_consistent = function(candidate) {
-      var cmp_col, cmp_row, col, i, j, row, _ref, _ref2, _ref3, _results;
+      var cmp_col, cmp_row, col, i, j, row, _ref, _ref2, _ref3;
       if (candidate.length === 1) {
         return true;
       } else {
-        _results = [];
         for (i = 0, _ref = candidate.length; 0 <= _ref ? i < _ref : i > _ref; 0 <= _ref ? i++ : i--) {
           row = this.location[i].row_id_char;
           col = this.location[i].column_id + 1;
@@ -219,12 +225,11 @@
                 return false;
               } else {
                 console.log("      Consistent");
-                return true;
               }
             }
           }
         }
-        return _results;
+        return true;
       }
     };
     Cage.prototype.add_candidate_to_grid = function(candidate) {};
