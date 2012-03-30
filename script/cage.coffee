@@ -26,68 +26,72 @@ class Cage
 		@candidates = []
 		switch @operation
 			when "+"
-				console.log "******NEW + ********"
-				#console.log @target
-				single_candidate = []
-				single_candidate.push @target
-				#console.log single_candidate
+				#console.log "******NEW + ********"
+				##console.log @target
+				for i in [@grid_size..1]
+					single_candidate = []
+					single_candidate.push i
+				##console.log single_candidate
 				#single_candidate.push 4
-				@bt_plus single_candidate, 0
-				console.log "location.length = #{@location.length}, candidates="
-				console.log @candidates
+					@bt_plus single_candidate, 1
+				#console.log "location.length = #{@location.length}, candidates="
+				#console.log @candidates
 				break
 			when "-" #then @candidates_minus grid_size
-				console.log "********* minus"
+				#console.log "********* minus"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
 					@bt_minus single_candidate, 1
 				break
 			when "*" #then @candidates_multi(grid_size)
-				console.log "********* multiply"
+				#console.log "********* multiply"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
 					@bt_multi single_candidate, 1
 				break
 			when "/" #then @candidates_divide(grid_size)
-				console.log "/////////// divide"
+				#console.log "/////////// divide"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
 					@bt_divide single_candidate, 1
 
 	bt_plus: (candidate, counter) ->
-		running_target = candidate[0]
-		######console.log "candidate =  #{candidate}, counter = #{counter}"
-		#console.log candidate
-		for prev_vals in [1...candidate.length]
+		running_target = @target
+		#######console.log "candidate =  #{candidate}, counter = #{counter}"
+		##console.log candidate
+		for prev_vals in [0...candidate.length]
 			running_target -= candidate[prev_vals]
-		#console.log running_target
+		##console.log running_target
 
 		if running_target < 0 or (running_target is 0 and counter isnt @location.length)
-			#console.log "invalid"
+			##console.log "invalid"
 			return #candidate.pop()
 		
 		if running_target is 0
 			#console.log "######valid"
-			#console.log candidate[1..candidate.length]
-			@candidates.push candidate[1..candidate.length]
+			#console.log "targetop = #{@target}#{@operation}"
+			#console.log "check_consistent() = #{candidate}"
+			if @check_consistent(candidate) is true
+				#console.log "Candidate added!"
+				@candidates.push candidate[0..candidate.length]
 			return
-		#console.log "location.length = #{@location.length}, counter=#{counter}"
+			
 		if counter >= (@location.length)
-			#console.log "invalid 2"
+			##console.log "invalid 2"
 			return
 
-		#console.log "Hello?"
-		#console.log @location.length
+		##console.log "Hello?"
+		##console.log @location.length
 		potentials = [@grid_size..1]
 		for val in potentials
 			
 			new_branch = candidate
 			new_branch.push val
 			new_count = counter+1
-			#console.log "the candidate entering bt() is #{candidate}"
+			##console.log "the candidate entering bt() is #{candidate}"
 			@bt_plus new_branch, new_count
 			candidate.pop()
 
@@ -99,69 +103,71 @@ class Cage
 
 	bt_minus: (candidate, counter) ->
 		running_target = candidate[0]
-		console.log "candidate =  #{candidate}, counter = #{counter}"
-		#console.log candidate
+		##console.log "candidate =  #{candidate}, counter = #{counter}"
+		##console.log candidate
 		for prev_vals in [1...candidate.length]
 			running_target -= candidate[prev_vals]
-		# console.log "running target #{running_target}"
+		# #console.log "running target #{running_target}"
 
 		if running_target < @target or (running_target is @target and counter isnt @location.length)
-			# console.log "invalid"
+			# #console.log "invalid"
 			return #candidate.pop()
 		
 		if running_target is @target
-			# console.log "######valid"
-			# console.log "valid candidate = #{candidate}"
-			# console.log candidate[0...candidate.length]
-			@candidates.push candidate[0...candidate.length]
+			# #console.log "######valid"
+			# #console.log "valid candidate = #{candidate}"
+			# #console.log candidate[0...candidate.length]
+			if (@check_consistent(candidate) is true)
+				@candidates.push candidate[0..candidate.length]
 			return
-		#console.log "location.length = #{@location.length}, counter=#{counter}"
+		##console.log "location.length = #{@location.length}, counter=#{counter}"
 		if counter >= (@location.length)
-			# console.log "invalid 2"
+			# #console.log "invalid 2"
 			return
 
-		#console.log "Hello?"
-		#console.log @location.length
+		##console.log "Hello?"
+		##console.log @location.length
 		potentials = [@grid_size..1]
 		for val in potentials
 			new_branch = candidate
 			new_branch.push val
 			new_count = counter+1
-			console.log "the candidate entering bt() is #{candidate}"
+			# #console.log "the candidate entering bt() is #{candidate}"
 			@bt_minus new_branch, new_count
 			candidate.pop()
 
 	bt_multi: (candidate, counter) ->
 		running_target = candidate[0]
-		console.log "candidate =  #{candidate}, counter = #{counter}"
-		#console.log candidate
+		#console.log "candidate =  #{candidate}, counter = #{counter}"
+		##console.log candidate
 		for prev_vals in [1...candidate.length]
 			running_target *= candidate[prev_vals]
-		#console.log running_target
+		##console.log running_target
 
 		if running_target > @target or (running_target is @target and counter isnt @location.length)
-			console.log "invalid"
+			#console.log "invalid"
 			return #candidate.pop()
 		
 		if running_target is @target
-			console.log "######valid"
-			#console.log candidate[1..candidate.length]
-			@candidates.push candidate[0...candidate.length]
+			#console.log "######valid"
+			##console.log candidate[1..candidate.length]
+			if (@check_consistent(candidate) is true)
+				@candidates.push candidate[0..candidate.length]
 			return
-		console.log "location.length = #{@location.length}, counter=#{counter}"
+		#console.log "location.length = #{@location.length}, counter=#{counter}"
 		if counter >= (@location.length)
-			console.log "invalid 2"
+			#console.log "invalid 2"
 			return
 
-		#console.log "Hello?"
-		#console.log @location.length
+		##console.log "Hello?"
+		##console.log @location.length
 		potentials = [@grid_size..1]
 		for val in potentials
 			
 			new_branch = candidate
 			new_branch.push val
 			new_count = counter+1
-			console.log "the candidate entering bt() is #{candidate}"
+			#console.log "the candidate entering bt() is #{candidate}"
 			@bt_multi new_branch, new_count
 			candidate.pop()
 
@@ -173,42 +179,43 @@ class Cage
 
 	bt_divide: (candidate, counter) ->
 		running_target = candidate[0]
-		console.log "candidate =  #{candidate}, counter = #{counter}"
-		# console.log candidate
+		#console.log "candidate =  #{candidate}, counter = #{counter}"
+		# #console.log candidate
 		for prev_vals in [1...candidate.length]
 			running_target /= candidate[prev_vals]
-		console.log running_target
+		#console.log running_target
 
 		if running_target < @target
-			console.log "invalid"
+			#console.log "invalid"
 			return #candidate.pop()
 		
 		if running_target is @target
-			console.log "######valid"
+			#console.log "######valid"
 			if counter isnt @location.length
 				i = @location.length
-				console.log "location.length = #{@location.length}, #{i}, #{counter}"
+				#console.log "location.length = #{@location.length}, #{i}, #{counter}"
 				while i isnt counter
 					candidate.push 1
 					i--
-				console.log "candidate = #{candidate}"
-			#console.log candidate[1..candidate.length]
-			@candidates.push candidate[0...candidate.length]
+				#console.log "candidate = #{candidate}"
+			##console.log candidate[1..candidate.length]
+			#if (@check_consistent(candidate) is true)
+			#	@candidates.push candidate[0..candidate.length]
 			return
-		console.log "location.length = #{@location.length}, counter=#{counter}"
+		#console.log "location.length = #{@location.length}, counter=#{counter}"
 		if counter >= (@location.length)
-			console.log "invalid 2"
+			#console.log "invalid 2"
 			return
 
-		#console.log "Hello?"
-		#console.log @location.length
+		##console.log "Hello?"
+		##console.log @location.length
 		potentials = [@grid_size..1]
 		for val in potentials
 			
 			new_branch = candidate
 			new_branch.push val
 			new_count = counter+1
-			console.log "the candidate entering bt() is #{candidate}"
+			#console.log "the candidate entering bt() is #{candidate}"
 			@bt_divide new_branch, new_count
 			candidate.pop()
 
@@ -218,34 +225,31 @@ class Cage
 			#	temp.push i
 			#	@bt_plus temp, ++counter
 
-
-	candidates_plus: (n, output) ->
-		console.log n
-		if (n <= 0) and (output.length < @grid_size)
-			return null
-		else if (n is 0)
-			return output
+	check_consistent: (candidate) ->
+		#console.log "candidate=#{candidate}"
+		if candidate.length is 1
+			return true
 		else
-			current =  if n > @grid_size then @grid_size else n
-			console.log current
-			while current > 0
-				#output += current
-				console.log output
-				temp = @candidates_plus n-current, output
-				current-- 
-			  # body...
-
-
-
-
-
-		#while(running_target > 0)
-
-	candidates_minus: (grid_size) ->
-
-	candidates_multi: (grid_size) ->
-
-	candidates_divide: (grid_size) ->
+			for i in [0...candidate.length]
+				row = @location[i].row_id_char
+				col = @location[i].column_id+1
+				console.log "row=#{row}, col=#{col}"
+				for j in [i+1...candidate.length]
+					if not candidate[j]?
+						break
+					cmp_row = @location[j].row_id_char
+					cmp_col = @location[j].column_id+1
+					console.log "   cmp_row=#{cmp_row}, cmp_col=#{cmp_col}"
+					if cmp_row is row or cmp_col is col
+						console.log "      candidate[i]=#{candidate[i]}, candidate[j]=#{candidate[j]}"
+						if candidate[i] is candidate[j]
+							console.log "      ERROR: inconsistent"
+							return false
+						else
+							console.log "      Consistent"
+							#@candidates.push candidate[0..candidate.length]
+							return true
+			
 
 	add_candidate_to_grid: (candidate) ->
 	
