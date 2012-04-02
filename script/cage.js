@@ -25,6 +25,7 @@
       this.candidates = [];
       switch (this.operation) {
         case "+":
+          console.log("++++++++++++++");
           for (i = _ref = this.grid_size; _ref <= 1 ? i <= 1 : i >= 1; _ref <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -32,6 +33,7 @@
           }
           break;
         case "-":
+          console.log("--------------");
           for (i = _ref2 = this.grid_size; _ref2 <= 1 ? i <= 1 : i >= 1; _ref2 <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -39,6 +41,7 @@
           }
           break;
         case "*":
+          console.log("**************");
           for (i = _ref3 = this.grid_size; _ref3 <= 1 ? i <= 1 : i >= 1; _ref3 <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -46,6 +49,7 @@
           }
           break;
         case "/":
+          console.log("//////////////////");
           _results = [];
           for (i = _ref4 = this.grid_size; _ref4 <= 1 ? i <= 1 : i >= 1; _ref4 <= 1 ? i++ : i--) {
             single_candidate = [];
@@ -55,9 +59,26 @@
           return _results;
       }
     };
+    Cage.prototype.remove_duplicates = function(candidate) {
+      var foo;
+      if (candidate != null) {
+        console.log("candidates[candidate]");
+        foo = candidate;
+        foo.unique();
+        console.log("foo");
+        console.log(foo);
+        return this.candidates[candidate] = foo;
+      }
+    };
     Cage.prototype.bt_plus = function(candidate, counter) {
-      var new_branch, new_count, potentials, prev_vals, running_target, val, _i, _j, _len, _ref, _ref2, _results, _results2;
+      var n, new_branch, new_candidates, new_count, no_solutions, perms, permutation, potentials, prev_vals, running_target, val, _i, _j, _k, _len, _len2, _ref, _results;
       running_target = this.target;
+      if (candidate[0] * this.location.length < this.target) {
+        return;
+      }
+      if (candidate[0] + this.location.length - 1 > this.target) {
+        return;
+      }
       for (prev_vals = 0, _ref = candidate.length; 0 <= _ref ? prev_vals < _ref : prev_vals > _ref; 0 <= _ref ? prev_vals++ : prev_vals--) {
         running_target -= candidate[prev_vals];
       }
@@ -65,34 +86,47 @@
         return;
       }
       if (running_target === 0) {
-        if (this.check_consistent(candidate) === true) {
-          console.log("Candidate added!");
-          this.candidates.push(candidate.slice(0, (candidate.length + 1) || 9e9));
+        perms = permute(candidate, this.grid_size);
+        for (_i = 0, _len = perms.length; _i < _len; _i++) {
+          permutation = perms[_i];
+          if (this.check_consistent(permutation)) {
+            if (this.candidates[candidate] != null) {
+              this.candidates[candidate].push(permutation);
+              new_candidates = this.candidates[candidate];
+              this.candidates[candidate] = new_candidates.unique();
+            } else {
+              this.candidates[candidate] = [];
+              this.candidates[candidate].push(permutation);
+            }
+          }
         }
         return;
       }
       if (counter >= this.location.length) {
         return;
       }
+      n = candidate[candidate.length - 1] < this.grid_size ? candidate[candidate.length - 1] : this.grid_size;
+      no_solutions = 1;
       potentials = (function() {
         _results = [];
-        for (var _i = _ref2 = this.grid_size; _ref2 <= 1 ? _i <= 1 : _i >= 1; _ref2 <= 1 ? _i++ : _i--){ _results.push(_i); }
+        for (var _j = n; n <= 1 ? _j <= 1 : _j >= 1; n <= 1 ? _j++ : _j--){ _results.push(_j); }
         return _results;
       }).apply(this, arguments);
-      _results2 = [];
-      for (_j = 0, _len = potentials.length; _j < _len; _j++) {
-        val = potentials[_j];
+      for (_k = 0, _len2 = potentials.length; _k < _len2; _k++) {
+        val = potentials[_k];
         new_branch = candidate;
         new_branch.push(val);
         new_count = counter + 1;
         this.bt_plus(new_branch, new_count);
-        _results2.push(candidate.pop());
+        candidate.pop();
       }
-      return _results2;
     };
     Cage.prototype.bt_minus = function(candidate, counter) {
-      var new_branch, new_count, potentials, prev_vals, running_target, val, _i, _j, _len, _ref, _ref2, _results, _results2;
+      var n, new_branch, new_candidates, new_count, perms, permutation, potentials, prev_vals, running_target, val, _i, _j, _k, _len, _len2, _ref, _results, _results2;
       running_target = candidate[0];
+      if (candidate[0] < this.target) {
+        return;
+      }
       for (prev_vals = 1, _ref = candidate.length; 1 <= _ref ? prev_vals < _ref : prev_vals > _ref; 1 <= _ref ? prev_vals++ : prev_vals--) {
         running_target -= candidate[prev_vals];
       }
@@ -100,23 +134,34 @@
         return;
       }
       if (running_target === this.target) {
-        if (this.check_consistent(candidate) === true) {
-          console.log("Candidate added!");
-          this.candidates.push(candidate.slice(0, (candidate.length + 1) || 9e9));
+        perms = permute(candidate, this.grid_size);
+        for (_i = 0, _len = perms.length; _i < _len; _i++) {
+          permutation = perms[_i];
+          if (this.check_consistent(permutation)) {
+            if (this.candidates[candidate] != null) {
+              this.candidates[candidate].push(permutation);
+              new_candidates = this.candidates[candidate];
+              this.candidates[candidate] = new_candidates.unique();
+            } else {
+              this.candidates[candidate] = [];
+              this.candidates[candidate].push(permutation);
+            }
+          }
         }
         return;
       }
       if (counter >= this.location.length) {
         return;
       }
+      n = candidate[candidate.length - 1] < this.grid_size ? candidate[candidate.length - 1] : this.grid_size;
       potentials = (function() {
         _results = [];
-        for (var _i = _ref2 = this.grid_size; _ref2 <= 1 ? _i <= 1 : _i >= 1; _ref2 <= 1 ? _i++ : _i--){ _results.push(_i); }
+        for (var _j = n; n <= 1 ? _j <= 1 : _j >= 1; n <= 1 ? _j++ : _j--){ _results.push(_j); }
         return _results;
       }).apply(this, arguments);
       _results2 = [];
-      for (_j = 0, _len = potentials.length; _j < _len; _j++) {
-        val = potentials[_j];
+      for (_k = 0, _len2 = potentials.length; _k < _len2; _k++) {
+        val = potentials[_k];
         new_branch = candidate;
         new_branch.push(val);
         new_count = counter + 1;
@@ -126,42 +171,64 @@
       return _results2;
     };
     Cage.prototype.bt_multi = function(candidate, counter) {
-      var new_branch, new_count, potentials, prev_vals, running_target, val, _i, _j, _len, _ref, _ref2, _results, _results2;
+      var i, k, n, new_branch, new_candidates, new_count, perms, permutation, pop_counter, potentials, prev_vals, running_target, val, _i, _j, _k, _len, _len2, _ref, _results;
       running_target = candidate[0];
       for (prev_vals = 1, _ref = candidate.length; 1 <= _ref ? prev_vals < _ref : prev_vals > _ref; 1 <= _ref ? prev_vals++ : prev_vals--) {
         running_target *= candidate[prev_vals];
       }
-      if (running_target > this.target || (running_target === this.target && counter !== this.location.length)) {
-        return;
+      if (running_target > this.target || candidate.length > this.location.length) {
+        return 1;
       }
       if (running_target === this.target) {
-        if (this.check_consistent(candidate) === true) {
-          console.log("Candidate added!");
-          this.candidates.push(candidate.slice(0, (candidate.length + 1) || 9e9));
+        pop_counter = 1;
+        if (counter !== this.location.length) {
+          i = this.location.length;
+          while (i !== counter) {
+            candidate.push(1);
+            i--;
+            ++pop_counter;
+          }
         }
-        return;
+        perms = permute(candidate, this.grid_size);
+        for (_i = 0, _len = perms.length; _i < _len; _i++) {
+          permutation = perms[_i];
+          if (this.check_consistent(permutation)) {
+            if (this.candidates[candidate] != null) {
+              this.candidates[candidate].push(permutation);
+              new_candidates = this.candidates[candidate];
+              this.candidates[candidate] = new_candidates.unique();
+            } else {
+              this.candidates[candidate] = [];
+              this.candidates[candidate].push(permutation);
+            }
+          }
+        }
+        return pop_counter;
       }
       if (counter >= this.location.length) {
-        return;
+        return 1;
       }
+      n = candidate[candidate.length - 1] < this.grid_size ? candidate[candidate.length - 1] : this.grid_size;
       potentials = (function() {
         _results = [];
-        for (var _i = _ref2 = this.grid_size; _ref2 <= 1 ? _i <= 1 : _i >= 1; _ref2 <= 1 ? _i++ : _i--){ _results.push(_i); }
+        for (var _j = n; n <= 2 ? _j <= 2 : _j >= 2; n <= 2 ? _j++ : _j--){ _results.push(_j); }
         return _results;
       }).apply(this, arguments);
-      _results2 = [];
-      for (_j = 0, _len = potentials.length; _j < _len; _j++) {
-        val = potentials[_j];
+      for (_k = 0, _len2 = potentials.length; _k < _len2; _k++) {
+        val = potentials[_k];
         new_branch = candidate;
         new_branch.push(val);
         new_count = counter + 1;
-        this.bt_multi(new_branch, new_count);
-        _results2.push(candidate.pop());
+        k = this.bt_multi(new_branch, new_count);
+        while (k !== 0) {
+          candidate.pop();
+          k--;
+        }
       }
-      return _results2;
+      return 1;
     };
     Cage.prototype.bt_divide = function(candidate, counter) {
-      var i, new_branch, new_count, potentials, prev_vals, running_target, val, _i, _j, _len, _ref, _ref2, _results, _results2;
+      var i, n, new_branch, new_candidates, new_count, perms, permutation, potentials, prev_vals, running_target, val, _i, _j, _k, _len, _len2, _ref, _results, _results2;
       running_target = candidate[0];
       for (prev_vals = 1, _ref = candidate.length; 1 <= _ref ? prev_vals < _ref : prev_vals > _ref; 1 <= _ref ? prev_vals++ : prev_vals--) {
         running_target /= candidate[prev_vals];
@@ -177,23 +244,34 @@
             i--;
           }
         }
-        if (this.check_consistent(candidate) === true) {
-          console.log("Candidate added!");
-          this.candidates.push(candidate.slice(0, (candidate.length + 1) || 9e9));
+        perms = permute(candidate, this.grid_size);
+        for (_i = 0, _len = perms.length; _i < _len; _i++) {
+          permutation = perms[_i];
+          if (this.check_consistent(permutation)) {
+            if (this.candidates[candidate] != null) {
+              this.candidates[candidate].push(permutation);
+              new_candidates = this.candidates[candidate];
+              this.candidates[candidate] = new_candidates.unique();
+            } else {
+              this.candidates[candidate] = [];
+              this.candidates[candidate].push(permutation);
+            }
+          }
         }
         return;
       }
       if (counter >= this.location.length) {
         return;
       }
+      n = candidate[candidate.length - 1] < this.grid_size ? candidate[candidate.length - 1] : this.grid_size;
       potentials = (function() {
         _results = [];
-        for (var _i = _ref2 = this.grid_size; _ref2 <= 1 ? _i <= 1 : _i >= 1; _ref2 <= 1 ? _i++ : _i--){ _results.push(_i); }
+        for (var _j = n; n <= 1 ? _j <= 1 : _j >= 1; n <= 1 ? _j++ : _j--){ _results.push(_j); }
         return _results;
       }).apply(this, arguments);
       _results2 = [];
-      for (_j = 0, _len = potentials.length; _j < _len; _j++) {
-        val = potentials[_j];
+      for (_k = 0, _len2 = potentials.length; _k < _len2; _k++) {
+        val = potentials[_k];
         new_branch = candidate;
         new_branch.push(val);
         new_count = counter + 1;
@@ -210,21 +288,17 @@
         for (i = 0, _ref = candidate.length; 0 <= _ref ? i < _ref : i > _ref; 0 <= _ref ? i++ : i--) {
           row = this.location[i].row_id_char;
           col = this.location[i].column_id + 1;
-          console.log("row=" + row + ", col=" + col);
           for (j = _ref2 = i + 1, _ref3 = candidate.length; _ref2 <= _ref3 ? j < _ref3 : j > _ref3; _ref2 <= _ref3 ? j++ : j--) {
             if (!(candidate[j] != null)) {
               break;
             }
             cmp_row = this.location[j].row_id_char;
             cmp_col = this.location[j].column_id + 1;
-            console.log("   cmp_row=" + cmp_row + ", cmp_col=" + cmp_col);
             if (cmp_row === row || cmp_col === col) {
-              console.log("      candidate[i]=" + candidate[i] + ", candidate[j]=" + candidate[j]);
               if (candidate[i] === candidate[j]) {
-                console.log("      ERROR: inconsistent");
                 return false;
               } else {
-                console.log("      Consistent");
+
               }
             }
           }
@@ -264,6 +338,19 @@
         return _results;
       })();
       return (_ref = []).concat.apply(_ref, permutations);
+    };
+    Array.prototype.unique = function() {
+      var key, output, value, _ref, _results;
+      output = {};
+      for (key = 0, _ref = this.length; 0 <= _ref ? key < _ref : key > _ref; 0 <= _ref ? key++ : key--) {
+        output[this[key]] = this[key];
+      }
+      _results = [];
+      for (key in output) {
+        value = output[key];
+        _results.push(value);
+      }
+      return _results;
     };
     return Cage;
   })();
