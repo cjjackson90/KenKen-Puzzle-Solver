@@ -85,7 +85,7 @@ class Main
 		###
 
 		# TEST CAGE 2 - DIFFICULT pg42
-		# ###
+		###
 		n = 5
 		@main_grid = new Grid(n)
 
@@ -126,10 +126,82 @@ class Main
 
 		console.log("grid - cages")
 		console.log(@main_grid.cages)
-		# ###
+		###
+
+		# TEST CAGE 3 - V. DIFFICULT pg 89
+		
+		n = 6
+		@main_grid = new Grid(n)
+		
+		cage = new Cage([@main_grid.get_square("A1"), @main_grid.get_square("A2"), @main_grid.get_square("A3"), @main_grid.get_square("B1")])
+		cage.update_target(90)
+		cage.update_operation("*")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("A4"), @main_grid.get_square("A5"), @main_grid.get_square("A6"), @main_grid.get_square("B6")])
+		cage.update_target( 13 )
+		cage.update_operation("+")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("B2"), @main_grid.get_square("C1"), @main_grid.get_square("C2")])
+		cage.update_target(11 )
+		cage.update_operation("+")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("B3"), @main_grid.get_square("B4")])
+		cage.update_target( 4 )
+		cage.update_operation("-")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("B5"), @main_grid.get_square("C5"), @main_grid.get_square("C6")])
+		cage.update_target( 60 )
+		cage.update_operation("*")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("C3"), @main_grid.get_square("C4"), @main_grid.get_square("D4"), @main_grid.get_square("D5")])
+		cage.update_target( 180 )
+		cage.update_operation("*")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("D1"), @main_grid.get_square("E1")])
+		cage.update_target( 2 )
+		cage.update_operation("/")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("D2"), @main_grid.get_square("E2")])
+		cage.update_target( 1 )
+		cage.update_operation("-")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("D5"), @main_grid.get_square("E5")])
+		cage.update_target(6 )
+		cage.update_operation("*")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("D6"), @main_grid.get_square("E6")])
+		cage.update_target( 5 )
+		cage.update_operation("-")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("E3"), @main_grid.get_square("F1"), @main_grid.get_square("F2"), @main_grid.get_square("F3")])
+		cage.update_target(432 )
+		cage.update_operation("*")
+		@main_grid.add_cage(cage)
+
+		cage = new Cage([@main_grid.get_square("E4"), @main_grid.get_square("F4"), @main_grid.get_square("F5"), @main_grid.get_square("F6")])
+		cage.update_target(12 )
+		cage.update_operation("+")
+		@main_grid.add_cage(cage)
+
+		
+
 
 		for cage in @main_grid.cages
 			cage.find_all_candidates(@main_grid.size)
+			
+		for cage in @main_grid.cages
+			cage.remove_duplicates()
+
 		console.log @main_grid.cages
 
 		###temp = ["B1","B2"]

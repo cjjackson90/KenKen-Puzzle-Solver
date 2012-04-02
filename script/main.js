@@ -48,7 +48,7 @@
       return setCookie(name, "", -1);
     };
     function Main() {
-      var cage, n, _i, _len, _ref;
+      var cage, n, _i, _j, _len, _len2, _ref, _ref2;
       this.welcome_dialog();
       /*
       		n = 3
@@ -86,42 +86,107 @@
       		console.log("grid - cages")
       		console.log(@main_grid.cages)
       		*/
-      n = 5;
+      /*
+      		n = 5
+      		@main_grid = new Grid(n)
+      
+      		cage = new Cage([@main_grid.get_square("A1"), @main_grid.get_square("A2"), @main_grid.get_square("B1"), @main_grid.get_square("C1"), @main_grid.get_square("C2")])
+      		cage.update_target(12)
+      		cage.update_operation("*")
+      		@main_grid.add_cage(cage)
+      
+      		cage = new Cage([@main_grid.get_square("A3"), @main_grid.get_square("A4"), @main_grid.get_square("B2"), @main_grid.get_square("B3"), @main_grid.get_square("B4")])
+      		cage.update_target(21)
+      		cage.update_operation("+")
+      		@main_grid.add_cage(cage)
+      
+      		cage = new Cage([@main_grid.get_square("A5"), @main_grid.get_square("B5"), @main_grid.get_square("C5")])
+      		cage.update_target(24)
+      		cage.update_operation("*")
+      		@main_grid.add_cage(cage)
+      
+      		cage = new Cage([@main_grid.get_square("C3"), @main_grid.get_square("C4")])
+      		cage.update_target(4)
+      		cage.update_operation("-")
+      		@main_grid.add_cage(cage)
+      
+      		cage = new Cage([@main_grid.get_square("D1"), @main_grid.get_square("D2"), @main_grid.get_square("E1"), @main_grid.get_square("E2")])
+      		cage.update_target(16)
+      		cage.update_operation("+")
+      		@main_grid.add_cage(cage)
+      
+      		cage = new Cage([@main_grid.get_square("D3"), @main_grid.get_square("E3"), @main_grid.get_square("E4"), @main_grid.get_square("E5")])
+      		cage.update_target(6)
+      		cage.update_operation("*")
+      		@main_grid.add_cage(cage)
+      
+      		cage = new Cage([@main_grid.get_square("D4"), @main_grid.get_square("D5")])
+      		cage.update_target(3)
+      		cage.update_operation("-")
+      		@main_grid.add_cage(cage)
+      
+      		console.log("grid - cages")
+      		console.log(@main_grid.cages)
+      		*/
+      n = 6;
       this.main_grid = new Grid(n);
-      cage = new Cage([this.main_grid.get_square("A1"), this.main_grid.get_square("A2"), this.main_grid.get_square("B1"), this.main_grid.get_square("C1"), this.main_grid.get_square("C2")]);
-      cage.update_target(12);
+      cage = new Cage([this.main_grid.get_square("A1"), this.main_grid.get_square("A2"), this.main_grid.get_square("A3"), this.main_grid.get_square("B1")]);
+      cage.update_target(90);
       cage.update_operation("*");
       this.main_grid.add_cage(cage);
-      cage = new Cage([this.main_grid.get_square("A3"), this.main_grid.get_square("A4"), this.main_grid.get_square("B2"), this.main_grid.get_square("B3"), this.main_grid.get_square("B4")]);
-      cage.update_target(21);
+      cage = new Cage([this.main_grid.get_square("A4"), this.main_grid.get_square("A5"), this.main_grid.get_square("A6"), this.main_grid.get_square("B6")]);
+      cage.update_target(13);
       cage.update_operation("+");
       this.main_grid.add_cage(cage);
-      cage = new Cage([this.main_grid.get_square("A5"), this.main_grid.get_square("B5"), this.main_grid.get_square("C5")]);
-      cage.update_target(24);
-      cage.update_operation("*");
+      cage = new Cage([this.main_grid.get_square("B2"), this.main_grid.get_square("C1"), this.main_grid.get_square("C2")]);
+      cage.update_target(11);
+      cage.update_operation("+");
       this.main_grid.add_cage(cage);
-      cage = new Cage([this.main_grid.get_square("C3"), this.main_grid.get_square("C4")]);
+      cage = new Cage([this.main_grid.get_square("B3"), this.main_grid.get_square("B4")]);
       cage.update_target(4);
       cage.update_operation("-");
       this.main_grid.add_cage(cage);
-      cage = new Cage([this.main_grid.get_square("D1"), this.main_grid.get_square("D2"), this.main_grid.get_square("E1"), this.main_grid.get_square("E2")]);
-      cage.update_target(16);
-      cage.update_operation("+");
+      cage = new Cage([this.main_grid.get_square("B5"), this.main_grid.get_square("C5"), this.main_grid.get_square("C6")]);
+      cage.update_target(60);
+      cage.update_operation("*");
       this.main_grid.add_cage(cage);
-      cage = new Cage([this.main_grid.get_square("D3"), this.main_grid.get_square("E3"), this.main_grid.get_square("E4"), this.main_grid.get_square("E5")]);
+      cage = new Cage([this.main_grid.get_square("C3"), this.main_grid.get_square("C4"), this.main_grid.get_square("D4"), this.main_grid.get_square("D5")]);
+      cage.update_target(180);
+      cage.update_operation("*");
+      this.main_grid.add_cage(cage);
+      cage = new Cage([this.main_grid.get_square("D1"), this.main_grid.get_square("E1")]);
+      cage.update_target(2);
+      cage.update_operation("/");
+      this.main_grid.add_cage(cage);
+      cage = new Cage([this.main_grid.get_square("D2"), this.main_grid.get_square("E2")]);
+      cage.update_target(1);
+      cage.update_operation("-");
+      this.main_grid.add_cage(cage);
+      cage = new Cage([this.main_grid.get_square("D5"), this.main_grid.get_square("E5")]);
       cage.update_target(6);
       cage.update_operation("*");
       this.main_grid.add_cage(cage);
-      cage = new Cage([this.main_grid.get_square("D4"), this.main_grid.get_square("D5")]);
-      cage.update_target(3);
+      cage = new Cage([this.main_grid.get_square("D6"), this.main_grid.get_square("E6")]);
+      cage.update_target(5);
       cage.update_operation("-");
       this.main_grid.add_cage(cage);
-      console.log("grid - cages");
-      console.log(this.main_grid.cages);
+      cage = new Cage([this.main_grid.get_square("E3"), this.main_grid.get_square("F1"), this.main_grid.get_square("F2"), this.main_grid.get_square("F3")]);
+      cage.update_target(432);
+      cage.update_operation("*");
+      this.main_grid.add_cage(cage);
+      cage = new Cage([this.main_grid.get_square("E4"), this.main_grid.get_square("F4"), this.main_grid.get_square("F5"), this.main_grid.get_square("F6")]);
+      cage.update_target(12);
+      cage.update_operation("+");
+      this.main_grid.add_cage(cage);
       _ref = this.main_grid.cages;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         cage = _ref[_i];
         cage.find_all_candidates(this.main_grid.size);
+      }
+      _ref2 = this.main_grid.cages;
+      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+        cage = _ref2[_j];
+        cage.remove_duplicates();
       }
       console.log(this.main_grid.cages);
       /*temp = ["B1","B2"]
