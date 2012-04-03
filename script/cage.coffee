@@ -114,13 +114,13 @@ class Cage
 				if @check_consistent( permutation )
 					if @candidates[candidate]?
 						@candidates[candidate].push permutation
-
-						new_candidates = @candidates[candidate]
-						@candidates[candidate] = new_candidates.unique( )
 					else
 						@candidates[candidate] = []
 						@candidates[candidate].push permutation
 
+			if @candidates[candidate]?
+				new_candidates = @candidates[candidate]
+				@candidates[candidate] = new_candidates.unique( )
 
 			# console.log Object.keys(@candidates).length
 
@@ -180,11 +180,14 @@ class Cage
 				if @check_consistent( permutation )
 					if @candidates[candidate]? 
 						@candidates[candidate].push permutation
-						new_candidates = @candidates[candidate]
-						@candidates[candidate] = new_candidates.unique( )
 					else
 						@candidates[candidate] = []
 						@candidates[candidate].push permutation
+
+			if @candidates[candidate]?
+				new_candidates = @candidates[candidate]
+				@candidates[candidate] = new_candidates.unique( )
+
 
 			# console.log Object.keys(@candidates).length
 			return
@@ -235,11 +238,13 @@ class Cage
 				if @check_consistent( permutation )
 					if @candidates[candidate]? 
 						@candidates[candidate].push permutation
-						new_candidates = @candidates[candidate]
-						@candidates[candidate] = new_candidates.unique( )
 					else
 						@candidates[candidate] = []
 						@candidates[candidate].push permutation
+
+			if @candidates[candidate]?
+				new_candidates = @candidates[candidate]
+				@candidates[candidate] = new_candidates.unique( )
 
 			# console.log Object.keys(@candidates).length
 			return pop_counter
@@ -296,11 +301,13 @@ class Cage
 				if @check_consistent( permutation )
 					if @candidates[candidate]? 
 						@candidates[candidate].push permutation
-						new_candidates = @candidates[candidate]
-						@candidates[candidate] = new_candidates.unique( )
 					else
 						@candidates[candidate] = []
 						@candidates[candidate].push permutation
+
+			if @candidates[candidate]?
+				new_candidates = @candidates[candidate]
+				@candidates[candidate] = new_candidates.unique( )
 
 			# console.log Object.keys(@candidates).length
 			return
@@ -355,6 +362,8 @@ class Cage
 			return true
 			
 	add_candidate_to_grid: (candidate) ->
+		for i in [0...@location.length]
+			@location[i].set_value candidate[i]
 	
 
 

@@ -92,13 +92,15 @@
           if (this.check_consistent(permutation)) {
             if (this.candidates[candidate] != null) {
               this.candidates[candidate].push(permutation);
-              new_candidates = this.candidates[candidate];
-              this.candidates[candidate] = new_candidates.unique();
             } else {
               this.candidates[candidate] = [];
               this.candidates[candidate].push(permutation);
             }
           }
+        }
+        if (this.candidates[candidate] != null) {
+          new_candidates = this.candidates[candidate];
+          this.candidates[candidate] = new_candidates.unique();
         }
         return;
       }
@@ -140,13 +142,15 @@
           if (this.check_consistent(permutation)) {
             if (this.candidates[candidate] != null) {
               this.candidates[candidate].push(permutation);
-              new_candidates = this.candidates[candidate];
-              this.candidates[candidate] = new_candidates.unique();
             } else {
               this.candidates[candidate] = [];
               this.candidates[candidate].push(permutation);
             }
           }
+        }
+        if (this.candidates[candidate] != null) {
+          new_candidates = this.candidates[candidate];
+          this.candidates[candidate] = new_candidates.unique();
         }
         return;
       }
@@ -195,13 +199,15 @@
           if (this.check_consistent(permutation)) {
             if (this.candidates[candidate] != null) {
               this.candidates[candidate].push(permutation);
-              new_candidates = this.candidates[candidate];
-              this.candidates[candidate] = new_candidates.unique();
             } else {
               this.candidates[candidate] = [];
               this.candidates[candidate].push(permutation);
             }
           }
+        }
+        if (this.candidates[candidate] != null) {
+          new_candidates = this.candidates[candidate];
+          this.candidates[candidate] = new_candidates.unique();
         }
         return pop_counter;
       }
@@ -250,13 +256,15 @@
           if (this.check_consistent(permutation)) {
             if (this.candidates[candidate] != null) {
               this.candidates[candidate].push(permutation);
-              new_candidates = this.candidates[candidate];
-              this.candidates[candidate] = new_candidates.unique();
             } else {
               this.candidates[candidate] = [];
               this.candidates[candidate].push(permutation);
             }
           }
+        }
+        if (this.candidates[candidate] != null) {
+          new_candidates = this.candidates[candidate];
+          this.candidates[candidate] = new_candidates.unique();
         }
         return;
       }
@@ -306,7 +314,14 @@
         return true;
       }
     };
-    Cage.prototype.add_candidate_to_grid = function(candidate) {};
+    Cage.prototype.add_candidate_to_grid = function(candidate) {
+      var i, _ref, _results;
+      _results = [];
+      for (i = 0, _ref = this.location.length; 0 <= _ref ? i < _ref : i > _ref; 0 <= _ref ? i++ : i--) {
+        _results.push(this.location[i].set_value(candidate[i]));
+      }
+      return _results;
+    };
     arrayExcept = function(arr, idx) {
       var res;
       res = arr.slice(0);
