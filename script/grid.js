@@ -21,11 +21,213 @@
         }
       }
     }
-    Grid.prototype.add_candidate = function() {};
+    Grid.prototype.add_candidate = function(location, candidate) {
+      var col_id, current_cmp, i, row_id, _ref, _results;
+      _results = [];
+      for (i = 0, _ref = location.length; 0 <= _ref ? i < _ref : i > _ref; 0 <= _ref ? i++ : i--) {
+        current_cmp = this.display[location[i].row_id][location[i].column_id];
+        _results.push(current_cmp.id === location[i].id ? (current_cmp.set_value(candidate[i]), row_id = current_cmp.row_id, col_id = current_cmp.column_id, this.update_row(row_id, candidate[i]), this.update_column(col_id, candidate[i])) : void 0);
+      }
+      return _results;
+    };
     Grid.prototype.draw = function() {};
     Grid.prototype.clear = function() {};
-    Grid.prototype.update_row = function(row_id, col_id, val) {};
-    Grid.prototype.update_column = function(row_id, col_id, val) {};
+    Grid.prototype.update_row = function(row_id, val) {
+      return this.rows[row_id][val - 1] = null;
+    };
+    Grid.prototype.update_column = function(col_id, val) {
+      return this.columns[col_id][val - 1] = null;
+    };
+    Grid.prototype.update_affected_candidates = function(update_type, new_sq, value) {
+      /* update type determines whether row, column or both are
+      			updated. Row/Column would be updated depending on if a
+      			value is known to go in a particular row/column but not
+      			where. Both is used if the value is in place and thus
+      			affects both row and column.
+      			0 = both
+      			1 = row
+      			2 = column
+      		*/      var affected_cage, affected_col, affected_row, cage, cand, cand_group, candidate, i, loc_index, output, rem_array, square, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _m, _n, _o, _p, _ref, _ref10, _ref11, _ref12, _ref13, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9, _results, _results2, _results3;
+      switch (update_type) {
+        case 0:
+          affected_row = new_sq.row_id;
+          affected_col = new_sq.column_id;
+          _ref = this.display[affected_row];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            square = _ref[_i];
+            _ref2 = this.cages;
+            for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+              cage = _ref2[_j];
+              if (cage.id === square.cage_id) {
+                affected_cage = cage;
+                for (i = 0, _ref3 = affected_cage.location.length; 0 <= _ref3 ? i < _ref3 : i > _ref3; 0 <= _ref3 ? i++ : i--) {
+                  if (affected_cage.location[i] === square) {
+                    loc_index = i;
+                  }
+                }
+              }
+            }
+            _ref4 = affected_cage.candidates;
+            for (cand_group in _ref4) {
+              cand = _ref4[cand_group];
+              rem_array = [];
+              for (_k = 0, _len3 = cand.length; _k < _len3; _k++) {
+                candidate = cand[_k];
+                if (candidate[loc_index] === new_sq.value) {
+                  rem_array.push(candidate);
+                }
+              }
+              if (rem_array.length !== 0) {
+                output = affected_cage.candidates[cand_group];
+                for (_l = 0, _len4 = rem_array.length; _l < _len4; _l++) {
+                  candidate = rem_array[_l];
+                  output = this.remove(output, candidate);
+                }
+                affected_cage.candidates[cand_group] = output;
+              }
+            }
+          }
+          _results = [];
+          for (i = 0, _ref5 = this.size; 0 <= _ref5 ? i < _ref5 : i > _ref5; 0 <= _ref5 ? i++ : i--) {
+            square = this.display[i][affected_col];
+            _ref6 = this.cages;
+            for (_m = 0, _len5 = _ref6.length; _m < _len5; _m++) {
+              cage = _ref6[_m];
+              if (cage.id === square.cage_id) {
+                affected_cage = cage;
+                for (i = 0, _ref7 = affected_cage.location.length; 0 <= _ref7 ? i < _ref7 : i > _ref7; 0 <= _ref7 ? i++ : i--) {
+                  if (affected_cage.location[i] === square) {
+                    loc_index = i;
+                  }
+                }
+              }
+            }
+            _results.push((function() {
+              var _len6, _n, _ref8, _results2;
+              _ref8 = affected_cage.candidates;
+              _results2 = [];
+              for (cand_group in _ref8) {
+                cand = _ref8[cand_group];
+                rem_array = [];
+                for (_n = 0, _len6 = cand.length; _n < _len6; _n++) {
+                  candidate = cand[_n];
+                  if (candidate[loc_index] === new_sq.value) {
+                    rem_array.push(candidate);
+                  }
+                }
+                _results2.push((function() {
+                  var _len7, _o;
+                  if (rem_array.length !== 0) {
+                    output = affected_cage.candidates[cand_group];
+                    for (_o = 0, _len7 = rem_array.length; _o < _len7; _o++) {
+                      candidate = rem_array[_o];
+                      output = this.remove(output, candidate);
+                    }
+                    return affected_cage.candidates[cand_group] = output;
+                  }
+                }).call(this));
+              }
+              return _results2;
+            }).call(this));
+          }
+          return _results;
+          break;
+        case 1:
+          affected_row = new_sq.row_id;
+          _ref8 = this.display[affected_row];
+          _results2 = [];
+          for (_n = 0, _len6 = _ref8.length; _n < _len6; _n++) {
+            square = _ref8[_n];
+            _ref9 = this.cages;
+            for (_o = 0, _len7 = _ref9.length; _o < _len7; _o++) {
+              cage = _ref9[_o];
+              if (cage.id === square.cage_id) {
+                affected_cage = cage;
+                for (i = 0, _ref10 = affected_cage.location.length; 0 <= _ref10 ? i < _ref10 : i > _ref10; 0 <= _ref10 ? i++ : i--) {
+                  if (affected_cage.location[i] === square) {
+                    loc_index = i;
+                  }
+                }
+              }
+            }
+            _results2.push((function() {
+              var _len8, _p, _ref11, _results3;
+              _ref11 = affected_cage.candidates;
+              _results3 = [];
+              for (cand_group in _ref11) {
+                cand = _ref11[cand_group];
+                rem_array = [];
+                for (_p = 0, _len8 = cand.length; _p < _len8; _p++) {
+                  candidate = cand[_p];
+                  if (candidate[loc_index] === new_sq.value) {
+                    rem_array.push(candidate);
+                  }
+                }
+                _results3.push((function() {
+                  var _len9, _q;
+                  if (rem_array.length !== 0) {
+                    output = affected_cage.candidates[cand_group];
+                    for (_q = 0, _len9 = rem_array.length; _q < _len9; _q++) {
+                      candidate = rem_array[_q];
+                      output = this.remove(output, candidate);
+                    }
+                    return affected_cage.candidates[cand_group] = output;
+                  }
+                }).call(this));
+              }
+              return _results3;
+            }).call(this));
+          }
+          return _results2;
+          break;
+        case 2:
+          affected_col = new_sq.column_id;
+          _results3 = [];
+          for (i = 0, _ref11 = this.size; 0 <= _ref11 ? i < _ref11 : i > _ref11; 0 <= _ref11 ? i++ : i--) {
+            square = this.display[i][affected_col];
+            _ref12 = this.cages;
+            for (_p = 0, _len8 = _ref12.length; _p < _len8; _p++) {
+              cage = _ref12[_p];
+              if (cage.id === square.cage_id) {
+                affected_cage = cage;
+                for (i = 0, _ref13 = affected_cage.location.length; 0 <= _ref13 ? i < _ref13 : i > _ref13; 0 <= _ref13 ? i++ : i--) {
+                  if (affected_cage.location[i] === square) {
+                    loc_index = i;
+                  }
+                }
+              }
+            }
+            _results3.push((function() {
+              var _len9, _q, _ref14, _results4;
+              _ref14 = affected_cage.candidates;
+              _results4 = [];
+              for (cand_group in _ref14) {
+                cand = _ref14[cand_group];
+                rem_array = [];
+                for (_q = 0, _len9 = cand.length; _q < _len9; _q++) {
+                  candidate = cand[_q];
+                  if (candidate[loc_index] === new_sq.value) {
+                    rem_array.push(candidate);
+                  }
+                }
+                _results4.push((function() {
+                  var _len10, _r;
+                  if (rem_array.length !== 0) {
+                    output = affected_cage.candidates[cand_group];
+                    for (_r = 0, _len10 = rem_array.length; _r < _len10; _r++) {
+                      candidate = rem_array[_r];
+                      output = this.remove(output, candidate);
+                    }
+                    return affected_cage.candidates[cand_group] = output;
+                  }
+                }).call(this));
+              }
+              return _results4;
+            }).call(this));
+          }
+          return _results3;
+      }
+    };
     Grid.prototype.add_cage = function(cage) {
       return this.cages.push(cage);
     };
@@ -34,25 +236,35 @@
       return this.solution = solution;
     };
     Grid.prototype.verify_correct = function() {
-      var i, valid, _ref;
-      valid = true;
-      if (solution !== null) {
+      var i, _ref, _results;
+      console.log(this.solution);
+      if (this.solution.length === []) {
+        console.log("shouldn't be here...");
+        _results = [];
         for (i = 0, _ref = this.size; 0 <= _ref ? i <= _ref : i >= _ref; 0 <= _ref ? i++ : i--) {
-          if (display[i].value !== solution[i]) {
+          if (this.display[i].value != null) {
+            if (this.display[i].value !== this.solution[i]) {
+              return false;
+            }
+          } else {
             return false;
           }
         }
+        return _results;
       } else {
-        if (check_rows_are_valid() === false) {
+        if (this.check_rows_are_valid() === false) {
+          console.log("rows invalid");
           return false;
         }
-        if (check_cols_are_valid() === false) {
+        if (this.check_cols_are_valid() === false) {
+          console.log("cols invalid");
           return false;
         }
-        if (check_cages_are_valid() === false) {
+        if (this.check_cages_are_valid() === false) {
+          console.log("cages invalid");
           return false;
         }
-        return valid;
+        return true;
       }
     };
     Grid.prototype.check_rows_are_valid = function() {
@@ -180,6 +392,35 @@
     };
     Grid.prototype.ascending = function(a, b) {
       return a - b;
+    };
+    Grid.prototype.remove = function(arr, val) {
+      var x, _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = arr.length; _i < _len; _i++) {
+        x = arr[_i];
+        if (x !== val) {
+          _results.push(x);
+        }
+      }
+      return _results;
+    };
+    Grid.prototype.remove_array = function(arr, val) {
+      var current, i, mismatch, output, _i, _len, _ref;
+      output = [];
+      for (_i = 0, _len = arr.length; _i < _len; _i++) {
+        current = arr[_i];
+        mismatch = false;
+        for (i = 0, _ref = current.length; 0 <= _ref ? i < _ref : i > _ref; 0 <= _ref ? i++ : i--) {
+          if (current[i] !== val[i]) {
+            mismatch = true;
+            break;
+          }
+        }
+        if (mismatch === true) {
+          output.push(current);
+        }
+      }
+      return output;
     };
     return Grid;
   })();
