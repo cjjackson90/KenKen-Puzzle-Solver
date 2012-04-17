@@ -9,14 +9,24 @@
     Cage.prototype.candidates = [];
     Cage.prototype.grid_size = null;
     function Cage(location) {
-      this.location = location;
       this.id = uniqueId();
+      this.location = location;
     }
-    Cage.prototype.update_target = function(target) {
-      return this.target = target;
+    Cage.prototype.update_square_cage_ids = function() {
+      var square, _i, _len, _ref, _results;
+      _ref = this.location;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        square = _ref[_i];
+        _results.push(square.set_cage_id(this.id));
+      }
+      return _results;
     };
-    Cage.prototype.update_operation = function(op) {
-      return this.operation = op;
+    Cage.prototype.update_target = function(target) {
+      this.target = target;
+    };
+    Cage.prototype.update_operation = function(operation) {
+      this.operation = operation;
     };
     Cage.prototype.find_all_candidates = function(grid_size) {
       var i, output, single_candidate, _ref, _ref2, _ref3, _ref4, _results;
@@ -25,7 +35,6 @@
       this.candidates = [];
       switch (this.operation) {
         case "+":
-          console.log("++++++++++++++");
           for (i = _ref = this.grid_size; _ref <= 1 ? i <= 1 : i >= 1; _ref <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -33,7 +42,6 @@
           }
           break;
         case "-":
-          console.log("--------------");
           for (i = _ref2 = this.grid_size; _ref2 <= 1 ? i <= 1 : i >= 1; _ref2 <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -41,7 +49,6 @@
           }
           break;
         case "*":
-          console.log("**************");
           for (i = _ref3 = this.grid_size; _ref3 <= 1 ? i <= 1 : i >= 1; _ref3 <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -49,7 +56,6 @@
           }
           break;
         case "/":
-          console.log("//////////////////");
           _results = [];
           for (i = _ref4 = this.grid_size; _ref4 <= 1 ? i <= 1 : i >= 1; _ref4 <= 1 ? i++ : i--) {
             single_candidate = [];
@@ -62,11 +68,8 @@
     Cage.prototype.remove_duplicates = function(candidate) {
       var foo;
       if (candidate != null) {
-        console.log("candidates[candidate]");
         foo = candidate;
         foo.unique();
-        console.log("foo");
-        console.log(foo);
         return this.candidates[candidate] = foo;
       }
     };
@@ -99,8 +102,7 @@
           }
         }
         if (this.candidates[candidate] != null) {
-          new_candidates = this.candidates[candidate];
-          this.candidates[candidate] = new_candidates.unique();
+          new_candidates = this.unique(this.candidates[candidate]);
         }
         return;
       }
@@ -149,8 +151,7 @@
           }
         }
         if (this.candidates[candidate] != null) {
-          new_candidates = this.candidates[candidate];
-          this.candidates[candidate] = new_candidates.unique();
+          new_candidates = this.unique(this.candidates[candidate]);
         }
         return;
       }
@@ -206,8 +207,7 @@
           }
         }
         if (this.candidates[candidate] != null) {
-          new_candidates = this.candidates[candidate];
-          this.candidates[candidate] = new_candidates.unique();
+          new_candidates = this.unique(this.candidates[candidate]);
         }
         return pop_counter;
       }
@@ -263,8 +263,7 @@
           }
         }
         if (this.candidates[candidate] != null) {
-          new_candidates = this.candidates[candidate];
-          this.candidates[candidate] = new_candidates.unique();
+          new_candidates = this.unique(this.candidates[candidate]);
         }
         return;
       }
@@ -354,11 +353,11 @@
       })();
       return (_ref = []).concat.apply(_ref, permutations);
     };
-    Array.prototype.unique = function() {
+    Cage.prototype.unique = function(array) {
       var key, output, value, _ref, _results;
       output = {};
-      for (key = 0, _ref = this.length; 0 <= _ref ? key < _ref : key > _ref; 0 <= _ref ? key++ : key--) {
-        output[this[key]] = this[key];
+      for (key = 0, _ref = array.length; 0 <= _ref ? key < _ref : key > _ref; 0 <= _ref ? key++ : key--) {
+        output[array[key]] = array[key];
       }
       _results = [];
       for (key in output) {

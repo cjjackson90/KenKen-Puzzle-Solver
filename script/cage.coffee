@@ -8,24 +8,26 @@ class Cage
 	grid_size: null
 
 	constructor: (location) ->
-		@location = location
 		@id = uniqueId( )
+		@location = location
 
-	update_target: (target) ->
-		@target = target
+	update_square_cage_ids: () ->
+		for square in @location
+			square.set_cage_id @id
+			# console.log square
 
-	update_operation: (op) ->
-		@operation = op
+	update_target: (@target) ->
+
+	update_operation: (@operation) ->
 
 	find_all_candidates: (grid_size) ->
-	
 		#TODO: optimise by reducing from brute force.
 		@grid_size = grid_size
 		output = ""
 		@candidates = []
 		switch @operation
 			when "+"
-				console.log "++++++++++++++"
+				# console.log "++++++++++++++"
 				##console.log @target
 				for i in [@grid_size..1]
 					single_candidate = []
@@ -38,21 +40,21 @@ class Cage
 				#console.log @candidates
 				break
 			when "-" #then @candidates_minus grid_size
-				console.log "--------------"
+				# console.log "--------------"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
 					@bt_minus single_candidate, 1
 				break
 			when "*" #then @candidates_multi(grid_size)
-				console.log "**************"
+				# console.log "**************"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
 					@bt_multi single_candidate, 1
 				break
 			when "/" #then @candidates_divide(grid_size)
-				console.log "//////////////////"
+				# console.log "//////////////////"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
@@ -62,15 +64,14 @@ class Cage
 		# console.log @candidates["4,4,1"]
 		# for candidate in @candidates[candidate]
 		if candidate?	
-			console.log "candidates[candidate]"
+			# console.log "candidates[candidate]"
 			# console.log @candidates[candidate]
 			foo = candidate
 			foo.unique( )
-			console.log "foo"
-			console.log foo
+			# console.log "foo"
+			# console.log foo
 			@candidates[candidate] = foo
 		
-
 	bt_plus: (candidate, counter) ->
 		running_target = @target
 		#######console.log "candidate =  #{candidate}, counter = #{counter}"
@@ -117,10 +118,9 @@ class Cage
 					else
 						@candidates[candidate] = []
 						@candidates[candidate].push permutation
-
 			if @candidates[candidate]?
-				new_candidates = @candidates[candidate]
-				@candidates[candidate] = new_candidates.unique( )
+				new_candidates = @unique @candidates[candidate]
+				# @candidates[candidate] = new_candidates.unique( )
 
 			# console.log Object.keys(@candidates).length
 
@@ -185,8 +185,8 @@ class Cage
 						@candidates[candidate].push permutation
 
 			if @candidates[candidate]?
-				new_candidates = @candidates[candidate]
-				@candidates[candidate] = new_candidates.unique( )
+				new_candidates = @unique @candidates[candidate]
+				# @candidates[candidate] = new_candidates.unique( )
 
 
 			# console.log Object.keys(@candidates).length
@@ -243,8 +243,8 @@ class Cage
 						@candidates[candidate].push permutation
 
 			if @candidates[candidate]?
-				new_candidates = @candidates[candidate]
-				@candidates[candidate] = new_candidates.unique( )
+				new_candidates = @unique @candidates[candidate]
+				# @candidates[candidate] = new_candidates.unique( )
 
 			# console.log Object.keys(@candidates).length
 			return pop_counter
@@ -306,8 +306,8 @@ class Cage
 						@candidates[candidate].push permutation
 
 			if @candidates[candidate]?
-				new_candidates = @candidates[candidate]
-				@candidates[candidate] = new_candidates.unique( )
+				new_candidates = @unique @candidates[candidate]
+				# @candidates[candidate] = new_candidates.unique( )
 
 			# console.log Object.keys(@candidates).length
 			return
@@ -337,6 +337,7 @@ class Cage
 
 	check_consistent: (candidate) ->
 		#console.log "candidate=#{candidate}"
+		# console.log @location
 		if candidate.length is 1
 			return true
 		else
@@ -362,9 +363,11 @@ class Cage
 			return true
 			
 	add_candidate_to_grid: (candidate) ->
+		# console.log "location[0] is..."
+		# console.log @location[0]
 		for i in [0...@location.length]
 			@location[i].set_value candidate[i]
-	
+
 
 
 
@@ -391,9 +394,9 @@ class Cage
 		# Flatten the array before returning it.
 		[].concat permutations...
 
-	Array::unique = ->
+	unique: (array) ->
 		output = {}
-		output[@[key]] = @[key] for key in [0...@length]
+		output[array[key]] = array[key] for key in [0...array.length]
 		value for key, value of output
 
 this.Cage = Cage
