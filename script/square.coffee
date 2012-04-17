@@ -9,21 +9,19 @@ class Square
 	cage_id: null
 
 
-	constructor: (row_id, column_id) ->
-		@row_id = row_id
-		@column_id = column_id
+	constructor: (@row_id, @column_id) ->
 		@row_id_char = String.fromCharCode(row_id+65)
 		@id = (@row_id_char) + (column_id+1) 
 		#console.log(@id)
 	
-	set_cage_id: (cage_id) ->
-		@cage_id = cage_id
+	set_cage_id: (@cage_id) ->
 
-	set_value: (new_val) ->
-		@value = new_val
+	set_value: (@value) ->
 
 	set_target_op: (target_val, op) ->
 		@target_op = target_val + op
+
+	set_square: (@Square) ->
 
 
 this.Square = Square
