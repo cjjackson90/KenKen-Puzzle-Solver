@@ -46,205 +46,346 @@ class Main
 		#n = 3
 		#@main_grid = new Grid(n)
 
-		# TEST CAGE 1 - EASY pg1
-		# solution = 
-		# 3 2 1
-		# 2 1 3
-		# 1 3 2
-		n = 3
-		@main_grid = new Grid(n)
-		console.log @main_grid
-
-
-		cage = new Cage([@main_grid.get_square("A1"), @main_grid.get_square("A2")])
-		cage.update_target(5)
-		cage.update_operation("+")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
-
-		#console.log(@main_grid.cages)
-
-		cage = new Cage([@main_grid.get_square("B1"), @main_grid.get_square("B2")])
-		cage.update_target(2)
-		cage.update_operation("/")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
-		#console.log(@main_grid.cages)
-
-		cage = new Cage([@main_grid.get_square("A3"), @main_grid.get_square("B3")])
-		cage.update_target(2)
-		cage.update_operation("-")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
-		#console.log(@main_grid.cages)
-
-		cage = new Cage([@main_grid.get_square("C1")])
-		cage.update_target(1)
-		cage.update_operation("+")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
-		#console.log(@main_grid.cages)
-
-		cage = new Cage([@main_grid.get_square("C2"), @main_grid.get_square("C3")])
-		cage.update_target(6)
-		cage.update_operation("*")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
-
-		console.log "A1 cage_id = #{@main_grid.display[0][0].cage_id}"
-
-		$('body').append( '''
-		<table border="1">
-		<tr>
-			<td id="A1"> </td>
-			<td id="A2"> </td>
-			<td id="A3"> </td>
-		</tr>
-		<tr>
-			<td id="B1"> </td>
-			<td id="B2"> </td>
-			<td id="B3"> </td>
-		</tr>
-		<tr>
-			<td id="C1"> </td>
-			<td id="C2"> </td>
-			<td id="C3"> </td>
-		</tr>
-		</table>
-		''')
-
-		# console.log("grid - cages")
-		# console.log(@main_grid.cages)
+		test_case = 2
 		
+		switch (test_case)
+			when 1
+				# TEST CAGE 1 - EASY pg1
+				# solution = 
+				# 3 2 1
+				# 2 1 3
+				# 1 3 2
+				n = 3
+				@main_grid = new Grid(n)
+				console.log @main_grid
 
-		# TEST CAGE 2 - DIFFICULT pg42
-		###
-		n = 5
-		@main_grid = new Grid(n)
 
-		cage = new Cage([@main_grid.get_square("A1"), @main_grid.get_square("A2"), @main_grid.get_square("B1"), @main_grid.get_square("C1"), @main_grid.get_square("C2")])
-		cage.update_target(12)
-		cage.update_operation("*")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("A1"), @main_grid.get_square("A2")])
+				cage.update_target(5)
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
 
-		cage = new Cage([@main_grid.get_square("A3"), @main_grid.get_square("A4"), @main_grid.get_square("B2"), @main_grid.get_square("B3"), @main_grid.get_square("B4")])
-		cage.update_target(21)
-		cage.update_operation("+")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				#console.log(@main_grid.cages)
 
-		cage = new Cage([@main_grid.get_square("A5"), @main_grid.get_square("B5"), @main_grid.get_square("C5")])
-		cage.update_target(24)
-		cage.update_operation("*")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("B1"), @main_grid.get_square("B2")])
+				cage.update_target(2)
+				cage.update_operation("/")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+				#console.log(@main_grid.cages)
 
-		cage = new Cage([@main_grid.get_square("C3"), @main_grid.get_square("C4")])
-		cage.update_target(4)
-		cage.update_operation("-")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("A3"), @main_grid.get_square("B3")])
+				cage.update_target(2)
+				cage.update_operation("-")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+				#console.log(@main_grid.cages)
 
-		cage = new Cage([@main_grid.get_square("D1"), @main_grid.get_square("D2"), @main_grid.get_square("E1"), @main_grid.get_square("E2")])
-		cage.update_target(16)
-		cage.update_operation("+")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("C1")])
+				cage.update_target(1)
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+				#console.log(@main_grid.cages)
 
-		cage = new Cage([@main_grid.get_square("D3"), @main_grid.get_square("E3"), @main_grid.get_square("E4"), @main_grid.get_square("E5")])
-		cage.update_target(6)
-		cage.update_operation("*")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("C2"), @main_grid.get_square("C3")])
+				cage.update_target(6)
+				cage.update_operation("*")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
 
-		cage = new Cage([@main_grid.get_square("D4"), @main_grid.get_square("D5")])
-		cage.update_target(3)
-		cage.update_operation("-")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				# console.log "A1 cage_id = #{@main_grid.display[0][0].cage_id}"
 
-		console.log("grid - cages")
-		console.log(@main_grid.cages)
-		###
+				$('body').append( '''
+				<table border="1">
+				<tr>
+					<td id="A1"> </td>
+					<td id="A2"> </td>
+					<td id="A3"> </td>
+				</tr>
+				<tr>
+					<td id="B1"> </td>
+					<td id="B2"> </td>
+					<td id="B3"> </td>
+				</tr>
+				<tr>
+					<td id="C1"> </td>
+					<td id="C2"> </td>
+					<td id="C3"> </td>
+				</tr>
+				</table>
+				''')
 
-		# TEST CAGE 3 - V. DIFFICULT pg 89
-		###
-		n = 6
-		@main_grid = new Grid(n)
+				# console.log("grid - cages")
+				# console.log(@main_grid.cages)
+
+			when 2
+
+				n = 4
+				@main_grid = new Grid(n)
+
+				cage = new Cage([@main_grid.get_square("A1")])
+				cage.update_target(4)
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("A2"), @main_grid.get_square("B2"), @main_grid.get_square("B3")])
+				cage.update_target(12)
+				cage.update_operation("*")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("A3"), @main_grid.get_square("A4")])
+				cage.update_target(2)
+				cage.update_operation("-")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("B1"), @main_grid.get_square("C1")])
+				cage.update_target(2)
+				cage.update_operation("/")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("B4"), @main_grid.get_square("C4")])
+				cage.update_target(3)
+				cage.update_operation("-")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("C2"), @main_grid.get_square("C3"), @main_grid.get_square("D3")])
+				cage.update_target(11)
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("D1"), @main_grid.get_square("D2")])
+				cage.update_target(4)
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("D4")])
+				cage.update_target(2)
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				$('body').append( '''
+				<table border="1">
+				<tr>
+					<td id="A1"> </td>
+					<td id="A2"> </td>
+					<td id="A3"> </td>
+					<td id="A4"> </td>
+				</tr>
+				<tr>
+					<td id="B1"> </td>
+					<td id="B2"> </td>
+					<td id="B3"> </td>
+					<td id="B4"> </td>
+				</tr>
+				<tr>
+					<td id="C1"> </td>
+					<td id="C2"> </td>
+					<td id="C3"> </td>
+					<td id="C4"> </td>
+				</tr>
+				<tr>
+					<td id="D1"> </td>
+					<td id="D2"> </td>
+					<td id="D3"> </td>
+					<td id="D4"> </td>
+				</tr>
+				</table>
+				''')
 		
-		cage = new Cage([@main_grid.get_square("A1"), @main_grid.get_square("A2"), @main_grid.get_square("A3"), @main_grid.get_square("B1")])
-		cage.update_target(90)
-		cage.update_operation("*")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+			when 3
 
-		cage = new Cage([@main_grid.get_square("A4"), @main_grid.get_square("A5"), @main_grid.get_square("A6"), @main_grid.get_square("B6")])
-		cage.update_target( 13 )
-		cage.update_operation("+")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				# TEST CAGE 3 - DIFFICULT pg42
+				# 2 1 4 5 3
+				# 1 5 3 4 2
+				# 3 2 5 1 4
+				# 4 3 1 2 5
+				# 5 4 2 3 1
+				n = 5
+				@main_grid = new Grid(n)
 
-		cage = new Cage([@main_grid.get_square("B2"), @main_grid.get_square("C1"), @main_grid.get_square("C2")])
-		cage.update_target(11 )
-		cage.update_operation("+")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("A1"), @main_grid.get_square("A2"), @main_grid.get_square("B1"), @main_grid.get_square("C1"), @main_grid.get_square("C2")])
+				cage.update_target(12)
+				cage.update_operation("*")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
 
-		cage = new Cage([@main_grid.get_square("B3"), @main_grid.get_square("B4")])
-		cage.update_target( 4 )
-		cage.update_operation("-")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("A3"), @main_grid.get_square("A4"), @main_grid.get_square("B2"), @main_grid.get_square("B3"), @main_grid.get_square("B4")])
+				cage.update_target(21)
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
 
-		cage = new Cage([@main_grid.get_square("B5"), @main_grid.get_square("C5"), @main_grid.get_square("C6")])
-		cage.update_target( 60 )
-		cage.update_operation("*")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("A5"), @main_grid.get_square("B5"), @main_grid.get_square("C5")])
+				cage.update_target(24)
+				cage.update_operation("*")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
 
-		cage = new Cage([@main_grid.get_square("C3"), @main_grid.get_square("C4"), @main_grid.get_square("D4"), @main_grid.get_square("D5")])
-		cage.update_target( 180 )
-		cage.update_operation("*")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("C3"), @main_grid.get_square("C4")])
+				cage.update_target(4)
+				cage.update_operation("-")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
 
-		cage = new Cage([@main_grid.get_square("D1"), @main_grid.get_square("E1")])
-		cage.update_target( 2 )
-		cage.update_operation("/")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("D1"), @main_grid.get_square("D2"), @main_grid.get_square("E1"), @main_grid.get_square("E2")])
+				cage.update_target(16)
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
 
-		cage = new Cage([@main_grid.get_square("D2"), @main_grid.get_square("E2")])
-		cage.update_target( 1 )
-		cage.update_operation("-")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("D3"), @main_grid.get_square("E3"), @main_grid.get_square("E4"), @main_grid.get_square("E5")])
+				cage.update_target(6)
+				cage.update_operation("*")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
 
-		cage = new Cage([@main_grid.get_square("D5"), @main_grid.get_square("E5")])
-		cage.update_target(6 )
-		cage.update_operation("*")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				cage = new Cage([@main_grid.get_square("D4"), @main_grid.get_square("D5")])
+				cage.update_target(3)
+				cage.update_operation("-")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
 
-		cage = new Cage([@main_grid.get_square("D6"), @main_grid.get_square("E6")])
-		cage.update_target( 5 )
-		cage.update_operation("-")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				console.log("grid - cages")
+				console.log(@main_grid.cages)
+				
+				$('body').append( '''
+				<table border="1">
+				<tr>
+					<td id="A1"> </td>
+					<td id="A2"> </td>
+					<td id="A3"> </td>
+					<td id="A4"> </td>
+					<td id="A5"> </td>
+				</tr>
+				<tr>
+					<td id="B1"> </td>
+					<td id="B2"> </td>
+					<td id="B3"> </td>
+					<td id="B4"> </td>
+					<td id="B5"> </td>
+				</tr>
+				<tr>
+					<td id="C1"> </td>
+					<td id="C2"> </td>
+					<td id="C3"> </td>
+					<td id="C4"> </td>
+					<td id="C5"> </td>
+				</tr>
+				<tr>
+					<td id="D1"> </td>
+					<td id="D2"> </td>
+					<td id="D3"> </td>
+					<td id="D4"> </td>
+					<td id="D5"> </td>
+				</tr>
+				<tr>
+					<td id="E1"> </td>
+					<td id="E2"> </td>
+					<td id="E3"> </td>
+					<td id="E4"> </td>
+					<td id="E5"> </td>
+				</tr>
+				</table>
+				''')
+			
+			when 4
 
-		cage = new Cage([@main_grid.get_square("E3"), @main_grid.get_square("F1"), @main_grid.get_square("F2"), @main_grid.get_square("F3")])
-		cage.update_target(432 )
-		cage.update_operation("*")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
+				# TEST CAGE 4 - V. DIFFICULT pg 89
+				# 5 2 3 1 6 4
+				# 3 6 1 5 4 2
+				# 4 1 2 6 5 3
+				# 1 4 5 3 2 6
+				# 2 5 6 4 3 1
+				# 6 3 4 2 1 3
 
-		cage = new Cage([@main_grid.get_square("E4"), @main_grid.get_square("F4"), @main_grid.get_square("F5"), @main_grid.get_square("F6")])
-		cage.update_target(12 )
-		cage.update_operation("+")
-		cage.update_square_cage_ids()
-		@main_grid.add_cage(cage)
-		###
+				n = 6
+				@main_grid = new Grid(n)
+				
+				cage = new Cage([@main_grid.get_square("A1"), @main_grid.get_square("A2"), @main_grid.get_square("A3"), @main_grid.get_square("B1")])
+				cage.update_target(90)
+				cage.update_operation("*")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("A4"), @main_grid.get_square("A5"), @main_grid.get_square("A6"), @main_grid.get_square("B6")])
+				cage.update_target( 13 )
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("B2"), @main_grid.get_square("C1"), @main_grid.get_square("C2")])
+				cage.update_target(11 )
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("B3"), @main_grid.get_square("B4")])
+				cage.update_target( 4 )
+				cage.update_operation("-")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("B5"), @main_grid.get_square("C5"), @main_grid.get_square("C6")])
+				cage.update_target( 60 )
+				cage.update_operation("*")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("C3"), @main_grid.get_square("C4"), @main_grid.get_square("D4"), @main_grid.get_square("D5")])
+				cage.update_target( 180 )
+				cage.update_operation("*")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("D1"), @main_grid.get_square("E1")])
+				cage.update_target( 2 )
+				cage.update_operation("/")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("D2"), @main_grid.get_square("E2")])
+				cage.update_target( 1 )
+				cage.update_operation("-")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("D5"), @main_grid.get_square("E5")])
+				cage.update_target(6 )
+				cage.update_operation("*")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("D6"), @main_grid.get_square("E6")])
+				cage.update_target( 5 )
+				cage.update_operation("-")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("E3"), @main_grid.get_square("F1"), @main_grid.get_square("F2"), @main_grid.get_square("F3")])
+				cage.update_target(432 )
+				cage.update_operation("*")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+
+				cage = new Cage([@main_grid.get_square("E4"), @main_grid.get_square("F4"), @main_grid.get_square("F5"), @main_grid.get_square("F6")])
+				cage.update_target(12 )
+				cage.update_operation("+")
+				cage.update_square_cage_ids()
+				@main_grid.add_cage(cage)
+			
+
+
+
 
 		for cage in @main_grid.cages
 			cage.find_all_candidates(@main_grid.size)
@@ -285,12 +426,59 @@ class Main
 		$('#A1').append("#{current_grid.display[0][0].value}")
 		$('#A2').append("#{current_grid.display[0][1].value}")
 		$('#A3').append("#{current_grid.display[0][2].value}")
+		if n > 3
+			$('#A4').append("#{current_grid.display[0][3].value}")
+			if n > 4
+				$('#A5').append("#{current_grid.display[0][4].value}")
+				if n > 5
+					$('#A6').append("#{current_grid.display[0][5].value}")
+
 		$('#B1').append("#{current_grid.display[1][0].value}")
 		$('#B2').append("#{current_grid.display[1][1].value}")
 		$('#B3').append("#{current_grid.display[1][2].value}")
+		if n > 3
+			$('#B4').append("#{current_grid.display[1][3].value}")
+			if n > 4
+				$('#B5').append("#{current_grid.display[1][4].value}")
+				if n > 5
+					$('#B6').append("#{current_grid.display[1][5].value}")
+
 		$('#C1').append("#{current_grid.display[2][0].value}")
 		$('#C2').append("#{current_grid.display[2][1].value}")
 		$('#C3').append("#{current_grid.display[2][2].value}")
+		if n > 3
+			$('#C4').append("#{current_grid.display[2][3].value}")
+			if n > 4
+				$('#C5').append("#{current_grid.display[2][4].value}")
+				if n > 5
+					$('#C6').append("#{current_grid.display[2][5].value}")
+
+		if n > 3
+			$('#D1').append("#{current_grid.display[3][0].value}")
+			$('#D2').append("#{current_grid.display[3][1].value}")
+			$('#D3').append("#{current_grid.display[3][2].value}")
+			$('#D4').append("#{current_grid.display[3][3].value}")
+			if n > 4
+				$('#D5').append("#{current_grid.display[3][4].value}")
+				if n > 6
+					$('#D6').append("#{current_grid.display[3][5].value}")
+			if n > 4
+				$('#E1').append("#{current_grid.display[4][0].value}")
+				$('#E2').append("#{current_grid.display[4][1].value}")
+				$('#E3').append("#{current_grid.display[4][2].value}")
+				$('#E4').append("#{current_grid.display[4][3].value}")
+				$('#E5').append("#{current_grid.display[4][4].value}")
+				if n > 5
+					$('#E6').append("#{current_grid.display[4][5].value}")
+
+		if n > 5
+			$('#F1').append("#{current_grid.display[5][0].value}")
+			$('#F2').append("#{current_grid.display[5][1].value}")
+			$('#F3').append("#{current_grid.display[5][2].value}")
+			$('#F4').append("#{current_grid.display[5][3].value}")
+			$('#F5').append("#{current_grid.display[5][4].value}")
+			$('#F6').append("#{current_grid.display[5][4].value}")
+
 		# console.log solver.get_potentials(@main_grid)
 
 		# console.log solver.get_potentials(@main_grid)
