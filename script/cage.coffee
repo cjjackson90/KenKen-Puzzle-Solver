@@ -120,7 +120,7 @@ class Cage
 						@candidates[candidate].push permutation
 			if @candidates[candidate]?
 				new_candidates = @unique @candidates[candidate]
-				# @candidates[candidate] = new_candidates.unique( )
+				@candidates[candidate] = new_candidates
 
 			# console.log Object.keys(@candidates).length
 
@@ -186,7 +186,7 @@ class Cage
 
 			if @candidates[candidate]?
 				new_candidates = @unique @candidates[candidate]
-				# @candidates[candidate] = new_candidates.unique( )
+				@candidates[candidate] = new_candidates
 
 
 			# console.log Object.keys(@candidates).length
@@ -243,8 +243,12 @@ class Cage
 						@candidates[candidate].push permutation
 
 			if @candidates[candidate]?
+				console.log "@candidates[candidate]"
+				console.log @candidates[candidate]
 				new_candidates = @unique @candidates[candidate]
-				# @candidates[candidate] = new_candidates.unique( )
+				console.log "new_candidates"
+				console.log new_candidates
+				@candidates[candidate] = new_candidates
 
 			# console.log Object.keys(@candidates).length
 			return pop_counter
@@ -307,7 +311,7 @@ class Cage
 
 			if @candidates[candidate]?
 				new_candidates = @unique @candidates[candidate]
-				# @candidates[candidate] = new_candidates.unique( )
+				@candidates[candidate] = new_candidates
 
 			# console.log Object.keys(@candidates).length
 			return

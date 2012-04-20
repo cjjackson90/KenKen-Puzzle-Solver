@@ -103,6 +103,7 @@
         }
         if (this.candidates[candidate] != null) {
           new_candidates = this.unique(this.candidates[candidate]);
+          this.candidates[candidate] = new_candidates;
         }
         return;
       }
@@ -152,6 +153,7 @@
         }
         if (this.candidates[candidate] != null) {
           new_candidates = this.unique(this.candidates[candidate]);
+          this.candidates[candidate] = new_candidates;
         }
         return;
       }
@@ -207,7 +209,12 @@
           }
         }
         if (this.candidates[candidate] != null) {
+          console.log("@candidates[candidate]");
+          console.log(this.candidates[candidate]);
           new_candidates = this.unique(this.candidates[candidate]);
+          console.log("new_candidates");
+          console.log(new_candidates);
+          this.candidates[candidate] = new_candidates;
         }
         return pop_counter;
       }
@@ -264,6 +271,7 @@
         }
         if (this.candidates[candidate] != null) {
           new_candidates = this.unique(this.candidates[candidate]);
+          this.candidates[candidate] = new_candidates;
         }
         return;
       }
