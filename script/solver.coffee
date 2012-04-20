@@ -14,15 +14,7 @@ class Solver
 					grid_complete = false
 					break
 
-		solution = false
-		if grid.display[0][0].value is 3 and grid.display[0][1].value is 2 and grid.display[0][2].value is 1 and grid.display[1][0].value is 2 and grid.display[1][1].value is 1 and grid.display[1][2].value is 3 and grid.display[2][0].value is 1 and grid.display[2][1].value is 3 and grid.display[2][2].value is 2
-			solution = true
-		
 		verified_correct = grid.verify_correct()
-
-		if solution
-			console.log "$$$$$$$$$$$$$$$$$$$$$$$$$$"
-			console.log verified_correct
 
 		if verified_correct is false and grid_complete is true
 			return_obj =
@@ -43,23 +35,23 @@ class Solver
 
 		# TODO: Implement strategies.
 
-		console.log "A1 = #{grid.display[0][0].value}"
-		console.log "A2 = #{grid.display[0][1].value}"
-		console.log "A3 = #{grid.display[0][2].value}"
-		console.log "B1 = #{grid.display[1][0].value}"
-		console.log "B2 = #{grid.display[1][1].value}"
-		console.log "B3 = #{grid.display[1][2].value}"
-		console.log "C1 = #{grid.display[2][0].value}"
-		console.log "C2 = #{grid.display[2][1].value}"
-		console.log "C3 = #{grid.display[2][2].value}"
-
 		potentials = @get_potentials(grid)
+		console.log "potentials"
+		console.log potentials
+		for i in [0...potentials.length]
+			for cage in potentials[i].cages
+				if cage.location[0]? and cage.location[1]? and cage.location[2]?
+					console.log "A2 = #{cage.location[0].value}, B2 = #{cage.location[1].value}, B3 = #{cage.location[2].value}"
+					if cage.location[0].value is 2 and cage.location[1].value is 3 and cage.location[2].value is 2
+						console.log "************232 exists!"
 		if potentials.length is 1
 			return_obj =
 				status:"update"
 				updated_grid: potentials[0]
 			return return_obj
 
+		console.log "potentials 2"
+		console.log potentials
 		for new_grid in potentials
 			return_obj = @solve(new_grid)
 
@@ -68,19 +60,11 @@ class Solver
 					return return_obj
 				when "valid"
 					return return_obj
-				when "invalid"
-					console.log "Breaking because this grid is invalid"
-					console.log "A1 = #{new_grid.display[0][0].value}"
-					console.log "A2 = #{new_grid.display[0][1].value}"
-					console.log "A3 = #{new_grid.display[0][2].value}"
-					console.log "B1 = #{new_grid.display[1][0].value}"
-					console.log "B2 = #{new_grid.display[1][1].value}"
-					console.log "B3 = #{new_grid.display[1][2].value}"
-					console.log "C1 = #{new_grid.display[2][0].value}"
-					console.log "C2 = #{new_grid.display[2][1].value}"
-					console.log "C3 = #{new_grid.display[2][2].value}"
 
-					break
+			console.log "Returned to here. Following grid invalid."
+			console.log new_grid
+				# when "invalid"
+				# 	break
 		return {status:"invalid"}			
 
 
@@ -91,22 +75,27 @@ class Solver
 	# 		return {status:"update"}
 
 	get_potentials: (grid) ->
-		profitable_cage = null # Chose some method of selecting a profitable cage for backtracking. Store id.
+		profitable_cage = null # Chose some method of selecting a profitable cage for backtracking.
 		potentials = []
 
 		smallest_cage = grid.cages[0]
 		first_index = 0
 
 		for i in [0...grid.cages.length]
-			console.log grid.cages[i].location
+			# console.log grid.cages[i].location
+			viable_cage = false
 			for sq in grid.cages[i].location
 				if sq.value is null
-					smallest_cage = grid.cages[i]
-					first_index = i
+					viable_cage = true
 					break
+			if viable_cage is true
+				smallest_cage = grid.cages[i]
+				first_index = i
+				# console.log "first_index = #{first_index}"
+				break
 
-		console.log "smallest_cage.id"
-		console.log smallest_cage.id
+		console.log "smallest_cage"
+		console.log smallest_cage
 		# smallest_cage = grid.cages[0]
 		# for square in grid.cages[0]
 			# if not square.value?
@@ -115,17 +104,23 @@ class Solver
 
 		for cand_group, candidate of smallest_cage.candidates
 			smallest_length = candidate.length
+			console.log smallest_length
 
+		# console.log "deffo here..."
+		# console.log first_index+1
+		# console.log grid.cages[first_index+1]
 		for cage in grid.cages[first_index+1...grid.cages.length]
+			# console.log "reaching??"
 			# console.log cage
 			viable = false
 			for square in cage.location
+				# console.log "square.value = #{square.value}. this should be null..."
 				if square.value is null
 					viable = true
 					break
 
 			for cand_group, candidate of cage.candidates
-				console.log "candidate.length = #{candidate.length}, smallest_length = #{smallest_length}, viable?=#{viable}"
+				# console.log "candidate.length = #{candidate.length}, smallest_length = #{smallest_length}, viable?=#{viable}"
 				if candidate.length < smallest_length and viable is true
 					smallest_cage = cage
 					smallest_length = candidate.length
