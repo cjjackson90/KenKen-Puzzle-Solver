@@ -291,7 +291,7 @@ class Grid
 		@solution = solution
 
 	verify_correct: () ->
-		console.log @solution
+		# console.log @solution
 		if @solution.length is []
 			console.log "shouldn't be here..."
 			for i in [0..@size]
@@ -302,13 +302,13 @@ class Grid
 					return false
 		else
 			if @check_rows_are_valid( ) is false
-				console.log "rows invalid"
+				# console.log "rows invalid"
 				return false
 			if @check_cols_are_valid( ) is false
-				console.log "cols invalid"
+				# console.log "cols invalid"
 				return false
 			if @check_cages_are_valid( ) is false
-				console.log "cages invalid"
+				# console.log "cages invalid"
 				return false
 			return true
 

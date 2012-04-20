@@ -237,7 +237,6 @@
     };
     Grid.prototype.verify_correct = function() {
       var i, _ref, _results;
-      console.log(this.solution);
       if (this.solution.length === []) {
         console.log("shouldn't be here...");
         _results = [];
@@ -253,15 +252,12 @@
         return _results;
       } else {
         if (this.check_rows_are_valid() === false) {
-          console.log("rows invalid");
           return false;
         }
         if (this.check_cols_are_valid() === false) {
-          console.log("cols invalid");
           return false;
         }
         if (this.check_cages_are_valid() === false) {
-          console.log("cages invalid");
           return false;
         }
         return true;
