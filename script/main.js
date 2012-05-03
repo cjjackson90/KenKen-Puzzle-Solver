@@ -48,7 +48,7 @@
       return setCookie(name, "", -1);
     };
     function Main() {
-      var cage, current_grid, i, n, solver, test_case, _i, _len, _ref, _return;
+      var cage, current_grid, end, n, solver, start, test_case, time, _i, _len, _ref, _return;
       this.welcome_dialog();
       test_case = 2;
       switch (test_case) {
@@ -241,25 +241,26 @@
       }
       console.log(this.main_grid.cages);
       console.log(this.main_grid);
+      start = new Date().getTime();
       solver = new Solver(this.main_grid);
       current_grid = this.main_grid;
-      for (i = 0; i <= 10; i++) {
-        console.log("iteration " + i);
-        _return = solver.solve(current_grid);
-        console.log(_return);
-        if (_return.updated_grid != null) {
-          current_grid = _return.updated_grid;
-        }
-        if (_return.status === "valid") {
+      _return = solver.solve(current_grid, 0);
+      switch (_return.status) {
+        case "valid":
           console.log("WOO! Solution! :D");
           current_grid = _return.valid_grid;
           break;
-        }
-        if (_return.status === "invalid") {
-          console.log("Boo! No solution :'(");
+        case "invalid":
+          console.log("Boo! No solution :(");
           break;
-        }
+        case "debug":
+          console.log("Debugging...");
+          current_grid = _return.grid;
+          break;
       }
+      end = new Date().getTime();
+      time = end - start;
+      $('body').append(time);
       $('#A1').append("" + current_grid.display[0][0].value);
       $('#A2').append("" + current_grid.display[0][1].value);
       $('#A3').append("" + current_grid.display[0][2].value);

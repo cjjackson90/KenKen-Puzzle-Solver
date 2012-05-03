@@ -394,6 +394,9 @@ class Main
 
 		console.log @main_grid
 		
+		# Timing function - start
+		start = new Date().getTime()
+
 		solver = new Solver(@main_grid)
 
 
@@ -407,21 +410,43 @@ class Main
 		# console.log "Grid after removal"
 		# console.log @main_grid
 
-
 		current_grid = @main_grid
-		for i in [0..10]
-			console.log "iteration #{i}"
-			_return = solver.solve(current_grid)
-			console.log _return
-			if _return.updated_grid?
-				current_grid = _return.updated_grid
-			if _return.status is "valid"
+		_return = solver.solve(current_grid, 0)
+		
+		switch _return.status
+			when "valid"
 				console.log "WOO! Solution! :D"
 				current_grid = _return.valid_grid
 				break
-			if _return.status is "invalid"
-				console.log "Boo! No solution :'("
+			when "invalid"
+				console.log "Boo! No solution :("
 				break
+			# when "update"
+			# 	current_grid = _return.grid
+			# 	_return = solver.solve(current_grid)
+			when "debug"
+				console.log "Debugging..."
+				current_grid = _return.grid
+				break
+		end = new Date().getTime()
+		time = end - start
+		$('body').append(time)
+		# current_grid = @main_grid
+		# for i in [0..10]
+		# 	console.log "iteration #{i}"
+		# 	_return = solver.solve(current_grid)
+		# 	console.log "_return = "
+		# 	console.log _return
+		# 	if _return.updated_grid?
+		# 		current_grid = _return.updated_grid
+		# 		depth = _return.depth
+		# 	if _return.status is "valid"
+		# 		console.log "WOO! Solution! :D"
+		# 		current_grid = _return.valid_grid
+		# 		break
+		# 	if _return.status is "invalid"
+		# 		console.log "Boo! No solution :'("
+		# 		break
 
 		$('#A1').append("#{current_grid.display[0][0].value}")
 		$('#A2').append("#{current_grid.display[0][1].value}")
