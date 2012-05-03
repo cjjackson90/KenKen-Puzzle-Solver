@@ -236,9 +236,8 @@
       return this.solution = solution;
     };
     Grid.prototype.verify_correct = function() {
-      var i, _ref, _results;
+      var col_check, i, row_check, _ref, _results;
       if (this.solution.length === []) {
-        console.log("shouldn't be here...");
         _results = [];
         for (i = 0, _ref = this.size; 0 <= _ref ? i <= _ref : i >= _ref; 0 <= _ref ? i++ : i--) {
           if (this.display[i].value != null) {
@@ -251,16 +250,29 @@
         }
         return _results;
       } else {
-        if (this.check_rows_are_valid() === false) {
-          return false;
+        row_check = this.check_rows_are_valid();
+        if (row_check.status === "inconsistent") {
+          return row_check;
         }
-        if (this.check_cols_are_valid() === false) {
-          return false;
+        col_check = this.check_cols_are_valid();
+        if (col_check.status === "inconsistent") {
+          return col_check;
         }
         if (this.check_cages_are_valid() === false) {
-          return false;
+          if (row_check.status === "consistent" && col_check.status === "consistent") {
+            return {
+              status: "consistent"
+            };
+          } else {
+            return {
+              status: "inconsistent"
+            };
+          }
+        } else {
+          return {
+            status: "valid"
+          };
         }
-        return true;
       }
     };
     Grid.prototype.check_rows_are_valid = function() {
@@ -279,7 +291,15 @@
         sorted = current_row.sort(this.ascending);
         for (i = 0, _ref4 = sorted.length; 0 <= _ref4 ? i < _ref4 : i > _ref4; 0 <= _ref4 ? i++ : i--) {
           if (sorted[i] !== cmp[i]) {
-            return false;
+            if (sorted[i] === null) {
+              return {
+                status: "consistent"
+              };
+            } else {
+              return {
+                status: "inconsistent"
+              };
+            }
           }
         }
       }
@@ -301,7 +321,15 @@
         sorted = current_col.sort(this.ascending);
         for (i = 0, _ref4 = sorted.length; 0 <= _ref4 ? i < _ref4 : i > _ref4; 0 <= _ref4 ? i++ : i--) {
           if (sorted[i] !== cmp[i]) {
-            return false;
+            if (sorted[i] === null) {
+              return {
+                status: "consistent"
+              };
+            } else {
+              return {
+                status: "inconsistent"
+              };
+            }
           }
         }
       }
@@ -367,12 +395,18 @@
       return true;
     };
     Grid.prototype.cages_have_candidates = function() {
-      var cage, _i, _len, _ref;
+      var cage, sq, _i, _j, _len, _len2, _ref, _ref2;
       _ref = this.cages;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         cage = _ref[_i];
         if (cage.candidates === null) {
-          return false;
+          _ref2 = cage.location;
+          for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+            sq = _ref2[_j];
+            if (!(sq.value != null)) {
+              return false;
+            }
+          }
         }
       }
       return true;

@@ -72,6 +72,9 @@ class Grid
 					# console.log loc_index
 					# rem_array = []
 					# rem_val = []
+
+					# for candidate in 
+
 					for cand_group, cand of affected_cage.candidates
 						# console.log "cand before removal"
 						# console.log cand
@@ -293,7 +296,6 @@ class Grid
 	verify_correct: () ->
 		# console.log @solution
 		if @solution.length is []
-			console.log "shouldn't be here..."
 			for i in [0..@size]
 				if @display[i].value?
 					if @display[i].value isnt @solution[i]
@@ -301,16 +303,33 @@ class Grid
 				else
 					return false
 		else
-			if @check_rows_are_valid( ) is false
-				# console.log "rows invalid"
-				return false
-			if @check_cols_are_valid( ) is false
-				# console.log "cols invalid"
-				return false
+			row_check = @check_rows_are_valid( )
+			# console.log "row_check.status = #{row_check.status}"
+			if row_check.status is "inconsistent"
+				return row_check
+			
+			col_check = @check_cols_are_valid( )
+			# console.log "col_check.status = #{col_check.status}"
+			if col_check.status is "inconsistent"
+				return col_check
+
 			if @check_cages_are_valid( ) is false
-				# console.log "cages invalid"
-				return false
-			return true
+				if row_check.status is "consistent" and col_check.status is "consistent"
+					return {status: "consistent"}
+				else
+					return {status: "inconsistent"}
+			else
+				return {status: "valid"}
+			# if @check_rows_are_valid( ) is false
+			# 	console.log "rows invalid"
+			# 	return false
+			# if @check_cols_are_valid( ) is false
+			# 	# console.log "cols invalid"
+			# 	return false
+			# if @check_cages_are_valid( ) is false
+			# 	# console.log "cages invalid"
+			# 	return false
+			# return true
 
 	check_rows_are_valid: () ->
 		cmp = [1..@size]
@@ -324,7 +343,10 @@ class Grid
 
 			for i in [0...sorted.length]
 				if sorted[i] isnt cmp[i]
-					return false
+					if sorted[i] is null
+						return {status: "consistent"}
+					else
+						return {status: "inconsistent"}
 				# console.log "won't see this..."
 				# valid = true
 		return valid
@@ -340,7 +362,11 @@ class Grid
 			sorted = current_col.sort(@ascending)
 			for i in [0...sorted.length]
 				if sorted[i] isnt cmp[i]
-					return false
+					if sorted[i] is null
+						return {status: "consistent"}
+					else
+						return {status: "inconsistent"}
+					# return false
 			# if current_col.sort is cmp
 			# 	valid = true
 			# else
@@ -400,7 +426,10 @@ class Grid
 	cages_have_candidates: () ->
 		for cage in @cages
 			if cage.candidates is null
-				return false
+				for sq in cage.location
+					if not sq.value?
+						return false
+				# return false
 		return true
 
 	get_square: (square_id) ->
