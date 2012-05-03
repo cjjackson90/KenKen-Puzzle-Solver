@@ -21,13 +21,12 @@ class Cage
 	update_operation: (@operation) ->
 
 	find_all_candidates: (grid_size) ->
-		#TODO: optimise by reducing from brute force.
 		@grid_size = grid_size
 		output = ""
 		@candidates = []
 		switch @operation
 			when "+"
-				# console.log "++++++++++++++"
+				console.log "++++++++++++++"
 				##console.log @target
 				for i in [@grid_size..1]
 					single_candidate = []
@@ -40,21 +39,21 @@ class Cage
 				#console.log @candidates
 				break
 			when "-" #then @candidates_minus grid_size
-				# console.log "--------------"
+				console.log "--------------"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
 					@bt_minus single_candidate, 1
 				break
 			when "*" #then @candidates_multi(grid_size)
-				# console.log "**************"
+				console.log "**************"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
 					@bt_multi single_candidate, 1
 				break
 			when "/" #then @candidates_divide(grid_size)
-				# console.log "//////////////////"
+				console.log "//////////////////"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
@@ -70,7 +69,11 @@ class Cage
 			foo.unique( )
 			# console.log "foo"
 			# console.log foo
-			@candidates[candidate] = foo
+
+			# Trying stuff...
+			# @candidates[candidate] = foo
+
+			@candidates = foo
 		
 	bt_plus: (candidate, counter) ->
 		running_target = @target
@@ -92,6 +95,7 @@ class Cage
 			return #candidate.pop()
 		
 		if running_target is 0
+			console.log "running target = 0"
 			# console.log "######valid"
 			#console.log "targetop = #{@target}#{@operation}"
 			#console.log "check_consistent() = #{candidate}"
@@ -113,15 +117,26 @@ class Cage
 			# console.log perms
 			for permutation in perms
 				if @check_consistent( permutation )
-					if @candidates[candidate]?
-						@candidates[candidate].push permutation
-					else
-						@candidates[candidate] = []
-						@candidates[candidate].push permutation
-			if @candidates[candidate]?
-				new_candidates = @unique @candidates[candidate]
-				@candidates[candidate] = new_candidates
-
+					# TEST if @candidates["#{candidate}"]?
+					# TEST @candidates["#{candidate}"].push permutation
+					@candidates.push permutation
+					console.log "value added = #{permutation}"
+					# TEST else
+					# 	TEST @candidates["#{candidate}"] = []
+					# 	TEST @candidates["#{candidate}"].push permutation
+			# TEST if @candidates["#{candidate}"]?
+				# TEST new_candidates = @unique @candidates["#{candidate}"]
+				# TEST @candidates["#{candidate}"] = new_candidates
+			new_candidates = @unique @candidates
+			console.log "new_candidates"
+			console.log new_candidates
+			@candidates = new_candidates
+			console.log @candidates
+			# console.log "candidates for #{@target}#{@operation}"
+			# console.log @candidates
+				# TESTconsole.log @candidates["#{candidate}"]
+				# console.log "candidates[candidate].length = #{@candidates["#{candidate}"].length}"
+				# console.log "candidates[candidate].length = #{@candidates["#{candidate}"].length}"
 			# console.log Object.keys(@candidates).length
 
 			return
@@ -137,7 +152,6 @@ class Cage
 		no_solutions = 1
 		potentials = [n..1]
 		for val in potentials
-			
 			new_branch = candidate
 			new_branch.push val
 			new_count = counter+1
@@ -178,15 +192,20 @@ class Cage
 			perms = permute candidate, @grid_size
 			for permutation in perms
 				if @check_consistent( permutation )
-					if @candidates[candidate]? 
-						@candidates[candidate].push permutation
-					else
-						@candidates[candidate] = []
-						@candidates[candidate].push permutation
+					@candidates.push permutation
+					# if @candidates["#{candidate}"]? 
+					# 	@candidates["#{candidate}"].push permutation
+					# else
+					# 	@candidates["#{candidate}"] = []
+					# 	@candidates["#{candidate}"].push permutation
 
-			if @candidates[candidate]?
-				new_candidates = @unique @candidates[candidate]
-				@candidates[candidate] = new_candidates
+			# Could move outside - plenty of optimisations in this class...
+			new_candidates = @unique @candidates
+
+			# if @candidates["#{candidate}"]?
+			# 	new_candidates = @unique @candidates["#{candidate}"]
+			# 	@candidates["#{candidate}"] = new_candidates
+			# 	console.log @candidates["#{candidate}"]
 
 
 			# console.log Object.keys(@candidates).length
@@ -201,7 +220,9 @@ class Cage
 		n = if candidate[candidate.length-1] < @grid_size then candidate[candidate.length-1] else @grid_size
 		potentials = [n..1]
 		for val in potentials
+			console.log "candidate = #{candidate}, val = #{val}"
 			new_branch = candidate
+			console.log new_branch
 			new_branch.push val
 			new_count = counter+1
 			# console.log "the candidate entering bt() is #{candidate}"
@@ -236,19 +257,23 @@ class Cage
 			perms = permute candidate, @grid_size
 			for permutation in perms
 				if @check_consistent( permutation )
-					if @candidates[candidate]? 
-						@candidates[candidate].push permutation
-					else
-						@candidates[candidate] = []
-						@candidates[candidate].push permutation
+					# if @candidates["#{candidate}"]? 
+					# 	@candidates["#{candidate}"].push permutation
+					# else
+					# 	@candidates["#{candidate}"] = []
+					# 	@candidates["#{candidate}"].push permutation
+					@candidates.push permutation
 
-			if @candidates[candidate]?
-				console.log "@candidates[candidate]"
-				console.log @candidates[candidate]
-				new_candidates = @unique @candidates[candidate]
-				console.log "new_candidates"
-				console.log new_candidates
-				@candidates[candidate] = new_candidates
+
+			new_candidates = @unique @candidates
+			@candidates = new_candidates
+			# if @candidates["#{candidate}"]?
+				# console.log "@candidates[candidate]"
+				# new_candidates = @unique @candidates["#{candidate}"]
+				# console.log "new_candidates"
+				# console.log new_candidates
+				# @candidates["#{candidate}"] = new_candidates
+				# console.log @candidates["#{candidate}"]
 
 			# console.log Object.keys(@candidates).length
 			return pop_counter
@@ -262,8 +287,9 @@ class Cage
 		n = if candidate[candidate.length-1] < @grid_size then candidate[candidate.length-1] else @grid_size
 		potentials = [n..2]
 		for val in potentials
-			
+			console.log "candidate = #{candidate}"
 			new_branch = candidate
+			console.log new_branch
 			new_branch.push val
 			new_count = counter+1
 			# console.log "the candidate entering bt() is #{candidate}"
@@ -302,16 +328,21 @@ class Cage
 			##console.log candidate[1..candidate.length]
 			perms = permute candidate, @grid_size
 			for permutation in perms
-				if @check_consistent( permutation )
-					if @candidates[candidate]? 
-						@candidates[candidate].push permutation
-					else
-						@candidates[candidate] = []
-						@candidates[candidate].push permutation
+				# if @check_consistent( permutation )
+				# 	if @candidates["#{candidate}"]? 
+				# 		@candidates["#{candidate}"].push permutation
+				# 	else
+				# 		@candidates["#{candidate}"] = []
+				# 		@candidates["#{candidate}"].push permutation
+				@candidates.push permutation
 
-			if @candidates[candidate]?
-				new_candidates = @unique @candidates[candidate]
-				@candidates[candidate] = new_candidates
+
+			new_candidates = @unique @candidates
+			@candidates = new_candidates
+			# if @candidates["#{candidate}"]?
+			# 	new_candidates = @unique @candidates["#{candidate}"]
+			# 	@candidates["#{candidate}"] = new_candidates
+			# 	console.log @candidates["#{candidate}"]
 
 			# console.log Object.keys(@candidates).length
 			return

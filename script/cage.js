@@ -35,6 +35,7 @@
       this.candidates = [];
       switch (this.operation) {
         case "+":
+          console.log("++++++++++++++");
           for (i = _ref = this.grid_size; _ref <= 1 ? i <= 1 : i >= 1; _ref <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -42,6 +43,7 @@
           }
           break;
         case "-":
+          console.log("--------------");
           for (i = _ref2 = this.grid_size; _ref2 <= 1 ? i <= 1 : i >= 1; _ref2 <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -49,6 +51,7 @@
           }
           break;
         case "*":
+          console.log("**************");
           for (i = _ref3 = this.grid_size; _ref3 <= 1 ? i <= 1 : i >= 1; _ref3 <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -56,6 +59,7 @@
           }
           break;
         case "/":
+          console.log("//////////////////");
           _results = [];
           for (i = _ref4 = this.grid_size; _ref4 <= 1 ? i <= 1 : i >= 1; _ref4 <= 1 ? i++ : i--) {
             single_candidate = [];
@@ -70,7 +74,7 @@
       if (candidate != null) {
         foo = candidate;
         foo.unique();
-        return this.candidates[candidate] = foo;
+        return this.candidates = foo;
       }
     };
     Cage.prototype.bt_plus = function(candidate, counter) {
@@ -89,22 +93,20 @@
         return;
       }
       if (running_target === 0) {
+        console.log("running target = 0");
         perms = permute(candidate, this.grid_size);
         for (_i = 0, _len = perms.length; _i < _len; _i++) {
           permutation = perms[_i];
           if (this.check_consistent(permutation)) {
-            if (this.candidates[candidate] != null) {
-              this.candidates[candidate].push(permutation);
-            } else {
-              this.candidates[candidate] = [];
-              this.candidates[candidate].push(permutation);
-            }
+            this.candidates.push(permutation);
+            console.log("value added = " + permutation);
           }
         }
-        if (this.candidates[candidate] != null) {
-          new_candidates = this.unique(this.candidates[candidate]);
-          this.candidates[candidate] = new_candidates;
-        }
+        new_candidates = this.unique(this.candidates);
+        console.log("new_candidates");
+        console.log(new_candidates);
+        this.candidates = new_candidates;
+        console.log(this.candidates);
         return;
       }
       if (counter >= this.location.length) {
@@ -143,18 +145,10 @@
         for (_i = 0, _len = perms.length; _i < _len; _i++) {
           permutation = perms[_i];
           if (this.check_consistent(permutation)) {
-            if (this.candidates[candidate] != null) {
-              this.candidates[candidate].push(permutation);
-            } else {
-              this.candidates[candidate] = [];
-              this.candidates[candidate].push(permutation);
-            }
+            this.candidates.push(permutation);
           }
         }
-        if (this.candidates[candidate] != null) {
-          new_candidates = this.unique(this.candidates[candidate]);
-          this.candidates[candidate] = new_candidates;
-        }
+        new_candidates = this.unique(this.candidates);
         return;
       }
       if (counter >= this.location.length) {
@@ -169,7 +163,9 @@
       _results2 = [];
       for (_k = 0, _len2 = potentials.length; _k < _len2; _k++) {
         val = potentials[_k];
+        console.log("candidate = " + candidate + ", val = " + val);
         new_branch = candidate;
+        console.log(new_branch);
         new_branch.push(val);
         new_count = counter + 1;
         this.bt_minus(new_branch, new_count);
@@ -200,22 +196,11 @@
         for (_i = 0, _len = perms.length; _i < _len; _i++) {
           permutation = perms[_i];
           if (this.check_consistent(permutation)) {
-            if (this.candidates[candidate] != null) {
-              this.candidates[candidate].push(permutation);
-            } else {
-              this.candidates[candidate] = [];
-              this.candidates[candidate].push(permutation);
-            }
+            this.candidates.push(permutation);
           }
         }
-        if (this.candidates[candidate] != null) {
-          console.log("@candidates[candidate]");
-          console.log(this.candidates[candidate]);
-          new_candidates = this.unique(this.candidates[candidate]);
-          console.log("new_candidates");
-          console.log(new_candidates);
-          this.candidates[candidate] = new_candidates;
-        }
+        new_candidates = this.unique(this.candidates);
+        this.candidates = new_candidates;
         return pop_counter;
       }
       if (counter >= this.location.length) {
@@ -229,7 +214,9 @@
       }).apply(this, arguments);
       for (_k = 0, _len2 = potentials.length; _k < _len2; _k++) {
         val = potentials[_k];
+        console.log("candidate = " + candidate);
         new_branch = candidate;
+        console.log(new_branch);
         new_branch.push(val);
         new_count = counter + 1;
         k = this.bt_multi(new_branch, new_count);
@@ -260,19 +247,10 @@
         perms = permute(candidate, this.grid_size);
         for (_i = 0, _len = perms.length; _i < _len; _i++) {
           permutation = perms[_i];
-          if (this.check_consistent(permutation)) {
-            if (this.candidates[candidate] != null) {
-              this.candidates[candidate].push(permutation);
-            } else {
-              this.candidates[candidate] = [];
-              this.candidates[candidate].push(permutation);
-            }
-          }
+          this.candidates.push(permutation);
         }
-        if (this.candidates[candidate] != null) {
-          new_candidates = this.unique(this.candidates[candidate]);
-          this.candidates[candidate] = new_candidates;
-        }
+        new_candidates = this.unique(this.candidates);
+        this.candidates = new_candidates;
         return;
       }
       if (counter >= this.location.length) {
