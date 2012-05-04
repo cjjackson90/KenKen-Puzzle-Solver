@@ -46,7 +46,7 @@ class Main
 		#n = 3
 		#@main_grid = new Grid(n)
 
-		test_case = 2
+		test_case = 4
 		
 		switch (test_case)
 			when 1
@@ -411,6 +411,7 @@ class Main
 		# console.log @main_grid
 
 		current_grid = @main_grid
+		console.log current_grid
 		_return = solver.solve(current_grid, 0)
 		
 		switch _return.status

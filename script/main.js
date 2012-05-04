@@ -50,7 +50,7 @@
     function Main() {
       var cage, current_grid, end, n, solver, start, test_case, time, _i, _len, _ref, _return;
       this.welcome_dialog();
-      test_case = 2;
+      test_case = 4;
       switch (test_case) {
         case 1:
           n = 3;
@@ -244,6 +244,7 @@
       start = new Date().getTime();
       solver = new Solver(this.main_grid);
       current_grid = this.main_grid;
+      console.log(current_grid);
       _return = solver.solve(current_grid, 0);
       switch (_return.status) {
         case "valid":
