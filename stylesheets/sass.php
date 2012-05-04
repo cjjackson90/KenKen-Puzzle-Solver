@@ -1,8 +1,8 @@
 <?php
 header('Content-Type: text/css');
 
-include '/var/www/phpsass/SassParser.php';
-#include 'C:/wamp/www/phpsass/SassParser.php';
+#include '/var/www/phpsass/SassParser.php';
+include 'C:/wamp/www/phpsass/SassParser.php';
 
 $options = array(
   'style' => 'nested',
