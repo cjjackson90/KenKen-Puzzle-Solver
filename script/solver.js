@@ -8,7 +8,7 @@
       this.strat = new Strategies();
     }
     Solver.prototype.solve = function(grid, depth) {
-      var grid_complete, i, j, new_grid, potentials, return_obj, sq, temp, test, verified_correct, _i, _j, _len, _len2, _ref, _ref2, _ref3;
+      var grid_complete, i, j, new_grid, obj, potentials, return_obj, sq, temp, test, test2, verified_correct, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3, _ref4;
       grid_complete = true;
       for (i = 0, _ref = grid.size; 0 <= _ref ? i < _ref : i > _ref; 0 <= _ref ? i++ : i--) {
         for (j = 0, _ref2 = grid.size; 0 <= _ref2 ? j < _ref2 : j > _ref2; 0 <= _ref2 ? j++ : j--) {
@@ -40,14 +40,44 @@
       }
       test = this.strat.one_candidate(grid);
       if (test.status === true) {
+        console.log("strat1 = success!");
         _ref3 = test.vals;
         for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
           sq = _ref3[_i];
-          temp = this.update_puzzle_info(grid, sq);
+          temp = this.update_puzzle_info(grid, sq.row_id, sq.column_id, sq.cage_id, sq.value);
           grid = temp;
         }
         return_obj = this.solve(grid, depth + 1);
-        console.log("post_update, " + depth + ": " + return_obj.status);
+        switch (return_obj.status) {
+          case "valid":
+            return return_obj;
+          case "invalid":
+            return {
+              status: "invalid"
+            };
+        }
+      }
+      test2 = this.strat.common_numbers(grid);
+      if (test2.status === true) {
+        console.log("strat2 = success!");
+        _ref4 = test2.vals;
+        for (_j = 0, _len2 = _ref4.length; _j < _len2; _j++) {
+          obj = _ref4[_j];
+          console.log("obj.cage_id = " + obj.cage_id);
+          if (obj.row_or_col === "row") {
+            grid = this.update_puzzle_info(grid, obj.id, -1, obj.cage_id, obj.val);
+          } else {
+            grid = this.update_puzzle_info(grid, -1, obj.id, obj.cage_id, obj.val);
+          }
+        }
+        if (depth > 5) {
+          return_obj = {
+            status: "debug",
+            grid: test2.grid
+          };
+          return return_obj;
+        }
+        return_obj = this.solve(grid, depth + 1);
         switch (return_obj.status) {
           case "valid":
             return return_obj;
@@ -58,8 +88,8 @@
         }
       }
       potentials = this.get_potentials(grid);
-      for (_j = 0, _len2 = potentials.length; _j < _len2; _j++) {
-        new_grid = potentials[_j];
+      for (_k = 0, _len3 = potentials.length; _k < _len3; _k++) {
+        new_grid = potentials[_k];
         return_obj = this.solve(new_grid, depth + 1);
         switch (return_obj.status) {
           case "update":
@@ -135,45 +165,96 @@
       return potentials;
     };
     Solver.prototype.append_solution_order = function(fresh_vals) {};
-    Solver.prototype.update_puzzle_info = function(grid, new_square) {
-      var cage, cand_index, candidate, col_id, cols, i, rem_info, row_id, rows, sq, to_remove, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3;
-      rows = grid.rows;
-      cols = grid.cols;
-      row_id = new_square.row_id;
-      col_id = new_square.col_id;
-      _ref = grid.display[row_id];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        sq = _ref[_i];
-        cage = ((function() {
-          var _j, _len2, _ref2, _results;
-          _ref2 = grid.cages;
-          _results = [];
-          for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-            cage = _ref2[_j];
-            if (cage.id === sq.cage_id) {
-              _results.push(cage);
+    Solver.prototype.update_puzzle_info = function(grid, row_id, col_id, cage_id, fresh_val) {
+      var cage, cand_index, candidate, i, j, rem_info, selective_reduction, sq, to_remove, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _m, _ref, _ref2, _ref3, _ref4, _ref5, _ref6;
+      selective_reduction = false;
+      if (row_id === -1 || col_id === -1) {
+        selective_reduction = true;
+      }
+      if (row_id !== -1) {
+        grid.update_row(row_id, fresh_val);
+        _ref = grid.display[row_id];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          sq = _ref[_i];
+          cage = ((function() {
+            var _j, _len2, _ref2, _results;
+            _ref2 = grid.cages;
+            _results = [];
+            for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+              cage = _ref2[_j];
+              if (cage.id === sq.cage_id) {
+                _results.push(cage);
+              }
+            }
+            return _results;
+          })())[0];
+          if (cage != null) {
+            if (selective_reduction) {
+              if (cage.id === cage_id) {
+                continue;
+              }
+            }
+            cand_index = 0;
+            for (i = 0, _ref2 = cage.location.length; 0 <= _ref2 ? i < _ref2 : i > _ref2; 0 <= _ref2 ? i++ : i--) {
+              if (cage.location[i] === sq) {
+                cand_index = i;
+              }
+            }
+            to_remove = [];
+            _ref3 = cage.candidates;
+            for (_j = 0, _len2 = _ref3.length; _j < _len2; _j++) {
+              candidate = _ref3[_j];
+              if (candidate[cand_index] === fresh_val) {
+                to_remove.push(candidate);
+              }
+            }
+            for (_k = 0, _len3 = to_remove.length; _k < _len3; _k++) {
+              rem_info = to_remove[_k];
+              cage.candidates = this.remove(cage.candidates, rem_info);
             }
           }
-          return _results;
-        })())[0];
-        if (cage != null) {
-          cand_index = 0;
-          for (i = 0, _ref2 = cage.location.length; 0 <= _ref2 ? i < _ref2 : i > _ref2; 0 <= _ref2 ? i++ : i--) {
-            if (cage.location[i] === sq) {
-              cand_index = i;
+        }
+      }
+      if (col_id !== -1) {
+        grid.update_column(col_id, fresh_val);
+        for (i = 0, _ref4 = grid.size; 0 <= _ref4 ? i < _ref4 : i > _ref4; 0 <= _ref4 ? i++ : i--) {
+          sq = grid.display[i][col_id];
+          cage = ((function() {
+            var _l, _len4, _ref5, _results;
+            _ref5 = grid.cages;
+            _results = [];
+            for (_l = 0, _len4 = _ref5.length; _l < _len4; _l++) {
+              cage = _ref5[_l];
+              if (cage.id === sq.cage_id) {
+                _results.push(cage);
+              }
             }
-          }
-          to_remove = [];
-          _ref3 = cage.candidates;
-          for (_j = 0, _len2 = _ref3.length; _j < _len2; _j++) {
-            candidate = _ref3[_j];
-            if (candidate[cand_index] === new_square.value) {
-              to_remove.push(candidate);
+            return _results;
+          })())[0];
+          if (cage != null) {
+            if (selective_reduction) {
+              if (cage.id === cage_id) {
+                continue;
+              }
             }
-          }
-          for (_k = 0, _len3 = to_remove.length; _k < _len3; _k++) {
-            rem_info = to_remove[_k];
-            cage.candidates = this.remove(cage.candidates, rem_info);
+            cand_index = 0;
+            for (j = 0, _ref5 = cage.location.length; 0 <= _ref5 ? j < _ref5 : j > _ref5; 0 <= _ref5 ? j++ : j--) {
+              if (cage.location[j] === sq) {
+                cand_index = j;
+              }
+            }
+            to_remove = [];
+            _ref6 = cage.candidates;
+            for (_l = 0, _len4 = _ref6.length; _l < _len4; _l++) {
+              candidate = _ref6[_l];
+              if (candidate[cand_index] === fresh_val) {
+                to_remove.push(candidate);
+              }
+            }
+            for (_m = 0, _len5 = to_remove.length; _m < _len5; _m++) {
+              rem_info = to_remove[_m];
+              cage.candidates = this.remove(cage.candidates, rem_info);
+            }
           }
         }
       }

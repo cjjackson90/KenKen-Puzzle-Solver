@@ -52,9 +52,7 @@ class Solver
 
 		# TODO: Implement strategies.
 		test = @strat.one_candidate( grid )
-		# console.log "test.status = #{test.status}"
 		# console.log test.vals
-
 		# console.log "grid.display after strategy"
 		# console.log "#{grid.display[0][0].value}, #{grid.display[0][1].value}, #{grid.display[0][2].value}, #{grid.display[0][3].value}"
 		# console.log "#{grid.display[1][0].value}, #{grid.display[1][1].value}, #{grid.display[1][2].value}, #{grid.display[1][3].value}"
@@ -81,10 +79,13 @@ class Solver
 		# console.log "this_cage"
 		# console.log this_cage
 		# this_cage = (cage for cage in grid.cages when cage.id is grid.display[0][0].cage_id)
-
+		# console.log "grid.cages[5].candidates[0]"
+		# console.log grid.cages[5].candidates[0]
+		# console.log grid.cages[5].candidates.length
 		if test.status is true
+			console.log "strat1 = success!"
 			for sq in test.vals
-				temp = @update_puzzle_info( grid, sq )
+				temp = @update_puzzle_info( grid, sq.row_id, sq.column_id, sq.cage_id, sq.value )
 				grid = temp
 			# console.log "2nd set of 1-cand squares"
 			# console.log "A1 = #{grid.display[0][0].value}"
@@ -94,15 +95,50 @@ class Solver
 			# console.log "D4 = #{grid.display[3][3].value}"
 
 			# if test.status is true
-			
+			# console.log grid.rows
 			return_obj = @solve(grid, depth+1)
-			console.log "post_update, #{depth}: #{return_obj.status}"
 			switch return_obj.status
 				when "valid"
 					return return_obj
 				when "invalid"
 					return {status:"invalid"}
 		
+		# console.log "trying strat2..."
+		# console.log grid
+		test2 = @strat.common_numbers( grid )
+
+		if test2.status is true
+			console.log "strat2 = success!"
+			for obj in test2.vals
+				console.log "obj.cage_id = #{obj.cage_id}"
+				if obj.row_or_col is "row"
+					grid = @update_puzzle_info( grid, obj.id, -1, obj.cage_id, obj.val )
+				else
+					grid = @update_puzzle_info( grid, -1, obj.id, obj.cage_id, obj.val)
+				# grid = temp
+				# console.log "row or col? #{obj.row_or_col}, id = #{obj.id}, val = #{obj.val}"
+			# console.log depth
+			if depth > 5
+				return_obj =
+					status:"debug"
+					grid:test2.grid
+				return return_obj
+
+			return_obj = @solve(grid, depth+1)
+			switch return_obj.status
+				when "valid"
+					return return_obj
+				when "invalid"
+					return {status:"invalid"}
+
+		# for val in grid.rows
+		# 	console.log val
+
+		# return_obj =
+		# 	status:"debug"
+		# 	grid:test2.grid
+		# return return_obj
+
 
 
 		# console.log "A1 GOING INTO POTENT = #{grid.display[0][0].value}"
@@ -340,35 +376,75 @@ class Solver
 
 	append_solution_order: (fresh_vals) ->
 
-	update_puzzle_info: (grid, new_square) ->
-		rows = grid.rows
-		cols = grid.cols
+	update_puzzle_info: (grid, row_id, col_id, cage_id, fresh_val) ->
+		selective_reduction = false
+		# rows = grid.rows
+		# cols = grid.cols
+		if row_id is -1 or col_id is -1
+			selective_reduction = true
 
+		if row_id isnt -1
+			grid.update_row( row_id, fresh_val )
+			for sq in grid.display[row_id]
+				# console.log sq
+				cage = (cage for cage in grid.cages when cage.id is sq.cage_id)[0]
+				if cage?
+					if selective_reduction
+						# console.log "cage.id = #{cage.id}, cage_id = #{cage_id}"
+						if cage.id is cage_id
+							continue
+					# console.log "original cage"
+					# console.log cage
+					cand_index = 0
+					for i in [0...cage.location.length]
+						if cage.location[i] is sq
+							cand_index = i
+
+					to_remove = []
+					for candidate in cage.candidates
+						if candidate[cand_index] is fresh_val
+							to_remove.push candidate
+					for rem_info in to_remove
+						cage.candidates = @remove(cage.candidates, rem_info)
+
+
+		if col_id isnt -1
+			grid.update_column( col_id, fresh_val )
+
+			# grid.update_column( col_id, fresh_val )
+			for i in [0...grid.size]
+				sq = grid.display[i][col_id]
+				# console.log i
+			# for sq in grid.display[row_id]
+				# console.log sq
+				cage = (cage for cage in grid.cages when cage.id is sq.cage_id)[0]
+				if cage?
+					if selective_reduction
+						if cage.id is cage_id
+							continue
+					# console.log "original cage"
+					# console.log cage
+					cand_index = 0
+					for j in [0...cage.location.length]
+						if cage.location[j] is sq
+							cand_index = j
+
+					to_remove = []
+					for candidate in cage.candidates
+						if candidate[cand_index] is fresh_val
+							to_remove.push candidate
+					for rem_info in to_remove
+						cage.candidates = @remove(cage.candidates, rem_info)
 		# console.log "new_square"
 		# console.log new_square
 
-		row_id = new_square.row_id
-		col_id = new_square.col_id
+		# row_id = new_square.row_id
+		# col_id = new_square.col_id
 
 		# console.log "sq in grid.display[row_id]"
-		for sq in grid.display[row_id]
-			# console.log sq
-			cage = (cage for cage in grid.cages when cage.id is sq.cage_id)[0]
-			if cage?
-				# console.log "original cage"
-				# console.log cage
-				cand_index = 0
-				for i in [0...cage.location.length]
-					if cage.location[i] is sq
-						cand_index = i
+		
 
-				to_remove = []
-				for candidate in cage.candidates
-					if candidate[cand_index] is new_square.value
-						to_remove.push candidate
-				for rem_info in to_remove
-					cage.candidates = @remove(cage.candidates, rem_info)
-
+		
 		return grid
 				# for cand_group, cand of cage.candidates
 				# 	for candidate in cand
