@@ -49,8 +49,10 @@
     };
     function Main() {
       var cage, current_grid, end, n, solver, start, test_case, time, _i, _len, _ref, _return;
+      this.edit_mode = true;
       this.welcome_dialog();
-      test_case = 4;
+      this.build_DOM();
+      test_case = 3;
       switch (test_case) {
         case 1:
           n = 3;
@@ -340,6 +342,19 @@
       		console.log(@main_grid.cages)
       		*/
     }
+    Main.prototype.build_DOM = function() {
+      $('body').append('<form method="post" action="">\n	<input name="radio1" type="radio" checked="checked" value="edit">Edit Mode</input>\n	<input name="radio1" type="radio" value="solve">Solve Mode</input>\n</form>\n<div id="edit_mode"> This is edit_mode </div>\n<div id="solve_mode"> This is solve_mode </div>');
+      $('#solve_mode').css({
+        opacity: 0,
+        display: "none"
+      });
+      return $(function(){
+				$('input:[name="radio1"]').lightSwitch({
+					switchImg:'img/switch-1.png',
+					animSpeed:250
+				});
+			});;
+    };
     Main.prototype.welcome_dialog = function() {
       if ("false" !== getCookie("welcome")) {
         this.modal = new Modal({

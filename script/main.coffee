@@ -42,11 +42,15 @@ class Main
 		setCookie name, "", -1
 
 	constructor: ->
+		@edit_mode = true
 		@welcome_dialog( )
+		@build_DOM( )
+
+		# $( 'input:[name="mode"]' ).click @switch_modes( )
 		#n = 3
 		#@main_grid = new Grid(n)
 
-		test_case = 4
+		test_case = 3
 		
 		switch (test_case)
 			when 1
@@ -534,7 +538,37 @@ class Main
 		@main_grid.add_cage(temp)
 		console.log(@main_grid.cages)
 		###
-		
+
+	build_DOM: ->
+			$('body').append('''
+			<form method="post" action="">
+				<input name="radio1" type="radio" checked="checked" value="edit">Edit Mode</input>
+				<input name="radio1" type="radio" value="solve">Solve Mode</input>
+			</form>
+			<div id="edit_mode"> This is edit_mode </div>
+			<div id="solve_mode"> This is solve_mode </div>
+			''')
+
+			$('#solve_mode').css
+				opacity:0
+				display:"none"	
+
+			`$(function(){
+				$('input:[name="radio1"]').lightSwitch({
+					switchImg:'img/switch-1.png',
+					animSpeed:250
+				});
+			});`
+
+	# switch_modes: ->
+
+	# $(function(){
+	# 	$('input:[name="radio1"]').lightSwitch({
+	# 		switchImg:'img/switch-1.png',
+	# 		animSpeed:250
+	# 	});
+	# });
+			# });`
 
 	welcome_dialog: ->
 		if "false" isnt getCookie "welcome"
