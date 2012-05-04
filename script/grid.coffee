@@ -73,34 +73,36 @@ class Grid
 					# rem_array = []
 					# rem_val = []
 
-					# for candidate in 
-
-					for cand_group, cand of affected_cage.candidates
-						# console.log "cand before removal"
-						# console.log cand
-						rem_array = []
-						for candidate in cand
-							# console.log "candidate"
-							# console.log candidate
-							# console.log "candidate[loc_index]"
-							# console.log candidate[loc_index]
-							# console.log "new_sq.value"
-							# console.log new_sq.value
-							if candidate[loc_index] is new_sq.value
-								# console.log "removing #{candidate} from cand"
-								rem_array.push candidate
-						# console.log "cand post removal"
-						if rem_array.length isnt 0
-							# console.log "rem_array has vals..."
-							# console.log rem_array
-							output = affected_cage.candidates[cand_group]
-							for candidate in rem_array
-								# console.log "candidate in new_cand"
-								# console.log candidate
-								output = @remove output, candidate
-								# console.log "output"
-								# console.log output
-							affected_cage.candidates[cand_group] = output
+					rem_array = []
+					for candidate in affected_cage.candidates
+						if candidate[loc_index] is new_sq.value
+							rem_array.push
+					# for cand_group, cand of affected_cage.candidates
+					# 	# console.log "cand before removal"
+					# 	# console.log cand
+					# 	rem_array = []
+					# 	for candidate in cand
+					# 		# console.log "candidate"
+					# 		# console.log candidate
+					# 		# console.log "candidate[loc_index]"
+					# 		# console.log candidate[loc_index]
+					# 		# console.log "new_sq.value"
+					# 		# console.log new_sq.value
+					# 		if candidate[loc_index] is new_sq.value
+					# 			# console.log "removing #{candidate} from cand"
+					# 			rem_array.push candidate
+					# 	# console.log "cand post removal"
+					# 	if rem_array.length isnt 0
+					# 		# console.log "rem_array has vals..."
+					# 		# console.log rem_array
+					# 		output = affected_cage.candidates[cand_group]
+					# 		for candidate in rem_array
+					# 			# console.log "candidate in new_cand"
+					# 			# console.log candidate
+					# 			output = @remove output, candidate
+					# 			# console.log "output"
+					# 			# console.log output
+					# 		affected_cage.candidates[cand_group] = output
 
 						# console.log "updated candidates"
 						# console.log affected_cage.candidates[cand_group]

@@ -47,7 +47,7 @@
       			0 = both
       			1 = row
       			2 = column
-      		*/      var affected_cage, affected_col, affected_row, cage, cand, cand_group, candidate, i, loc_index, output, rem_array, square, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _m, _n, _o, _p, _ref, _ref10, _ref11, _ref12, _ref13, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9, _results, _results2, _results3;
+      		*/      var affected_cage, affected_col, affected_row, cage, cand, cand_group, candidate, i, loc_index, output, rem_array, square, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _ref, _ref10, _ref11, _ref12, _ref13, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9, _results, _results2, _results3;
       switch (update_type) {
         case 0:
           affected_row = new_sq.row_id;
@@ -67,23 +67,12 @@
                 }
               }
             }
+            rem_array = [];
             _ref4 = affected_cage.candidates;
-            for (cand_group in _ref4) {
-              cand = _ref4[cand_group];
-              rem_array = [];
-              for (_k = 0, _len3 = cand.length; _k < _len3; _k++) {
-                candidate = cand[_k];
-                if (candidate[loc_index] === new_sq.value) {
-                  rem_array.push(candidate);
-                }
-              }
-              if (rem_array.length !== 0) {
-                output = affected_cage.candidates[cand_group];
-                for (_l = 0, _len4 = rem_array.length; _l < _len4; _l++) {
-                  candidate = rem_array[_l];
-                  output = this.remove(output, candidate);
-                }
-                affected_cage.candidates[cand_group] = output;
+            for (_k = 0, _len3 = _ref4.length; _k < _len3; _k++) {
+              candidate = _ref4[_k];
+              if (candidate[loc_index] === new_sq.value) {
+                rem_array.push;
               }
             }
           }
@@ -91,8 +80,8 @@
           for (i = 0, _ref5 = this.size; 0 <= _ref5 ? i < _ref5 : i > _ref5; 0 <= _ref5 ? i++ : i--) {
             square = this.display[i][affected_col];
             _ref6 = this.cages;
-            for (_m = 0, _len5 = _ref6.length; _m < _len5; _m++) {
-              cage = _ref6[_m];
+            for (_l = 0, _len4 = _ref6.length; _l < _len4; _l++) {
+              cage = _ref6[_l];
               if (cage.id === square.cage_id) {
                 affected_cage = cage;
                 for (i = 0, _ref7 = affected_cage.location.length; 0 <= _ref7 ? i < _ref7 : i > _ref7; 0 <= _ref7 ? i++ : i--) {
@@ -103,24 +92,24 @@
               }
             }
             _results.push((function() {
-              var _len6, _n, _ref8, _results2;
+              var _len5, _m, _ref8, _results2;
               _ref8 = affected_cage.candidates;
               _results2 = [];
               for (cand_group in _ref8) {
                 cand = _ref8[cand_group];
                 rem_array = [];
-                for (_n = 0, _len6 = cand.length; _n < _len6; _n++) {
-                  candidate = cand[_n];
+                for (_m = 0, _len5 = cand.length; _m < _len5; _m++) {
+                  candidate = cand[_m];
                   if (candidate[loc_index] === new_sq.value) {
                     rem_array.push(candidate);
                   }
                 }
                 _results2.push((function() {
-                  var _len7, _o;
+                  var _len6, _n;
                   if (rem_array.length !== 0) {
                     output = affected_cage.candidates[cand_group];
-                    for (_o = 0, _len7 = rem_array.length; _o < _len7; _o++) {
-                      candidate = rem_array[_o];
+                    for (_n = 0, _len6 = rem_array.length; _n < _len6; _n++) {
+                      candidate = rem_array[_n];
                       output = this.remove(output, candidate);
                     }
                     return affected_cage.candidates[cand_group] = output;
@@ -136,11 +125,11 @@
           affected_row = new_sq.row_id;
           _ref8 = this.display[affected_row];
           _results2 = [];
-          for (_n = 0, _len6 = _ref8.length; _n < _len6; _n++) {
-            square = _ref8[_n];
+          for (_m = 0, _len5 = _ref8.length; _m < _len5; _m++) {
+            square = _ref8[_m];
             _ref9 = this.cages;
-            for (_o = 0, _len7 = _ref9.length; _o < _len7; _o++) {
-              cage = _ref9[_o];
+            for (_n = 0, _len6 = _ref9.length; _n < _len6; _n++) {
+              cage = _ref9[_n];
               if (cage.id === square.cage_id) {
                 affected_cage = cage;
                 for (i = 0, _ref10 = affected_cage.location.length; 0 <= _ref10 ? i < _ref10 : i > _ref10; 0 <= _ref10 ? i++ : i--) {
@@ -151,24 +140,24 @@
               }
             }
             _results2.push((function() {
-              var _len8, _p, _ref11, _results3;
+              var _len7, _o, _ref11, _results3;
               _ref11 = affected_cage.candidates;
               _results3 = [];
               for (cand_group in _ref11) {
                 cand = _ref11[cand_group];
                 rem_array = [];
-                for (_p = 0, _len8 = cand.length; _p < _len8; _p++) {
-                  candidate = cand[_p];
+                for (_o = 0, _len7 = cand.length; _o < _len7; _o++) {
+                  candidate = cand[_o];
                   if (candidate[loc_index] === new_sq.value) {
                     rem_array.push(candidate);
                   }
                 }
                 _results3.push((function() {
-                  var _len9, _q;
+                  var _len8, _p;
                   if (rem_array.length !== 0) {
                     output = affected_cage.candidates[cand_group];
-                    for (_q = 0, _len9 = rem_array.length; _q < _len9; _q++) {
-                      candidate = rem_array[_q];
+                    for (_p = 0, _len8 = rem_array.length; _p < _len8; _p++) {
+                      candidate = rem_array[_p];
                       output = this.remove(output, candidate);
                     }
                     return affected_cage.candidates[cand_group] = output;
@@ -186,8 +175,8 @@
           for (i = 0, _ref11 = this.size; 0 <= _ref11 ? i < _ref11 : i > _ref11; 0 <= _ref11 ? i++ : i--) {
             square = this.display[i][affected_col];
             _ref12 = this.cages;
-            for (_p = 0, _len8 = _ref12.length; _p < _len8; _p++) {
-              cage = _ref12[_p];
+            for (_o = 0, _len7 = _ref12.length; _o < _len7; _o++) {
+              cage = _ref12[_o];
               if (cage.id === square.cage_id) {
                 affected_cage = cage;
                 for (i = 0, _ref13 = affected_cage.location.length; 0 <= _ref13 ? i < _ref13 : i > _ref13; 0 <= _ref13 ? i++ : i--) {
@@ -198,24 +187,24 @@
               }
             }
             _results3.push((function() {
-              var _len9, _q, _ref14, _results4;
+              var _len8, _p, _ref14, _results4;
               _ref14 = affected_cage.candidates;
               _results4 = [];
               for (cand_group in _ref14) {
                 cand = _ref14[cand_group];
                 rem_array = [];
-                for (_q = 0, _len9 = cand.length; _q < _len9; _q++) {
-                  candidate = cand[_q];
+                for (_p = 0, _len8 = cand.length; _p < _len8; _p++) {
+                  candidate = cand[_p];
                   if (candidate[loc_index] === new_sq.value) {
                     rem_array.push(candidate);
                   }
                 }
                 _results4.push((function() {
-                  var _len10, _r;
+                  var _len9, _q;
                   if (rem_array.length !== 0) {
                     output = affected_cage.candidates[cand_group];
-                    for (_r = 0, _len10 = rem_array.length; _r < _len10; _r++) {
-                      candidate = rem_array[_r];
+                    for (_q = 0, _len9 = rem_array.length; _q < _len9; _q++) {
+                      candidate = rem_array[_q];
                       output = this.remove(output, candidate);
                     }
                     return affected_cage.candidates[cand_group] = output;
