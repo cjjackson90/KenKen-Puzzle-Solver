@@ -26,7 +26,7 @@ class Cage
 		@candidates = []
 		switch @operation
 			when "+"
-				console.log "++++++++++++++"
+				# console.log "++++++++++++++"
 				##console.log @target
 				for i in [@grid_size..1]
 					single_candidate = []
@@ -39,21 +39,21 @@ class Cage
 				#console.log @candidates
 				break
 			when "-" #then @candidates_minus grid_size
-				console.log "--------------"
+				# console.log "--------------"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
 					@bt_minus single_candidate, 1
 				break
 			when "*" #then @candidates_multi(grid_size)
-				console.log "**************"
+				# console.log "**************"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
 					@bt_multi single_candidate, 1
 				break
 			when "/" #then @candidates_divide(grid_size)
-				console.log "//////////////////"
+				# console.log "//////////////////"
 				for i in [@grid_size..1]
 					single_candidate = []
 					single_candidate.push i
@@ -95,7 +95,7 @@ class Cage
 			return #candidate.pop()
 		
 		if running_target is 0
-			console.log "running target = 0"
+			# console.log "running target = 0"
 			# console.log "######valid"
 			#console.log "targetop = #{@target}#{@operation}"
 			#console.log "check_consistent() = #{candidate}"
@@ -120,7 +120,7 @@ class Cage
 					# TEST if @candidates["#{candidate}"]?
 					# TEST @candidates["#{candidate}"].push permutation
 					@candidates.push permutation
-					console.log "value added = #{permutation}"
+					# console.log "value added = #{permutation}"
 					# TEST else
 					# 	TEST @candidates["#{candidate}"] = []
 					# 	TEST @candidates["#{candidate}"].push permutation
@@ -128,10 +128,10 @@ class Cage
 				# TEST new_candidates = @unique @candidates["#{candidate}"]
 				# TEST @candidates["#{candidate}"] = new_candidates
 			new_candidates = @unique @candidates
-			console.log "new_candidates"
-			console.log new_candidates
+			# console.log "new_candidates"
+			# console.log new_candidates
 			@candidates = new_candidates
-			console.log @candidates
+			# console.log @candidates
 			# console.log "candidates for #{@target}#{@operation}"
 			# console.log @candidates
 				# TESTconsole.log @candidates["#{candidate}"]
@@ -188,9 +188,10 @@ class Cage
 			# #console.log candidate[0...candidate.length]
 			# if (@check_consistent(candidate) is true)
 				# console.log "Candidate added!"
-			
 			perms = permute candidate, @grid_size
 			for permutation in perms
+				# console.log permutation
+				# console.log @check_consistent( permutation )
 				if @check_consistent( permutation )
 					@candidates.push permutation
 					# if @candidates["#{candidate}"]? 
@@ -200,7 +201,39 @@ class Cage
 					# 	@candidates["#{candidate}"].push permutation
 
 			# Could move outside - plenty of optimisations in this class...
-			new_candidates = @unique @candidates
+			# new_candidates = []
+
+			new_candidates = (@unique( @candidates ))
+			@candidates = new_candidates
+
+			# console.log "temp"
+			# console.log temp
+			# @candidates = temp
+		# console.log "new_candidates"
+		# console.log new_candidates
+
+		# @candidates = []
+		# for val in new_candidates
+		# 	console.log "hello?"
+		# 	@candidates.push val
+
+			# console.log "@candidates"
+			# console.log @candidates
+
+
+			# console.log "candidates (before unique)"
+			# console.log @candidates
+			# console.log "@unique @candidates"
+			# console.log @unique @candidates
+			# new_candidates = (@unique @candidates)
+			# console.log "candidates (after unique)"
+			# console.log new_candidates
+			# # console.log "candidates"
+			# # console.log @candidates
+			# @candidates = new_candidates
+			# console.log "new @candidates"
+			# console.log @candidates
+
 
 			# if @candidates["#{candidate}"]?
 			# 	new_candidates = @unique @candidates["#{candidate}"]
@@ -220,9 +253,9 @@ class Cage
 		n = if candidate[candidate.length-1] < @grid_size then candidate[candidate.length-1] else @grid_size
 		potentials = [n..1]
 		for val in potentials
-			console.log "candidate = #{candidate}, val = #{val}"
+			# console.log "candidate = #{candidate}, val = #{val}"
 			new_branch = candidate
-			console.log new_branch
+			# console.log new_branch
 			new_branch.push val
 			new_count = counter+1
 			# console.log "the candidate entering bt() is #{candidate}"
@@ -287,9 +320,9 @@ class Cage
 		n = if candidate[candidate.length-1] < @grid_size then candidate[candidate.length-1] else @grid_size
 		potentials = [n..2]
 		for val in potentials
-			console.log "candidate = #{candidate}"
+			# console.log "candidate = #{candidate}"
 			new_branch = candidate
-			console.log new_branch
+			# console.log new_branch
 			new_branch.push val
 			new_count = counter+1
 			# console.log "the candidate entering bt() is #{candidate}"

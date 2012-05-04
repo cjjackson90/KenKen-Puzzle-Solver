@@ -35,7 +35,6 @@
       this.candidates = [];
       switch (this.operation) {
         case "+":
-          console.log("++++++++++++++");
           for (i = _ref = this.grid_size; _ref <= 1 ? i <= 1 : i >= 1; _ref <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -43,7 +42,6 @@
           }
           break;
         case "-":
-          console.log("--------------");
           for (i = _ref2 = this.grid_size; _ref2 <= 1 ? i <= 1 : i >= 1; _ref2 <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -51,7 +49,6 @@
           }
           break;
         case "*":
-          console.log("**************");
           for (i = _ref3 = this.grid_size; _ref3 <= 1 ? i <= 1 : i >= 1; _ref3 <= 1 ? i++ : i--) {
             single_candidate = [];
             single_candidate.push(i);
@@ -59,7 +56,6 @@
           }
           break;
         case "/":
-          console.log("//////////////////");
           _results = [];
           for (i = _ref4 = this.grid_size; _ref4 <= 1 ? i <= 1 : i >= 1; _ref4 <= 1 ? i++ : i--) {
             single_candidate = [];
@@ -93,20 +89,15 @@
         return;
       }
       if (running_target === 0) {
-        console.log("running target = 0");
         perms = permute(candidate, this.grid_size);
         for (_i = 0, _len = perms.length; _i < _len; _i++) {
           permutation = perms[_i];
           if (this.check_consistent(permutation)) {
             this.candidates.push(permutation);
-            console.log("value added = " + permutation);
           }
         }
         new_candidates = this.unique(this.candidates);
-        console.log("new_candidates");
-        console.log(new_candidates);
         this.candidates = new_candidates;
-        console.log(this.candidates);
         return;
       }
       if (counter >= this.location.length) {
@@ -149,6 +140,7 @@
           }
         }
         new_candidates = this.unique(this.candidates);
+        this.candidates = new_candidates;
         return;
       }
       if (counter >= this.location.length) {
@@ -163,9 +155,7 @@
       _results2 = [];
       for (_k = 0, _len2 = potentials.length; _k < _len2; _k++) {
         val = potentials[_k];
-        console.log("candidate = " + candidate + ", val = " + val);
         new_branch = candidate;
-        console.log(new_branch);
         new_branch.push(val);
         new_count = counter + 1;
         this.bt_minus(new_branch, new_count);
@@ -214,9 +204,7 @@
       }).apply(this, arguments);
       for (_k = 0, _len2 = potentials.length; _k < _len2; _k++) {
         val = potentials[_k];
-        console.log("candidate = " + candidate);
         new_branch = candidate;
-        console.log(new_branch);
         new_branch.push(val);
         new_count = counter + 1;
         k = this.bt_multi(new_branch, new_count);
