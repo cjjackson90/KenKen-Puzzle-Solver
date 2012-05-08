@@ -4,6 +4,7 @@ class Grid
 	cages: []
 	display: []
 	solution: []
+	solution_order: []
 	rows: []
 	columns: []
 
@@ -18,6 +19,9 @@ class Grid
 				@rows[i][j] = j+1
 				@columns[i][j] = j+1
 				@display[i][j] = new Square(i,j)
+
+		$('#edit_grid_wrapper').remove()
+		@draw()
 	
 	add_candidate: (location, candidate) ->
 		# console.log candidate
@@ -33,8 +37,53 @@ class Grid
 				@update_column col_id, candidate[i]
 
 	draw: () ->
+		# $('#edit_mode').append('''
+		# 	<table id="grid_lines">
+		# 	</table>
+		# 	<div id="grid_wrapper">
+		# 	</div>
+		# ''')
 
+		# for i in [0...@size]
+		# 	letter = String.fromCharCode( 65 + (i % @size))
+		# 	$('#grid_lines').append('<tr id="grid_row'+i+'" class="row"></tr>')
+		# 	for j in [0...@size]
+		# 		num = j + 1
+		# 		$('#grid_row'+i).append('<td id="grid_'+letter+num+'" class="col"></td>')
+		# 		$('#grid_wrapper').append('<div id="'+letter+''+num+'"><div class="op_target">&nbsp;</div>&nbsp;</div>')
+
+		# sq_size = ( ( $('#grid_wrapper').height() / @size ) )
+		# $('#grid_wrapper > div, #grid_lines > div').css(
+		# 	"width": "#{sq_size}px"
+		# 	"height": "#{sq_size}px"
+		# )
+
+		$('#edit_mode').append('''
+			<div id="edit_grid_wrapper">
+			</div>
+		''')
+
+		for i in [0...@size]
+			letter = String.fromCharCode( 65 + (i % @size))
+			# $('#grid_lines').append('<tr id="grid_row'+i+'" class="row"></tr>')
+			for j in [0...@size]
+				num = j + 1
+				# $('#grid_row'+i).append('<td id="grid_'+letter+num+'" class="col"></td>')
+				$('#edit_grid_wrapper').append('<div id="'+letter+''+num+'"><div class="op_target">&nbsp;</div>&nbsp;</div>')
+
+		sq_size = ( ( $('#edit_grid_wrapper').height() / @size ) )
+		$('#edit_grid_wrapper > div, #grid_lines > div').css(
+			"width": "#{sq_size}px"
+			"height": "#{sq_size}px"
+		)
+		
 	clear: () ->
+		size:null
+		cages: []
+		display: []
+		solution: []
+		rows: []
+		columns: []
 
 	update_row: (row_id, val) ->
 		@rows[row_id][val-1] = null
@@ -293,7 +342,14 @@ class Grid
 	remove_cage: () ->
 
 	add_solution: (solution) ->
-		@solution = solution
+		for i in [0...@size]
+			for j in [0...@size]
+				@solution.push @display[i][j]
+		console.log "solution"
+		console.log @solution
+
+	add_solution_order: (solution_order) ->
+		@solution_order = solution_order
 
 	verify_correct: () ->
 		# console.log @solution

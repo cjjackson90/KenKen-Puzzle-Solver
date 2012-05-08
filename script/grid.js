@@ -5,6 +5,7 @@
     Grid.prototype.cages = [];
     Grid.prototype.display = [];
     Grid.prototype.solution = [];
+    Grid.prototype.solution_order = [];
     Grid.prototype.rows = [];
     Grid.prototype.columns = [];
     function Grid(grid_size) {
@@ -20,6 +21,8 @@
           this.display[i][j] = new Square(i, j);
         }
       }
+      $('#edit_grid_wrapper').remove();
+      this.draw();
     }
     Grid.prototype.add_candidate = function(location, candidate) {
       var col_id, current_cmp, i, row_id, _ref, _results;
@@ -30,8 +33,32 @@
       }
       return _results;
     };
-    Grid.prototype.draw = function() {};
-    Grid.prototype.clear = function() {};
+    Grid.prototype.draw = function() {
+      var i, j, letter, num, sq_size, _ref, _ref2;
+      $('#edit_mode').append('<div id="edit_grid_wrapper">\n</div>');
+      for (i = 0, _ref = this.size; 0 <= _ref ? i < _ref : i > _ref; 0 <= _ref ? i++ : i--) {
+        letter = String.fromCharCode(65 + (i % this.size));
+        for (j = 0, _ref2 = this.size; 0 <= _ref2 ? j < _ref2 : j > _ref2; 0 <= _ref2 ? j++ : j--) {
+          num = j + 1;
+          $('#edit_grid_wrapper').append('<div id="' + letter + '' + num + '"><div class="op_target">&nbsp;</div>&nbsp;</div>');
+        }
+      }
+      sq_size = $('#edit_grid_wrapper').height() / this.size;
+      return $('#edit_grid_wrapper > div, #grid_lines > div').css({
+        "width": "" + sq_size + "px",
+        "height": "" + sq_size + "px"
+      });
+    };
+    Grid.prototype.clear = function() {
+      return {
+        size: null,
+        cages: [],
+        display: [],
+        solution: [],
+        rows: [],
+        columns: []
+      };
+    };
     Grid.prototype.update_row = function(row_id, val) {
       return this.rows[row_id][val - 1] = null;
     };
@@ -222,7 +249,17 @@
     };
     Grid.prototype.remove_cage = function() {};
     Grid.prototype.add_solution = function(solution) {
-      return this.solution = solution;
+      var i, j, _ref, _ref2;
+      for (i = 0, _ref = this.size; 0 <= _ref ? i < _ref : i > _ref; 0 <= _ref ? i++ : i--) {
+        for (j = 0, _ref2 = this.size; 0 <= _ref2 ? j < _ref2 : j > _ref2; 0 <= _ref2 ? j++ : j--) {
+          this.solution.push(this.display[i][j]);
+        }
+      }
+      console.log("solution");
+      return console.log(this.solution);
+    };
+    Grid.prototype.add_solution_order = function(solution_order) {
+      return this.solution_order = solution_order;
     };
     Grid.prototype.verify_correct = function() {
       var col_check, i, row_check, _ref, _results;
