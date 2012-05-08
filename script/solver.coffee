@@ -52,6 +52,7 @@ class Solver
 
 		# TODO: Implement strategies.
 		test = @strat.one_candidate( grid )
+
 		# console.log test.vals
 		# console.log "grid.display after strategy"
 		# console.log "#{grid.display[0][0].value}, #{grid.display[0][1].value}, #{grid.display[0][2].value}, #{grid.display[0][3].value}"
@@ -84,6 +85,7 @@ class Solver
 		# console.log grid.cages[5].candidates.length
 		if test.status is true
 			console.log "strat1 = success!"
+			@append_solution_order( test.vals )
 			for sq in test.vals
 				temp = @update_puzzle_info( grid, sq.row_id, sq.column_id, sq.cage_id, sq.value )
 				grid = temp
@@ -109,6 +111,7 @@ class Solver
 
 		if test2.status is true
 			console.log "strat2 = success!"
+			# @append_solution_order( test2.vals )
 			for obj in test2.vals
 				console.log "obj.cage_id = #{obj.cage_id}"
 				if obj.row_or_col is "row"
@@ -375,6 +378,7 @@ class Solver
 	# 	return "update"
 
 	append_solution_order: (fresh_vals) ->
+		@solution_order.push fresh_vals
 
 	update_puzzle_info: (grid, row_id, col_id, cage_id, fresh_val) ->
 		selective_reduction = false

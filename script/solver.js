@@ -41,6 +41,7 @@
       test = this.strat.one_candidate(grid);
       if (test.status === true) {
         console.log("strat1 = success!");
+        this.append_solution_order(test.vals);
         _ref3 = test.vals;
         for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
           sq = _ref3[_i];
@@ -164,7 +165,9 @@
       potentials;
       return potentials;
     };
-    Solver.prototype.append_solution_order = function(fresh_vals) {};
+    Solver.prototype.append_solution_order = function(fresh_vals) {
+      return this.solution_order.push(fresh_vals);
+    };
     Solver.prototype.update_puzzle_info = function(grid, row_id, col_id, cage_id, fresh_val) {
       var cage, cand_index, candidate, i, j, rem_info, selective_reduction, sq, to_remove, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _m, _ref, _ref2, _ref3, _ref4, _ref5, _ref6;
       selective_reduction = false;
