@@ -45,7 +45,7 @@ class Main
 	add_cage_dialog_open = false
 	position_in_display = 0
 	constructor: ->
-		@welcome_dialog( )
+		# @welcome_dialog( )
 		@build_DOM( )
 		@main_grid = new Grid( 5 )
 
@@ -848,29 +848,29 @@ class Main
 	# });
 			# });`
 
-	welcome_dialog: ->
-		if "false" isnt getCookie "welcome"
-			@modal = new Modal
-				title: "Welcome to Solvr!"
-				intro: """
-					<p>
-						Welcome to Solvr - the KenKen puzzle aid! This tool will help you solve KenKen puzzles 
-						you're having trouble with, in what is (hopefully!) an easy enough site to use.
-					</p>
-					<p>
-						Please note that this website is still under heavy development and we hope to improve our service,
-						with a quicker, more robust solving algorithm. But for now, give it a try and email the administrator
-						with issues, bugs or questions.
-					</p>
-					<p>
-						Regards,
-						The KenKen Solvr Team
-					</p>
-					"""
-				okay: "Don't show this again!"
-				cancel: "Okay, thanks!"
-				callback: ( r ) ->
-					setCookie "welcome", "false"
-			@modal.show( )
+	# welcome_dialog: ->
+	# 	if "false" isnt getCookie "welcome"
+	# 		@modal = new Modal
+	# 			title: "Welcome to Solvr!"
+	# 			intro: """
+	# 				<p>
+	# 					Welcome to Solvr - the KenKen puzzle aid! This tool will help you solve KenKen puzzles 
+	# 					you're having trouble with, in what is (hopefully!) an easy enough site to use.
+	# 				</p>
+	# 				<p>
+	# 					Please note that this website is still under heavy development and we hope to improve our service,
+	# 					with a quicker, more robust solving algorithm. But for now, give it a try and email the administrator
+	# 					with issues, bugs or questions.
+	# 				</p>
+	# 				<p>
+	# 					Regards,
+	# 					The KenKen Solvr Team
+	# 				</p>
+	# 				"""
+	# 			okay: "Don't show this again!"
+	# 			cancel: "Okay, thanks!"
+	# 			callback: ( r ) ->
+	# 				setCookie "welcome", "false"
+	# 		@modal.show( )
 
 this.Main = Main

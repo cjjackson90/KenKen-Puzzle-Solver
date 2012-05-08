@@ -57,7 +57,6 @@
     add_cage_dialog_open = false;
     position_in_display = 0;
     function Main() {
-      this.welcome_dialog();
       this.build_DOM();
       this.main_grid = new Grid(5);
       $('#grid_size').change(__bind(function(e) {
@@ -281,20 +280,6 @@
         $('#solve_grid_wrapper > #' + sq.id).append(sq.value);
       }
       return position_in_display++;
-    };
-    Main.prototype.welcome_dialog = function() {
-      if ("false" !== getCookie("welcome")) {
-        this.modal = new Modal({
-          title: "Welcome to Solvr!",
-          intro: "<p>\n	Welcome to Solvr - the KenKen puzzle aid! This tool will help you solve KenKen puzzles \n	you're having trouble with, in what is (hopefully!) an easy enough site to use.\n</p>\n<p>\n	Please note that this website is still under heavy development and we hope to improve our service,\n	with a quicker, more robust solving algorithm. But for now, give it a try and email the administrator\n	with issues, bugs or questions.\n</p>\n<p>\n	Regards,\n	The KenKen Solvr Team\n</p>",
-          okay: "Don't show this again!",
-          cancel: "Okay, thanks!",
-          callback: function(r) {
-            return setCookie("welcome", "false");
-          }
-        });
-        return this.modal.show();
-      }
     };
     return Main;
   })();
