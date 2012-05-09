@@ -23,9 +23,6 @@
     Square.prototype.set_target_op = function(target_val, op) {
       return this.target_op = target_val + op;
     };
-    Square.prototype.set_square = function(Square) {
-      this.Square = Square;
-    };
     return Square;
   })();
   this.Square = Square;

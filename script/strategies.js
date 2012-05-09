@@ -43,7 +43,6 @@
         grid: new_grid
       };
       return return_obj;
-      return false;
     };
     Strategies.prototype.common_numbers = function(grid) {
       var cage, candidate, col_id, foo, included, output, potentials, rem_obj, return_obj, row_id, same_col, same_row, sq, temp, val, _i, _j, _k, _l, _len, _len10, _len11, _len12, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _len9, _m, _n, _o, _p, _q, _r, _ref, _ref2, _ref3, _ref4, _s, _t;
@@ -76,26 +75,18 @@
           }
         }
         if (same_row) {
-          console.log(cage.candidates);
           potentials = cage.candidates[0];
-          console.log("potentials");
-          console.log(potentials);
           temp = [];
           for (_k = 0, _len3 = potentials.length; _k < _len3; _k++) {
             val = potentials[_k];
-            console.log("val = " + val);
-            console.log("value of grid.rows[" + row_id + "][" + (val - 1) + "] = " + grid.rows[row_id][val - 1]);
             if (grid.rows[row_id][val - 1] === null) {
               temp.push(this.remove(potentials, val));
             }
           }
-          console.log(temp);
           for (_l = 0, _len4 = temp.length; _l < _len4; _l++) {
             val = temp[_l];
-            console.log("removing " + val + " from " + potentials);
             foo = this.remove(potentials, val[0]);
             potentials = foo;
-            console.log(potentials);
           }
           if (potentials.length === 0) {
             continue;
@@ -110,8 +101,6 @@
               }
             }
           }
-          console.log("potentials reduced");
-          console.log(potentials);
           if (potentials.length > 0) {
             output = [];
             for (_o = 0, _len7 = potentials.length; _o < _len7; _o++) {
@@ -133,26 +122,18 @@
           return return_obj;
         }
         if (same_col) {
-          console.log(cage.candidates);
           potentials = cage.candidates[0];
-          console.log("potentials");
-          console.log(potentials);
           temp = [];
           for (_p = 0, _len8 = potentials.length; _p < _len8; _p++) {
             val = potentials[_p];
-            console.log("val = " + val);
-            console.log("value of grid.columns[" + col_id + "][" + (val - 1) + "] = " + grid.columns[col_id][val - 1]);
             if (grid.columns[col_id][val - 1] === null) {
               temp.push(this.remove(potentials, val));
             }
           }
-          console.log(temp);
           for (_q = 0, _len9 = temp.length; _q < _len9; _q++) {
             val = temp[_q];
-            console.log("removing " + val + " frp, " + potentials);
             foo = this.remove(potentials, val[0]);
             potentials = foo;
-            console.log(potentials);
           }
           if (potentials.length === 0) {
             continue;
@@ -167,8 +148,6 @@
               }
             }
           }
-          console.log("potentials reduced");
-          console.log(potentials);
           if (potentials.length > 0) {
             output = [];
             for (_t = 0, _len12 = potentials.length; _t < _len12; _t++) {

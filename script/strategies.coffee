@@ -1,7 +1,18 @@
 class Strategies
 
+	# ### Strategies.constructor()
+	# Initialises instance of strategies class.
 	constructor: () ->
 
+	# ### Strategies.one_candidate( grid )
+	# Finds cages which have only one candidate (ie, candidate is
+	# only possible entry for the cage) and returns an object
+	# containing status of the strategy's success (true, false),
+	# values that have only one candidate (if applicable) and the
+	# updated grid.
+	# ### Parameters
+	# * `grid' - the grid instance we wish to search for single
+	#	candidate cages.
 	one_candidate: (grid) ->
 		vals_added = false
 		vals = []
@@ -23,53 +34,28 @@ class Strategies
 			vals: vals
 			grid: new_grid
 		return return_obj
-			# for candidate in cage.candidates
 
-		# vals_added = false
-		# for cage in grid.cages
-		# 	console.log "current_cage"
-		# 	console.log cage
-		# 	for cand_group, cand of cage.candidates
-		# 		console.log "cand_group.length = #{cand_group.length}"
-		# 		console.log "cand.length = #{cand.length}"
-		# 		if cand.length is 1
-		# 			valid = false
-		# 			console.log cage.location
-		# 			for sq in cage.location
-		# 				if sq.value is null
-		# 					valid = true
-		# 					break
-		# 			if valid
-		# 				console.log "value is null; valid sq"
-		# 				cage.add_candidate_to_grid( cand )
-		# 				vals_added = true
-		# 		# for i in [0...candidates[0].length]
-		# 			# set_value( candidates[0][i] )
-		# return vals_added
-		return false
-
+	# ### Strategies.common_numbers( grid )
+	# Finds cages which have a `common number' in their candidates, ie,
+	# a value which appears in every candidate for that cage. As the
+	# value is thus accounted for the candidates of the remaining cages
+	# can be updated. This also returns an object containing status
+	# of the strategy's success (true, false), values that have only
+	# one candidate (if applicable) and the updated grid. 
+	# ### Parameters
+	# * `grid' - the grid instance we wish to search for candidates
+	#	containing common numbers..
 	common_numbers: (grid) ->
-		# console.log "********** NEW CALL TO COMMON_NUMBERS!"
-		# console.log grid
 		for cage in grid.cages
-			# console.log cage
-			# console.log "new cage"
-			# if cage.candid
-			# console.log cage.candidates[0]
-			# console.log cage.candidates.length
-			# if cage.candidates.length 
 			if cage.candidates.length is 0
 				continue
-			if cage.candidates[0].length > grid.size # or cage.candidates.length is 0
+			if cage.candidates[0].length > grid.size
 				continue
-				# return_obj = 
-				# 	status: false
 
 			same_row = true
 			same_col = true
 			row_id = cage.location[0].row_id
 			col_id = cage.location[0].column_id
-			# console.log "row_id = #{row_id}, col_id = #{col_id}"
 
 			for sq in cage.location
 				if sq.row_id isnt row_id
@@ -82,24 +68,16 @@ class Strategies
 						status:false
 
 			if same_row
-				console.log cage.candidates
 				potentials = cage.candidates[0]
-				console.log "potentials"
-				console.log potentials
 
 				temp = []
 				for val in potentials
-					console.log "val = #{val}"
-					console.log "value of grid.rows[#{row_id}][#{val-1}] = #{grid.rows[row_id][val-1]}"
 					if grid.rows[row_id][val-1] is null
 						temp.push @remove( potentials, val )
 
-				console.log temp
 				for val in temp
-					console.log "removing #{val} from #{potentials}"
 					foo = @remove( potentials, val[0] )
 					potentials = foo
-					console.log potentials
 
 				if potentials.length is 0
 					continue
@@ -109,9 +87,6 @@ class Strategies
 						if (included = val in candidate) is false
 							potentials = @remove( potentials, val )
 
-
-				console.log "potentials reduced"
-				console.log potentials
 
 				if potentials.length > 0
 					output = []
@@ -130,24 +105,15 @@ class Strategies
 
 
 			if same_col
-				console.log cage.candidates
 				potentials = cage.candidates[0]
-				console.log "potentials"
-				console.log potentials
-
 				temp = []
 				for val in potentials
-					console.log "val = #{val}"
-					console.log "value of grid.columns[#{col_id}][#{val-1}] = #{grid.columns[col_id][val-1]}"
 					if grid.columns[col_id][val-1] is null
 						temp.push @remove( potentials, val )
 
-				console.log temp
 				for val in temp
-					console.log "removing #{val} frp, #{potentials}"
 					foo = @remove( potentials, val[0] )
 					potentials = foo
-					console.log potentials
 
 				if potentials.length is 0
 					continue
@@ -156,9 +122,6 @@ class Strategies
 					for val in potentials
 						if (included = val in candidates) is false
 							potentials = @remove( potentials, val )
-
-				console.log "potentials reduced"
-				console.log potentials
 
 				if potentials.length > 0
 					output = []

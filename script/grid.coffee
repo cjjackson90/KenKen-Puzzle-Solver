@@ -1,14 +1,42 @@
 class Grid
 	
+	# size of the grid.
 	size: null
+
+	# Array of cages which are contained in this grid.
 	cages: []
+
+	# 2d array of squares which corresponds to the grid
+	# structure as it would be displayed.
 	display: []
+
+	# Single dimension representation of the squares
+	# (and thus their values) when a solution has been found.
 	solution: []
+
+	# Array of Square[]. Each increasing index indicates the
+	# squares that have been answered at each step.
 	solution_order: []
+
+	# 2d array, with the first dimension representing each row
+	# and the second the values 1...grid_size. When a value is
+	# known in a row it is removed from the relevent
+	# row - either as it has already been added, or its position
+	# is not known but cage is, thus it is accounted for.
 	rows: []
+
+	# 2d array, with the first dimension representing each column
+	# and the second the values 1...grid_size. When a value is
+	# known in a column it is removed from the relevent
+	# column - either as it has already been added, or its position
+	# is not known but cage is, thus it is accounted for.
 	columns: []
 
-
+	# ### Grid.constructor( grid_size )
+	# Initialises grid by taking grid_size and creating
+	# the necessary number of squares (grid elements)
+	# ### Parameters
+	# * `grid_size' - size of the grid
 	constructor: (grid_size) ->
 		@size = grid_size
 		for i in [0...@size]
@@ -22,42 +50,10 @@ class Grid
 
 		$('#edit_grid_wrapper').remove()
 		@draw()
-	
-	add_candidate: (location, candidate) ->
-		# console.log candidate
-		# console.log location
-		for i in [0...location.length]
-			current_cmp = @display[location[i].row_id][location[i].column_id]
 
-			if current_cmp.id is location[i].id
-				current_cmp.set_value candidate[i]
-				row_id = current_cmp.row_id
-				col_id = current_cmp.column_id
-				@update_row row_id, candidate[i]
-				@update_column col_id, candidate[i]
-
+	# ### Grid.draw
+	# Draws the grid to the screen using jquery.
 	draw: () ->
-		# $('#edit_mode').append('''
-		# 	<table id="grid_lines">
-		# 	</table>
-		# 	<div id="grid_wrapper">
-		# 	</div>
-		# ''')
-
-		# for i in [0...@size]
-		# 	letter = String.fromCharCode( 65 + (i % @size))
-		# 	$('#grid_lines').append('<tr id="grid_row'+i+'" class="row"></tr>')
-		# 	for j in [0...@size]
-		# 		num = j + 1
-		# 		$('#grid_row'+i).append('<td id="grid_'+letter+num+'" class="col"></td>')
-		# 		$('#grid_wrapper').append('<div id="'+letter+''+num+'"><div class="op_target">&nbsp;</div>&nbsp;</div>')
-
-		# sq_size = ( ( $('#grid_wrapper').height() / @size ) )
-		# $('#grid_wrapper > div, #grid_lines > div').css(
-		# 	"width": "#{sq_size}px"
-		# 	"height": "#{sq_size}px"
-		# )
-
 		$('#edit_mode').append('''
 			<div id="edit_grid_wrapper">
 			</div>
@@ -65,10 +61,8 @@ class Grid
 
 		for i in [0...@size]
 			letter = String.fromCharCode( 65 + (i % @size))
-			# $('#grid_lines').append('<tr id="grid_row'+i+'" class="row"></tr>')
 			for j in [0...@size]
 				num = j + 1
-				# $('#grid_row'+i).append('<td id="grid_'+letter+num+'" class="col"></td>')
 				$('#edit_grid_wrapper').append('<div id="'+letter+''+num+'"><div class="op_target">&nbsp;</div>&nbsp;</div>')
 
 		sq_size = ( ( $('#edit_grid_wrapper').height() / @size ) )
@@ -76,7 +70,9 @@ class Grid
 			"width": "#{sq_size}px"
 			"height": "#{sq_size}px"
 		)
-		
+	
+	# ### Grid.clear( )
+	# Reinitialises values to null/empty.
 	clear: () ->
 		size:null
 		cages: []
@@ -85,274 +81,56 @@ class Grid
 		rows: []
 		columns: []
 
+	# ### Grid.update_row( row_id, val )
+	# Indicates that a particular value (val) in a
+	# particular row (row_id) has been used.
+	# ### Parameters
+	# * `row_id' - the row id that has had the value removed.
+	# * `val' - the value which has been removed.
 	update_row: (row_id, val) ->
 		@rows[row_id][val-1] = null
 
+	# ### Grid.update_column( col_id, val )
+	# Indicates that a particular value (val) in a
+	# particular column (col_id) has been used.
+	# ### Parameters
+	# * `col_id' - the col id that has had the value removed.
+	# * `val' - the value which has been removed.
 	update_column: (col_id, val) ->
 		@columns[col_id][val-1] = null
-
-	update_affected_candidates: (update_type, new_sq, value) ->
-		# console.log "in update_affect_candidates()"
-		### update type determines whether row, column or both are
-			updated. Row/Column would be updated depending on if a
-			value is known to go in a particular row/column but not
-			where. Both is used if the value is in place and thus
-			affects both row and column.
-			0 = both
-			1 = row
-			2 = column
-		###
-		switch update_type
-			when 0
-				affected_row = new_sq.row_id
-				affected_col = new_sq.column_id
-
-				for square in @display[affected_row]
-					# console.log square
-					for cage in @cages
-						if cage.id is square.cage_id
-							affected_cage = cage
-							for i in [0...affected_cage.location.length]
-								if affected_cage.location[i] is square
-									loc_index = i
-					# console.log "affected_cage"
-					# console.log affected_cage
-					# console.log "loc_index"
-					# console.log loc_index
-					# rem_array = []
-					# rem_val = []
-
-					rem_array = []
-					for candidate in affected_cage.candidates
-						if candidate[loc_index] is new_sq.value
-							rem_array.push
-					# for cand_group, cand of affected_cage.candidates
-					# 	# console.log "cand before removal"
-					# 	# console.log cand
-					# 	rem_array = []
-					# 	for candidate in cand
-					# 		# console.log "candidate"
-					# 		# console.log candidate
-					# 		# console.log "candidate[loc_index]"
-					# 		# console.log candidate[loc_index]
-					# 		# console.log "new_sq.value"
-					# 		# console.log new_sq.value
-					# 		if candidate[loc_index] is new_sq.value
-					# 			# console.log "removing #{candidate} from cand"
-					# 			rem_array.push candidate
-					# 	# console.log "cand post removal"
-					# 	if rem_array.length isnt 0
-					# 		# console.log "rem_array has vals..."
-					# 		# console.log rem_array
-					# 		output = affected_cage.candidates[cand_group]
-					# 		for candidate in rem_array
-					# 			# console.log "candidate in new_cand"
-					# 			# console.log candidate
-					# 			output = @remove output, candidate
-					# 			# console.log "output"
-					# 			# console.log output
-					# 		affected_cage.candidates[cand_group] = output
-
-						# console.log "updated candidates"
-						# console.log affected_cage.candidates[cand_group]
-								# rem_array = cand
-								# rem_val = candidate
-						# console.log "rem array"
-						# console.log rem_array
-						# console.log "rem_val"
-						# rem_array = @remove rem_array, rem_val
-
-						# console.log "rem_array post-remove"
-						# console.log rem_array
-					# for i in [0...rem_array.length]
-						# @remove 
-
-				# console.log "Testy test"
-				# console.log @display[0][affected_col]
-				for i in [0...@size]
-					square = @display[i][affected_col]
-					# console.log "     checking affected column"
-					# console.log square
-					for cage in @cages
-						if cage.id is square.cage_id
-							affected_cage = cage
-							for i in [0...affected_cage.location.length]
-								if affected_cage.location[i] is square
-									loc_index = i
-					# console.log "affected_cage"
-					# console.log affected_cage
-					# console.log "loc_index"
-					# console.log loc_index
-					# rem_array = []
-					# rem_val = []
-					for cand_group, cand of affected_cage.candidates
-						# console.log "cand before removal"
-						# console.log cand
-						rem_array = []
-						for candidate in cand
-							# console.log "candidate"
-							# console.log candidate
-							# console.log "candidate[loc_index]"
-							# console.log candidate[loc_index]
-							# console.log "new_sq.value"
-							# console.log new_sq.value
-							if candidate[loc_index] is new_sq.value
-								# console.log "removing #{candidate} from cand"
-								rem_array.push candidate
-						# console.log "cand post removal"
-						if rem_array.length isnt 0
-							# console.log "rem_array has vals..."
-							# console.log rem_array
-							output = affected_cage.candidates[cand_group]
-							for candidate in rem_array
-								# console.log "candidate in new_cand"
-								# console.log candidate
-								output = @remove output, candidate
-								# console.log "output"
-								# console.log output
-							affected_cage.candidates[cand_group] = output
-
-						# console.log "updated candidates"
-						# console.log affected_cage.candidates[cand_group]
-								# rem_array = cand
-								# rem_val = candidate
-						# console.log "rem array"
-						# console.log rem_array
-						# console.log "rem_val"
-						# rem_array = @remove rem_array, rem_val
-
-						# console.log "rem_array post-remove"
-						# console.log rem_array
-					# for i in [0...rem_array.length]
-						# @remove 
-
-					# for cage in @cages
-					# 	if cage.id is square.cage_id
-					# 		affected_cage = cage
-					# 		for i in [0...affected_cage.location.length]
-					# 			if affected_cage.location[i] is square
-					# 				loc_index = i
-
-					# for cand_group, cand of affected_cage.candidates
-					# 	for candidate in cand
-					# 		if candidate[i] is new_sq.value
-					# 			@remove cand, candidate 
-					# 	console.log "one for every cand_group?"
-			when 1
-				affected_row = new_sq.row_id
-
-				for square in @display[affected_row]
-					# console.log square
-					for cage in @cages
-						if cage.id is square.cage_id
-							affected_cage = cage
-							for i in [0...affected_cage.location.length]
-								if affected_cage.location[i] is square
-									loc_index = i
-					# console.log "affected_cage"
-					# console.log affected_cage
-					# console.log "loc_index"
-					# console.log loc_index
-					# rem_array = []
-					# rem_val = []
-					for cand_group, cand of affected_cage.candidates
-						# console.log "cand before removal"
-						# console.log cand
-						rem_array = []
-						for candidate in cand
-							# console.log "candidate"
-							# console.log candidate
-							# console.log "candidate[loc_index]"
-							# console.log candidate[loc_index]
-							# console.log "new_sq.value"
-							# console.log new_sq.value
-							if candidate[loc_index] is new_sq.value
-								# console.log "removing #{candidate} from cand"
-								rem_array.push candidate
-						# console.log "cand post removal"
-						if rem_array.length isnt 0
-							# console.log "rem_array has vals..."
-							# console.log rem_array
-							output = affected_cage.candidates[cand_group]
-							for candidate in rem_array
-								# console.log "candidate in new_cand"
-								# console.log candidate
-								output = @remove output, candidate
-								# console.log "output"
-								# console.log output
-							affected_cage.candidates[cand_group] = output
-
-						# console.log "updated candidates"
-						# console.log affected_cage.candidates[cand_group]
-
-			when 2
-				affected_col = new_sq.column_id
-
-				for i in [0...@size]
-					square = @display[i][affected_col]
-					# console.log "     checking affected column"
-					# console.log square
-					for cage in @cages
-						if cage.id is square.cage_id
-							affected_cage = cage
-							for i in [0...affected_cage.location.length]
-								if affected_cage.location[i] is square
-									loc_index = i
-					# console.log "affected_cage"
-					# console.log affected_cage
-					# console.log "loc_index"
-					# console.log loc_index
-					# rem_array = []
-					# rem_val = []
-					for cand_group, cand of affected_cage.candidates
-						# console.log "cand before removal"
-						# console.log cand
-						rem_array = []
-						for candidate in cand
-							# console.log "candidate"
-							# console.log candidate
-							# console.log "candidate[loc_index]"
-							# console.log candidate[loc_index]
-							# console.log "new_sq.value"
-							# console.log new_sq.value
-							if candidate[loc_index] is new_sq.value
-								# console.log "removing #{candidate} from cand"
-								rem_array.push candidate
-						# console.log "cand post removal"
-						if rem_array.length isnt 0
-							# console.log "rem_array has vals..."
-							# console.log rem_array
-							output = affected_cage.candidates[cand_group]
-							for candidate in rem_array
-								# console.log "candidate in new_cand"
-								# console.log candidate
-								output = @remove output, candidate
-								# console.log "output"
-								# console.log output
-							affected_cage.candidates[cand_group] = output
-
-						# console.log "updated candidates"
-						# console.log affected_cage.candidates[cand_group]
-	# update_affected_candidates_2: (row_id, value) ->
-	# 	for square
-		
+	
+	# ### Grid.add_cage( cage )
+	# Pushes a cage onto the list of all the grid's cages.
+	# ### Parameters
+	# * `cage' - the cage object to be added to the list of cages.
 	add_cage: (cage) ->
 		@cages.push cage
 
-	remove_cage: () ->
-
+	# ### Grid.add_solution( )
+	# Adds the solution to the grid by creating a single dimension
+	# array of all the squares. This can be used to look up the
+	# value of each square, to display to the user.
 	add_solution: (solution) ->
 		for i in [0...@size]
 			for j in [0...@size]
 				@solution.push @display[i][j]
-		console.log "solution"
-		console.log @solution
 
+	# ### Grid.add_solution_order( solution_order )
+	# Sets the grid's solution order to be solution_order
+	# ### Parameters
+	# * `solution_order' - 2d array with each index storing an
+	#	array of squares, indicating the order the solver determined
+	#	their value.
 	add_solution_order: (solution_order) ->
 		@solution_order = solution_order
 
+	# ### Grid.verify_correct( )
+	# Checks the grid is correct or not by either checking the 
+	# solution array (if it exists) or checking the rows/columns/cages
+	# are consistent. Returns consistent if the grid is correct so far,
+	# inconsistent if an anomaly has been found or valid if the grid is
+	# complete and correct.
 	verify_correct: () ->
-		# console.log @solution
 		if @solution.length is []
 			for i in [0..@size]
 				if @display[i].value?
@@ -362,12 +140,10 @@ class Grid
 					return false
 		else
 			row_check = @check_rows_are_valid( )
-			# console.log "row_check.status = #{row_check.status}"
 			if row_check.status is "inconsistent"
 				return row_check
 			
 			col_check = @check_cols_are_valid( )
-			# console.log "col_check.status = #{col_check.status}"
 			if col_check.status is "inconsistent"
 				return col_check
 
@@ -378,17 +154,14 @@ class Grid
 					return {status: "inconsistent"}
 			else
 				return {status: "valid"}
-			# if @check_rows_are_valid( ) is false
-			# 	console.log "rows invalid"
-			# 	return false
-			# if @check_cols_are_valid( ) is false
-			# 	# console.log "cols invalid"
-			# 	return false
-			# if @check_cages_are_valid( ) is false
-			# 	# console.log "cages invalid"
-			# 	return false
-			# return true
 
+	# ### Grid.check_rows_are_valid( )
+	# Checks each row is valid by sorting the row and comparing
+	# the sort to the numbers [1...grid_size]. If the sorted row
+	# matches until a null is found (ie, row is not finished) this
+	# returns "consistent". If the sorted row doesn't match at any
+	# point we return "inconsistent". Otherwise (ie, all rows contain
+	# all the numbers once) return "true".
 	check_rows_are_valid: () ->
 		cmp = [1..@size]
 		valid = true
@@ -405,10 +178,15 @@ class Grid
 						return {status: "consistent"}
 					else
 						return {status: "inconsistent"}
-				# console.log "won't see this..."
-				# valid = true
 		return valid
 
+	# ### Grid.check_cols_are_valid( )
+	# Checks each column is valid by sorting the column and comparing
+	# the sort to the numbers [1...grid_size]. If the sorted column
+	# matches until a null is found (ie, column is not finished) this
+	# returns "consistent". If the sorted column doesn't match at any
+	# point we return "inconsistent". Otherwise (ie, all columns contain
+	# all the numbers once) return "true".
 	check_cols_are_valid: ->
 		cmp = [1..@size]
 		valid = true
@@ -424,13 +202,11 @@ class Grid
 						return {status: "consistent"}
 					else
 						return {status: "inconsistent"}
-					# return false
-			# if current_col.sort is cmp
-			# 	valid = true
-			# else
-			# 	return false
 		return valid
 
+	# ### Grid.check_cages_are_valid( )
+	# Checks each cage in the grid to see its contained values match
+	# its target when combined using its operator.
 	check_cages_are_valid: ->
 		for cage in @cages
 			cage_nums = []
@@ -439,7 +215,6 @@ class Grid
 
 			switch cage.operation
 				when "+"
-					# sorted = cage_nums.sort(@ascending)
 					cage_value = 0
 					for i in cage_nums
 						cage_value += i
@@ -453,7 +228,6 @@ class Grid
 					if cage_value isnt cage.target
 						return false
 				when "*"
-					# sorted = cage_nums.sort(@ascending)
 					cage_value = 1
 					for i in cage_nums
 						cage_value *= i
@@ -466,68 +240,67 @@ class Grid
 						cage_value /= i
 					if cage_value isnt cage.target
 						return false
-				# when "-"
-				# 	current_cage = []
-				# 	for i in cage.location
-				# 		current_cage.push i.value
-				# 	current_cage.sort
-				# 	for i in [current_cage.le]
-				# 	for i in cage.location
-				# 		cage_value -= i.value 
-				# when "*"
-
-				# when "/"
-
-			# return false if cage_value isnt cage.target 
 		return true		
 
+	# ### Grid.cages_have_candidates( )
+	# Checks all the cages have candidates. If at least one doesn't
+	# return false, and true if they all have at least one candidate.
+	# If a cage has no candidates the grid is invalid.
 	cages_have_candidates: () ->
 		for cage in @cages
 			if cage.candidates is null
 				for sq in cage.location
 					if not sq.value?
 						return false
-				# return false
 		return true
 
+	# ### Grid.get_square( square_id )
+	# Returns the square object when passed a square id, such as B3.
+	# ### Parameters
+	# * `square_id' - the id we wish to return the object of, such as A2.
 	get_square: (square_id) ->
-		#console.log("trying to get "+square_id)
-
 		row = square_id.substring(0,1).charCodeAt(0) - 65 #Converts capital letter to row id; A=0, B=1, etc
 		column = square_id.substring(1) - 1 #Makes index of column one = 0, etc 
-		#console.log(row + " "+ column)
+
 		return @display[row][column]
-		# for square in @display
-		# 	if square.id is square_id
-		# 		return square
+
+	# ### Grid.ascending( a, b )
+	# Used to allow the js.sort method to return numerically ascending
+	# values as opposed to lexicographically ascending values.
+	# eg, [9, 10, 54, 300] instead of [10, 300, 54, 9]
+	ascending: (a,b) ->
+		return a-b
 	
-	# These two functions allow the js sort method to sort numerically
-	# as opposed to lexicographically.
-	# ie, [9, 10, 54, 300] instead of [10, 300, 54, 9]
+	# ### Grid.descending( a, b )
+	# Used to allow the js.sort method to return numerically descending
+	# values, as opposed to lexicographically ascending values.
+	# eg, [300, 54, 10, 9] instead of [10, 300, 54, 9]
 	descending: (a,b) ->
 		return b-a
 
-	ascending: (a,b) ->
-		return a-b
-
+	# ### Grid.remove( arr, val )
+	# Returns array arr, with value val removed
+	# ### Parameters
+	# * `arr' - array from which we want to remove a value.
+	# * `val' - value we wish to remove from arr.
 	remove: (arr, val) ->
 		x for x in arr when x!=val
 	
+	# ### Grid.remove_array( arr, val )
+	# Returns array arr, with value val removed. Used instead
+	# of 'remove(arr,val)' when val is an array.
+	# ### Parameters
+	# * `arr' - array from which we want to remove a value.
+	# * `val' - value we wish to remove from arr.
 	remove_array: (arr, val) ->
-		# console.log "    In remove_array method"
 		output = []
 		for current in arr
-			# console.log "    current"
-			# console.log current
 			mismatch = false
 			for i in [0...current.length]
-				# console.log "current[i] = #{current[i]}, val[i] = #{val[i]}"
 				if current[i] isnt val[i]
 					mismatch = true
 					break
 			output.push current if mismatch is true
-		# console.log "output"
-		# console.log output
 		return output
 
 this.Grid = Grid

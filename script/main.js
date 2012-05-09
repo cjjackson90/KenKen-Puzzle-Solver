@@ -62,12 +62,6 @@
       $('#grid_size').change(__bind(function(e) {
         return this.update_grid_size($('#grid_size').val());
       }, this));
-      $('#current_size').click(__bind(function(e) {
-        return alert(this.main_grid.size);
-      }, this));
-      $('#log_cages').click(__bind(function(e) {
-        return console.log(this.main_grid.cages);
-      }, this));
       $('#add_cage').click(__bind(function(e) {
         return this.add_cage_click();
       }, this));
@@ -86,17 +80,6 @@
       $('#solve_step').click(__bind(function(e) {
         return this.solve_next_step();
       }, this));
-      console.log(this.main_grid.cages);
-      /*temp = ["B1","B2"]
-      		@main_grid.add_cage(temp)
-      		temp = ["A3", "B3"]
-      		@main_grid.add_cage(temp)
-      		temp = ["C1"]
-      		@main_grid.add_cage(temp)
-      		temp = ["C2","C3"]
-      		@main_grid.add_cage(temp)
-      		console.log(@main_grid.cages)
-      		*/
     }
     Main.prototype.build_DOM = function() {
       $('body').append('<div id="main">\n	<div id="modes">\n		<div id="edit_mode">\n			<div id="edit_top_bar" class="top_bar"></div>\n			<div id="edit_side_bar" class="side_bar" float="left">\n				<img src="img/grid_size.png">\n				<input id="grid_size" type="text" size="1"></input>\n				<p>\n				<p>\n				<div id="add_cage">\n					<div float="left"><img src="img/add_cage2.png"></div>\n				</div>\n			</div>\n		</div>\n		\n		<div id="solve_mode">\n			<div id="solve_top_bar" class="top_bar"></div>\n			<div id="solve_side_bar" class="side_bar" float="left">\n				<div id="solve_reset">\n					<img src="img/reset.png">\n				</div>\n				<div id="solve_step">\n					<img src="img/next_step.png">\n				</div>\n				<div id="solve_solution">\n					<img src="img/solution.png">\n				</div>\n			</div>\n		</div>\n\n		<ul>\n			<li><a id="edit_mode_button" href="#edit_mode">Edit Mode</a></li>\n			<li><a id="solve_mode_button" href="#solve_mode">Solve Mode</a></li>\n		</ul>\n	</div>\n</div>');
@@ -109,10 +92,8 @@
         alert("Sorry, grid sizes must a value 1-9.");
         return $('#grid_size').val(this.main_grid.size);
       } else {
-        console.log("grid size changed to " + grid_size);
         $('#grid_lines').remove();
         $('#edit_grid_wrapper > *').remove();
-        this.main_grid.clear();
         return this.main_grid = new Grid(grid_size);
       }
     };
@@ -129,7 +110,7 @@
       $('#edit_grid_wrapper').selectable();
       $('#edit_side_bar').append('<div id="add_cage_dialog" class="instructions">\n	Ctrl+Click squares to add to cage.\n	<p>\n	Target: <input id="target_val" type="text" size="5"></input>\n	<p>\n	Operation: <select id="op_val">\n		<option value="+">+</option>\n		<option value="-">-</option>\n		<option value="*">*</option>\n		<option value="/">/</option>\n	</select>\n	<p>\n	<div position="absolute">\n		<div id="add_cage_ok">Add</div>\n		<p>\n		<div id="add_cage_cancel">Cancel</div>\n	<div>\n</div>');
       $('#add_cage_ok').click(__bind(function(e) {
-        var cage, first_sq, i, selected_ids, selected_squares, sq, squares, target, to_check, val, val_letter, val_num, _i, _j, _len, _len2, _ref, _ref2, _ref3;
+        var cage, first_sq, i, selected_ids, selected_squares, sq, squares, target, to_check, val, val_letter, val_num, _i, _j, _len, _len2, _ref, _ref2;
         target = $('#target_val').val();
         selected_squares = $('.ui-selected').get();
         selected_ids = [];
@@ -139,15 +120,12 @@
           selected_ids.push($(sq).attr('id'));
           squares.push(this.main_grid.get_square($(sq).attr('id')));
         }
-        console.log(target);
         cage = new Cage(squares);
         cage.update_target(parseInt(target));
         cage.update_operation($('#op_val').val());
         cage.update_square_cage_ids();
         cage.location[0].set_target_op(cage.target, cage.operation);
         this.main_grid.add_cage(cage);
-        console.log(cage);
-        console.log(selected_ids);
         first_sq = true;
         _ref = cage.location;
         for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
@@ -155,7 +133,6 @@
           val_letter = val.row_id;
           val_num = val.column_id + 1;
           if (first_sq) {
-            console.log("val.target_op = " + val.target_op);
             $('#' + val.id + ' > div').append(val.target_op);
             first_sq = false;
           }
@@ -164,35 +141,28 @@
           to_check.push(String.fromCharCode(val_letter + 66) + val_num);
           to_check.push(String.fromCharCode(val_letter + 65) + (val_num + 1));
           to_check.push(String.fromCharCode(val_letter + 65) + (val_num - 1));
-          console.log(to_check);
-          console.log(val.id);
           $('#' + val.id).css({
             "border": "8px solid #7FD13B"
           });
           for (i = 0; i < 4; i++) {
-            console.log((_ref2 = to_check[i], __indexOf.call(selected_ids, _ref2) >= 0));
-            if ((_ref3 = to_check[i], __indexOf.call(selected_ids, _ref3) >= 0)) {
+            if ((_ref2 = to_check[i], __indexOf.call(selected_ids, _ref2) >= 0)) {
               switch (i) {
                 case 0:
-                  console.log("when 0");
                   $('#' + val.id).css({
                     "border-top": "1px solid #D6ECFF"
                   });
                   break;
                 case 1:
-                  console.log("when 1");
                   $('#' + val.id).css({
                     "border-bottom": "1px solid #D6ECFF"
                   });
                   break;
                 case 2:
-                  console.log("when 2");
                   $('#' + val.id).css({
                     "border-right": "1px solid #D6ECFF"
                   });
                   break;
                 case 3:
-                  console.log("when 3");
                   $('#' + val.id).css({
                     "border-left": "1px solid #D6ECFF"
                   });
@@ -212,21 +182,16 @@
     };
     Main.prototype.solve_mode_button_click = function() {
       var cage, current_grid, end, solver, start, time, _i, _len, _ref, _return;
-      console.log("solve_mode_button_click");
       $('#solve_mode').append('<div id="solve_grid_wrapper">\n</div>');
       $('#edit_grid_wrapper').children().clone().appendTo('#solve_grid_wrapper');
-      console.log(this.main_grid.size);
       _ref = this.main_grid.cages;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         cage = _ref[_i];
         cage.find_all_candidates(parseInt(this.main_grid.size));
       }
-      console.log(this.main_grid.cages);
-      console.log(this.main_grid);
       start = new Date().getTime();
       solver = new Solver(this.main_grid);
       current_grid = this.main_grid;
-      console.log(current_grid);
       _return = solver.solve(current_grid, 0);
       switch (_return.status) {
         case "valid":
@@ -234,6 +199,9 @@
           current_grid = _return.valid_grid;
           break;
         case "invalid":
+          if ((_return.reason != null)) {
+            console.log("Solvr timed out!");
+          }
           console.log("Boo! No solution :(");
           break;
         case "debug":
@@ -243,8 +211,8 @@
       }
       end = new Date().getTime();
       time = end - start;
+      console.log(time);
       this.main_grid = current_grid;
-      console.log(this.main_grid);
       this.main_grid.add_solution(this.main_grid.display);
       return this.main_grid.add_solution_order(solver.solution_order);
     };
@@ -252,16 +220,11 @@
       return $('#solve_grid_wrapper').remove();
     };
     Main.prototype.solve_solution_button_click = function() {
-      var id, sq, test, _i, _len, _ref, _results;
-      console.log("solution clicked");
+      var id, sq, _i, _len, _ref, _results;
       _ref = this.main_grid.solution;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         sq = _ref[_i];
-        console.log(sq.id);
-        test = sq.id.substring(1, 3);
-        console.log(test);
-        console.log(sq);
         id = sq.id;
         _results.push($('#solve_grid_wrapper > #' + id).append(sq.value));
       }

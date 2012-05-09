@@ -1,7 +1,6 @@
 (function() {
   var Solver;
   Solver = (function() {
-    Solver.prototype.current_puzzle = null;
     Solver.prototype.solution_order = [];
     Solver.prototype.strat = null;
     function Solver() {
@@ -9,6 +8,12 @@
     }
     Solver.prototype.solve = function(grid, depth) {
       var grid_complete, i, j, new_grid, obj, potentials, return_obj, sq, temp, test, test2, verified_correct, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3, _ref4;
+      if (depth > 1000) {
+        return_obj = {
+          status: "invalid"
+        };
+        return return_obj;
+      }
       grid_complete = true;
       for (i = 0, _ref = grid.size; 0 <= _ref ? i < _ref : i > _ref; 0 <= _ref ? i++ : i--) {
         for (j = 0, _ref2 = grid.size; 0 <= _ref2 ? j < _ref2 : j > _ref2; 0 <= _ref2 ? j++ : j--) {
@@ -104,7 +109,7 @@
       };
     };
     Solver.prototype.get_potentials = function(grid) {
-      var cage, candidate, first_index, i, potentials, profitable_cage, smallest_cage, smallest_length, sq, square, temp, viable, viable_cage, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _m, _ref, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7;
+      var cage, first_index, i, potentials, prof_candidate, profitable_cage, smallest_cage, smallest_length, sq, square, temp, viable, viable_cage, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _m, _ref, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7;
       profitable_cage = null;
       potentials = [];
       smallest_cage = grid.cages[0];
@@ -148,7 +153,7 @@
       profitable_cage = smallest_cage;
       _ref5 = profitable_cage.candidates;
       for (_l = 0, _len4 = _ref5.length; _l < _len4; _l++) {
-        candidate = _ref5[_l];
+        prof_candidate = _ref5[_l];
         temp = this.clone(grid);
         _ref6 = temp.cages;
         for (_m = 0, _len5 = _ref6.length; _m < _len5; _m++) {
@@ -157,12 +162,11 @@
             cage.location[i] = temp.get_square(cage.location[i].id);
           }
           if (cage.id === profitable_cage.id) {
-            temp.add_candidate(cage.location, candidate);
+            cage.add_candidate_to_grid(prof_candidate);
           }
         }
         potentials.push(this.clone(temp));
       }
-      potentials;
       return potentials;
     };
     Solver.prototype.append_solution_order = function(fresh_vals) {

@@ -65,14 +65,6 @@
           return _results;
       }
     };
-    Cage.prototype.remove_duplicates = function(candidate) {
-      var foo;
-      if (candidate != null) {
-        foo = candidate;
-        foo.unique();
-        return this.candidates = foo;
-      }
-    };
     Cage.prototype.bt_plus = function(candidate, counter) {
       var n, new_branch, new_candidates, new_count, no_solutions, perms, permutation, potentials, prev_vals, running_target, val, _i, _j, _k, _len, _len2, _ref, _results;
       running_target = this.target;
