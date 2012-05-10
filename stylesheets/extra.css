@@ -50,9 +50,10 @@
 	padding: 5px;
 	vertical-align: middle;
 	z-index: 2;
-	box-sizing:border-box;
 	-moz-box-sizing:border-box; /* Firefox */
 	-webkit-box-sizing:border-box; /* Safari */
+	-ms-box-sizing:border-box;
+	box-sizing:border-box;
 }
 
 #solve_grid_wrapper {
@@ -66,9 +67,11 @@
 	padding: 5px;
 	vertical-align: middle;
 	z-index: 2;
-	box-sizing:border-box;
 	-moz-box-sizing:border-box; /* Firefox */
 	-webkit-box-sizing:border-box; /* Safari */
+	-ms-box-sizing:border-box;
+	box-sizing:border-box;
+
 }
 
 /*#grid_lines {
@@ -101,9 +104,10 @@
 	margin: 0px;
 	float: left;
 	position: relative;
-	box-sizing:border-box;
 	-moz-box-sizing:border-box; /* Firefox */
 	-webkit-box-sizing:border-box; /* Safari */
+	-ms-box-sizing:border-box;
+	box-sizing:border-box;
 }
 
 #solve_grid_wrapper > div {
@@ -114,9 +118,10 @@
 	float: left;
 	position: relative;
 	color: #7FD13B;
-	box-sizing:border-box;
 	-moz-box-sizing:border-box; /* Firefox */
 	-webkit-box-sizing:border-box; /* Safari */
+	-ms-box-sizing:border-box;
+	box-sizing:border-box;
 }
 
 .op_target {
