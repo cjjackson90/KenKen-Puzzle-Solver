@@ -261,6 +261,14 @@ class Main
 									"border-left": "1px solid #D6ECFF"
 								)
 
+			# start = new Date().getTime()
+			# cage.find_all_candidates( @main_grid.size )
+			# end = new Date().getTime()
+
+			# console.log "Find all candidates: #{end-start}ms"
+
+			# console.log "candidates"
+			# console.log cage.candidates
 			$('.ui-selected').removeClass("ui-selected")
 			$('#add_cage').css("visibility", "visible")
 
@@ -283,7 +291,13 @@ class Main
 		$('#edit_grid_wrapper').children().clone().appendTo( '#solve_grid_wrapper' )
 
 		for cage in @main_grid.cages
+			cage.max_val_repeats = cage.find_max_repeat( )
+
+		start = new Date().getTime()
+		for cage in @main_grid.cages
 			cage.find_all_candidates(parseInt(@main_grid.size))
+		end = new Date().getTime()
+		console.log "Time taken to find all candidates: #{end-start}ms"
 
 		# Timing function - start
 		start = new Date().getTime()
@@ -307,8 +321,8 @@ class Main
 				current_grid = _return.grid
 				break
 		end = new Date().getTime()
-		time = end - start
-		console.log time
+		# time = end - start
+		console.log "Time taken to find solution: #{end-start}ms"
 
 		@main_grid = current_grid
 		@main_grid.add_solution( @main_grid.display )

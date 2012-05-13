@@ -20,6 +20,8 @@ class Cage
 	# size of the grid this cage belongs to.
 	grid_size: null
 
+	max_val_repeats: 0
+
 	# ### Cage.constructor( )
 	# Initialises a cage. Requires location as an array
 	# of squares from the grid.
@@ -28,6 +30,7 @@ class Cage
 	constructor: (location) ->
 		@id = uniqueId( )
 		@location = location
+		# @max_val_repeats = @find_max_repeat( )
 
 	# ### Cage.update_square_cage_ids( )
 	# Goes through all the squares that make this cage and
@@ -109,13 +112,44 @@ class Cage
 			return
 		
 		if running_target is 0			
-			perms = permute candidate, @grid_size
-			for permutation in perms
-				if @check_consistent( permutation )
-					@candidates.push permutation
-			new_candidates = @unique @candidates
+			# perms = permute candidate, @grid_size
 
-			@candidates = new_candidates
+			# for permutation in perms
+			# 	if @check_consistent( permutation )
+			# 		@candidates.push permutation
+
+			# TESTING
+			last_val = 0
+			counter = 0
+			valid = true
+			for val in candidate
+				if val != last_val
+					last_val = val
+					counter = 1
+				else
+					counter++
+
+				# console.log "counter=#{counter}, max_val_repeats=#{@max_val_repeats}"
+				if counter > @max_val_repeats
+					valid = false
+					break
+
+			if valid
+
+				perms = permute candidate, @grid_size
+
+				for permutation in perms
+					if @check_consistent( permutation )
+						@candidates.push permutation
+
+				# for val in candidate
+				# 	console.log val
+
+				# @candidates.push candidate
+			# \TESTING
+			
+				new_candidates = @unique @candidates
+				@candidates = new_candidates
 
 			return
 			
@@ -291,7 +325,45 @@ class Cage
 							return false
 						else
 			return true
-	
+
+	consistent_list: (square, squares_array) ->
+		for sq in squares_array
+			if square.row_id_char is sq.row_id_char
+				return false
+			if square.column_id is sq.column_id
+				return false
+		return true 
+
+	find_max_repeat: ->
+		temp = @location
+		potentials_1 = []
+		potentials_2 = []
+
+		# temp[0].set_value( 1 )
+		potentials_1.push temp[0]
+		for i in [1...temp.length]
+			# pot1 = null
+			# pot2 = null
+			# for val in potentials_1
+			# 	pot1 += val.id
+
+			# for val in potentials_2
+			# 	pot2 += val.id
+
+			# console.log "potentials_1 = #{pot1}"
+			# console.log "potentials_2 = #{pot2}"
+
+			if @consistent_list(temp[i], potentials_1)
+				potentials_1.push temp[i]
+
+			if @consistent_list(temp[i], potentials_2)
+				potentials_2.push temp[i]
+
+		if potentials_1.length > potentials_2.length
+			return potentials_1.length
+		else
+			return potentials_2.length
+
 	# ### Cage.add_candidate_to_grid( candidate )
 	# Sets the square (grid) values to be the candidate.		
 	add_candidate_to_grid: (candidate) ->
@@ -314,13 +386,28 @@ class Cage
 	permute = (arr, grid_size) ->
 		arr = Array::slice.call arr, 0
 		return [[]] if arr.length == 0
-	 
+
 		permutations = (for value,idx in arr
 			[value].concat perm for perm in permute arrayExcept arr, idx)
 
-
 		# Flatten the array before returning it.
 		[].concat permutations...
+
+
+	`function perm(list, ret)
+	{
+		if (list.length == 0) {
+			var row = document.createTextNode(ret.join(' ') + '\n');
+			return;
+		}
+		for (var i = 0; i < list.length; i++) {
+			var x = list.splice(i, 1);
+			ret.push(x);
+			perm(list, ret);
+			ret.pop();
+			list.splice(i, 0, x);
+		}
+	}`
 
 	# ### Cage.unique( array )
 	# Returns copy of array, without duplicated values. Duplicated vals
@@ -329,5 +416,17 @@ class Cage
 		output = {}
 		output[array[key]] = array[key] for key in [0...array.length]
 		value for key, value of output
+
+	clone: (obj) ->
+		if not obj? or typeof obj isnt 'object'
+			return obj
+
+		newInstance = new obj.constructor()
+
+		for key of obj
+			newInstance[key] = @clone obj[key]
+
+		return newInstance
+
 
 this.Cage = Cage

@@ -181,14 +181,22 @@
       }, this));
     };
     Main.prototype.solve_mode_button_click = function() {
-      var cage, current_grid, end, solver, start, time, _i, _len, _ref, _return;
+      var cage, current_grid, end, solver, start, _i, _j, _len, _len2, _ref, _ref2, _return;
       $('#solve_mode').append('<div id="solve_grid_wrapper">\n</div>');
       $('#edit_grid_wrapper').children().clone().appendTo('#solve_grid_wrapper');
       _ref = this.main_grid.cages;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         cage = _ref[_i];
+        cage.max_val_repeats = cage.find_max_repeat();
+      }
+      start = new Date().getTime();
+      _ref2 = this.main_grid.cages;
+      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+        cage = _ref2[_j];
         cage.find_all_candidates(parseInt(this.main_grid.size));
       }
+      end = new Date().getTime();
+      console.log("Time taken to find all candidates: " + (end - start) + "ms");
       start = new Date().getTime();
       solver = new Solver(this.main_grid);
       current_grid = this.main_grid;
@@ -210,8 +218,7 @@
           break;
       }
       end = new Date().getTime();
-      time = end - start;
-      console.log(time);
+      console.log("Time taken to find solution: " + (end - start) + "ms");
       this.main_grid = current_grid;
       this.main_grid.add_solution(this.main_grid.display);
       return this.main_grid.add_solution_order(solver.solution_order);

@@ -8,6 +8,7 @@
     Cage.prototype.location = [];
     Cage.prototype.candidates = [];
     Cage.prototype.grid_size = null;
+    Cage.prototype.max_val_repeats = 0;
     function Cage(location) {
       this.id = uniqueId();
       this.location = location;
@@ -66,7 +67,7 @@
       }
     };
     Cage.prototype.bt_plus = function(candidate, counter) {
-      var n, new_branch, new_candidates, new_count, no_solutions, perms, permutation, potentials, prev_vals, running_target, val, _i, _j, _k, _len, _len2, _ref, _results;
+      var last_val, n, new_branch, new_candidates, new_count, no_solutions, perms, permutation, potentials, prev_vals, running_target, val, valid, _i, _j, _k, _l, _len, _len2, _len3, _ref, _results;
       running_target = this.target;
       if (candidate[0] * this.location.length < this.target) {
         return;
@@ -81,15 +82,33 @@
         return;
       }
       if (running_target === 0) {
-        perms = permute(candidate, this.grid_size);
-        for (_i = 0, _len = perms.length; _i < _len; _i++) {
-          permutation = perms[_i];
-          if (this.check_consistent(permutation)) {
-            this.candidates.push(permutation);
+        last_val = 0;
+        counter = 0;
+        valid = true;
+        for (_i = 0, _len = candidate.length; _i < _len; _i++) {
+          val = candidate[_i];
+          if (val !== last_val) {
+            last_val = val;
+            counter = 1;
+          } else {
+            counter++;
+          }
+          if (counter > this.max_val_repeats) {
+            valid = false;
+            break;
           }
         }
-        new_candidates = this.unique(this.candidates);
-        this.candidates = new_candidates;
+        if (valid) {
+          perms = permute(candidate, this.grid_size);
+          for (_j = 0, _len2 = perms.length; _j < _len2; _j++) {
+            permutation = perms[_j];
+            if (this.check_consistent(permutation)) {
+              this.candidates.push(permutation);
+            }
+          }
+          new_candidates = this.unique(this.candidates);
+          this.candidates = new_candidates;
+        }
         return;
       }
       if (counter >= this.location.length) {
@@ -99,11 +118,11 @@
       no_solutions = 1;
       potentials = (function() {
         _results = [];
-        for (var _j = n; n <= 1 ? _j <= 1 : _j >= 1; n <= 1 ? _j++ : _j--){ _results.push(_j); }
+        for (var _k = n; n <= 1 ? _k <= 1 : _k >= 1; n <= 1 ? _k++ : _k--){ _results.push(_k); }
         return _results;
       }).apply(this, arguments);
-      for (_k = 0, _len2 = potentials.length; _k < _len2; _k++) {
-        val = potentials[_k];
+      for (_l = 0, _len3 = potentials.length; _l < _len3; _l++) {
+        val = potentials[_l];
         new_branch = candidate;
         new_branch.push(val);
         new_count = counter + 1;
@@ -279,6 +298,39 @@
         return true;
       }
     };
+    Cage.prototype.consistent_list = function(square, squares_array) {
+      var sq, _i, _len;
+      for (_i = 0, _len = squares_array.length; _i < _len; _i++) {
+        sq = squares_array[_i];
+        if (square.row_id_char === sq.row_id_char) {
+          return false;
+        }
+        if (square.column_id === sq.column_id) {
+          return false;
+        }
+      }
+      return true;
+    };
+    Cage.prototype.find_max_repeat = function() {
+      var i, potentials_1, potentials_2, temp, _ref;
+      temp = this.location;
+      potentials_1 = [];
+      potentials_2 = [];
+      potentials_1.push(temp[0]);
+      for (i = 1, _ref = temp.length; 1 <= _ref ? i < _ref : i > _ref; 1 <= _ref ? i++ : i--) {
+        if (this.consistent_list(temp[i], potentials_1)) {
+          potentials_1.push(temp[i]);
+        }
+        if (this.consistent_list(temp[i], potentials_2)) {
+          potentials_2.push(temp[i]);
+        }
+      }
+      if (potentials_1.length > potentials_2.length) {
+        return potentials_1.length;
+      } else {
+        return potentials_2.length;
+      }
+    };
     Cage.prototype.add_candidate_to_grid = function(candidate) {
       var i, _ref, _results;
       _results = [];
@@ -319,6 +371,20 @@
       })();
       return (_ref = []).concat.apply(_ref, permutations);
     };
+    function perm(list, ret)
+	{
+		if (list.length == 0) {
+			var row = document.createTextNode(ret.join(' ') + '\n');
+			return;
+		}
+		for (var i = 0; i < list.length; i++) {
+			var x = list.splice(i, 1);
+			ret.push(x);
+			perm(list, ret);
+			ret.pop();
+			list.splice(i, 0, x);
+		}
+	};
     Cage.prototype.unique = function(array) {
       var key, output, value, _ref, _results;
       output = {};
@@ -331,6 +397,17 @@
         _results.push(value);
       }
       return _results;
+    };
+    Cage.prototype.clone = function(obj) {
+      var key, newInstance;
+      if (!(obj != null) || typeof obj !== 'object') {
+        return obj;
+      }
+      newInstance = new obj.constructor();
+      for (key in obj) {
+        newInstance[key] = this.clone(obj[key]);
+      }
+      return newInstance;
     };
     return Cage;
   })();
